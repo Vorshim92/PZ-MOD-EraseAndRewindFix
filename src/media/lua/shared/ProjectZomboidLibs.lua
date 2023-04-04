@@ -78,12 +78,19 @@ end
 ---@param character IsoGameCharacter
 ---@param perk PerkFactory.Perk
 ---@param xp float
-function addXP_PZ(character, perk, xp )
-    if not character then
+---@param flag1 boolean default false
+---@param flag2 boolean default false
+---@param flag3 boolean default true
+function addXP_PZ(character, perk, xp, flag1, flag2, flag3 )
+    if not character or not perk then
         return nil
     end
 
-    character:getXp():AddXP(perk, xp);
+    flag1 = flag1 or false -- is the default
+    flag2 = flag2 or false -- is the default
+    flag3 = flag3 or true -- is the default
+
+    character:getXp():AddXP(perk, xp, flag1, flag2, flag3);
 end
 
 ---@param value double
@@ -270,12 +277,49 @@ end
 ---@param levelPerk int
 --- - IsoGameCharacter.XP : zombie.characters.IsoGameCharacter.XP
 function setPerkLevel(character, perk, levelPerk)
+    if not character or not perk or not levelPerk then
+        return nil
+    end
+
+    local convertLevelToXp_ = 0.0
+
+    for level_ = 1, levelPerk do
+        convertLevelToXp_ = convertLevelToXp_ + convertLevelToXp(perk, level_)
+    end
+
+    local totalXp = ( convertLevelToXp_ -
+            getXpPerk_PZ( character, perk ) ) -- * 2
+
+    if totalXp == 0 then
+        return
+    end
+
+    addXP_PZ(character, perk, convertLevelToXp_,
+            false, false, true )
+end
+
+-- TODO LoseLevel
+---Set Perk Level and level
+---@param character IsoGameCharacter
+---@param perk PerkFactory.Perk
+---@param levelPerk int
+--- ISPlayerStatsUI.lua 635
+--- - IsoGameCharacter.XP : zombie.characters.IsoGameCharacter.XP
+function removePerkLevel(character, perk, levelPerk)
     if not character then
         return nil
     end
 
-    character:setPerkLevelDebug(perk, levelPerk)  -- Perks.Maintenance
+    for i = levelPerk, ENUM.Zero, -1  do
+        character:LoseLevel(perk, true)  -- Perks.Maintenance
+    end
+    --local character = getPlayer()
+    --local perk = PerkFactory.getPerk(Perks.Cooking)
+    --character:level0(perk)
+    --character:LoseLevel(perk)
+    --character:LevelPerk(perk)  -- Perks.Maintenance
 end
+
 
 -- TODO setCharacterProfession_PZ
 --- Get Charater profession
@@ -299,29 +343,14 @@ end
 ---Set Xp Level To Zero
 ---@param character IsoGameCharacter
 ---@param perk PerkFactory.Perk
-function setXpLevelToZero(character, perk)
-    if not character or not perk then
-        return nil
-    end
-
-    local totalXp = ( getXpPerk_PZ( character, perk ) ) * ENUM.Two
-
-    addXP_PZ(character, perk, totalXp)
-end
-
--- TODO LoseLevel
----Set Perk Level and level
----@param character IsoGameCharacter
----@param perk PerkFactory.Perk
----@return float xp
---- ISPlayerStatsUI.lua 635
---- - IsoGameCharacter.XP : zombie.characters.IsoGameCharacter.XP
-function setPerkLevel_PZ(character, perk, levelPerk)
-    --local character = getPlayer()
-    --local perk = PerkFactory.getPerk(Perks.Cooking)
-    --character:level0(perk)
-    --character:LoseLevel(perk)
-    --character:LevelPerk(perk)  -- Perks.Maintenance
+local function setXpLevelToZero(character, perk)
+    --if not character or not perk then
+    --    return nil
+    --end
+    --
+    --local totalXp = ( getXpPerk_PZ( character, perk ) ) * ENUM.Two
+    --
+    --addXP_PZ(character, perk, totalXp)
 end
 
 -- TODO getParent_PZ
@@ -329,3 +358,5 @@ end
 function getParent_PZ(character)
 
 end
+
+-- char:getDescriptor():getForename();
