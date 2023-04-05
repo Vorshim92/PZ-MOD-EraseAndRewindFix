@@ -254,23 +254,6 @@ function convertLevelToXp(perk, level)
     return nil
 end
 
--- ----------------------
-
--- TODO resetChart
----Reset Character
----@param character IsoGameCharacter
-function resetChart(character)
-    --if not character then
-    --    return nil
-    --end
-    --
-    --local profession = getCharacterProfession_PZ(character)
-    --local perk_ = getPerk_PZ(perk)
-    --local level = getPerkLevel_PZ(character, perk_)
-    --local xp = getXpPerk_PZ(character, perk_)
-end
-
--- TODO setPerkLevel
 ---Set Perk Level and level
 ---@param character IsoGameCharacter
 ---@param perk PerkFactory.Perk
@@ -298,7 +281,12 @@ function setPerkLevel(character, perk, levelPerk)
             false, false, true )
 end
 
--- TODO LoseLevel
+
+--[[
+    Utilizza removePerkLevel(character, Perks.Maintenance, _)
+    funziona ma può dare valori negativi se si
+    selezione il numero di livelli da togliere. Sistemare
+]]
 ---Set Perk Level and level
 ---@param character IsoGameCharacter
 ---@param perk PerkFactory.Perk
@@ -306,20 +294,37 @@ end
 --- ISPlayerStatsUI.lua 635
 --- - IsoGameCharacter.XP : zombie.characters.IsoGameCharacter.XP
 function removePerkLevel(character, perk, levelPerk)
-    if not character then
+    if not character or not perk then
         return nil
     end
 
-    for i = levelPerk, ENUM.Zero, -1  do
-        character:LoseLevel(perk, true)  -- Perks.Maintenance
+    local currentLevelPerk = getPerkLevel_PZ(character, perk)
+
+    if levelPerk == true then
+        if levelPerk > currentLevelPerk then
+            levelPerk = currentLevelPerk
+        end
     end
-    --local character = getPlayer()
-    --local perk = PerkFactory.getPerk(Perks.Cooking)
-    --character:level0(perk)
-    --character:LoseLevel(perk)
-    --character:LevelPerk(perk)  -- Perks.Maintenance
+
+    levelPerk = levelPerk or currentLevelPerk
+
+    for i = 0, levelPerk  do
+        character:LoseLevel(perk)
+    end
+
+    local xpPerk = getXpPerk_PZ(character, perk)
+    xpPerk = -xpPerk
+
+    if xpPerk == 0 then
+        return
+    end
+
+    addXP_PZ(character, perk, xpPerk,
+            false, false, true )
+
 end
 
+-- ----------------------
 
 -- TODO setCharacterProfession_PZ
 --- Get Charater profession

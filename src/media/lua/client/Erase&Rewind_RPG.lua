@@ -8,9 +8,11 @@
 require("media.lua.shared.DbgLeleLib")
 
 local function onCustomUIKeyPressed(key)
-    character = getPlayer()
+    local character = getPlayer()
+
+
     key34(character, key)
-    --key35(character, key)
+    key35(character, key)
     --key36(character, key)
 end
 -- Perks.Maintenance
@@ -20,9 +22,13 @@ end
 function key34(character, key)
     if key == 34 then -- <<<< g
         print("Key = g\n")
-        -- character:setPerkLevelDebug(Perks.Maintenance, 2)
-        setPerkLevel(character, Perks.Maintenance, 5)
-        -- character:LevelPerk(Perks.Maintenance, true)
+        local CharacterObj01 = CharacterObj:new(nil)
+
+        CharacterObj01 = getCharacterAllSkills(character)
+
+        local dbg
+
+        getPlayer():getModData().nomeCane = CharacterObj01
     end
 end
 
@@ -30,8 +36,16 @@ end
 function key35(character, key)
     if key == 35 then -- <<< h
         print("Key = h\n")
-        -- removePerkLevel(character, Perks.Maintenance, 0)
-        --character:LoseLevel(Perks.Maintenance)
+
+        local CharacterObj02 = CharacterObj:new(nil)
+
+        CharacterObj02 = getPlayer():getModData().nomeCane
+
+        local dbg
+
+        for i, v in pairs( getPlayer():getModData().nomeCane ) do
+            print(tostring(v.perk) .. "     " .. tostring(v.level))
+        end
     end
 
 end
@@ -45,23 +59,27 @@ end
 
 -- ------------------------------------------------------------
 
+local function copyCharacter(character)
+    local CharacterObj01 = CharacterObj:new(nil)
+    CharacterObj01 = getCharacterAllSkills(character)
+
+    for i, v in pairs(CharacterObj01) do
+        setPerkLevel(character, v:getPerk(), v:getLevel())
+    end
+end
+
+local function deleteCharacter(character)
+    local CharacterObj01 = CharacterObj:new(nil)
+    CharacterObj01 = getCharacterAllSkills(character)
+
+    for i, v in pairs(CharacterObj01) do
+        removePerkLevel(character, v:getPerk(), _)
+    end
+end
+
 local function OnGameStart()
 
 end
 
-local function AddXP(character, perk, level)
-
-end
-
---Events.AddXP.Add(AddXP)
---Events.OnGameStart.Add(OnGameStart)
+Events.OnGameStart.Add(OnGameStart)
 Events.OnCustomUIKeyPressed.Add(onCustomUIKeyPressed)
-
-
---[[
-    local character = getPlayer()
-    local convertLevelToXp_ = PerkFactory.getPerk(Perks.Woodwork):getXp1()
-    character:getXp():AddXP(perk, convertLevelToXp_)
-
-    print(convertLevelToXp_)
-]]

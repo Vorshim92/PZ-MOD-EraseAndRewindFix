@@ -24,7 +24,8 @@ end
 Questo per moddata del player lato client
 Init:
 if getPlayer():getModData().nomeModData == nil then
-    getPlayer():getModData().nomeModData = valore (può essere qualsiasi cosa tu voglia, anche unaltra table)
+    getPlayer():getModData().nomeModData = valore (può essere qualsiasi cosa tu voglia,
+     anche un altra table)
 
 Lettura:
 Local val = getPlayer():getModData().nomeModData
