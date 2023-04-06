@@ -6,6 +6,7 @@
 --- ISSkillProgressBar:updateTooltip(lvlSelected)
 
 require("media.lua.shared.DbgLeleLib")
+require("media.lua.shared.objects.CharacterObj")
 
 local function onCustomUIKeyPressed(key)
     local character = getPlayer()
@@ -22,13 +23,33 @@ end
 function key34(character, key)
     if key == 34 then -- <<<< g
         print("Key = g\n")
-        local CharacterObj01 = CharacterObj:new(nil)
 
+        local value = {}
+        local CharacterObj01 = CharacterObj:new(nil)
         CharacterObj01 = getCharacterAllSkills(character)
 
-        local dbg
+        for i, v in pairs(CharacterObj01) do
+            local aaa = tostring(v:getPerk()) .. "-" .. tostring(v:getLevel()) .. "-" .. tostring(v:getXp())
+            value[i] = aaa
+            ModData.add("characterPerkDetails", value)
+        end
 
-        getPlayer():getModData().nomeCane = CharacterObj01
+
+        -- ModData.create("characterPerkDetails")
+        -- ModData.add("characterPerkDetails", value)
+        local dbg1 = ModData.get("characterPerkDetails")
+
+        local dgb
+
+        --for i, v in pairs(CharacterObj01) do
+        --    value = tostring(v:getPerk()) .. "-" .. tostring(v:getLevel()) .. "-" .. tostring(v:getXp())
+        --    ModData.add("characterPerkDetails", value)
+        --    local dbg2 = value
+        --    local dbg
+        --end
+        --
+        --local dbg1 = ModData.get("characterPerkDetails")
+        --local dbg
     end
 end
 
@@ -37,15 +58,40 @@ function key35(character, key)
     if key == 35 then -- <<< h
         print("Key = h\n")
 
-        local CharacterObj02 = CharacterObj:new(nil)
+        --[[
+str = "perk-level-xp"
+lines = {}
+for s in str:gmatch("[^\r-]+") do
+    table.insert(lines, s)
+end
 
-        CharacterObj02 = getPlayer():getModData().nomeCane
+local val0 = lines[1]
+local val1 = lines[2]
+local val2 = lines[3]
 
+print(val0 .. " " .. val1 .. " " .. val2)
+]]
+
+        local characterPerkDetails = ModData.get("characterPerkDetails")
         local dbg
+        local lines = {}
 
-        for i, v in pairs( getPlayer():getModData().nomeCane ) do
-            print(tostring(v.perk) .. "     " .. tostring(v.level))
+        for i, v in pairs(characterPerkDetails) do
+            for s in v:gmatch("[^\r-]+") do
+                table.insert(lines,s)
+            end
+
+            print(lines[1] .. " " .. lines[2] .. " " .. lines[3] )
+            lines =  {}
         end
+
+        --CharacterObj02 = getPlayer():getModData().nomeCane
+        --
+        --local dbg
+        --
+        --for i, v in pairs( getPlayer():getModData().nomeCane ) do
+        --    print(tostring(v.perk) .. "     " .. tostring(v.level))
+        --end
     end
 
 end
@@ -53,21 +99,65 @@ end
 function key36(character, key)
     if key == 36 then -- <<<< j
         print("Key = J\n")
+        local value = {"asd-awd-bbb"}
 
+        ModData.create("characterPerkDetails")
+        ModData.add("characterPerkDetails", value)
+        local dbg1 = ModData.get("characterPerkDetails")
+
+        local dgb
     end
 end
 
 -- ------------------------------------------------------------
 
-local function copyCharacter(character)
+---Read Character Perk Details From Hd
+local function readCharacterPerkDetailsFromHd()
+    local CharacterObj01 = CharacterObj:new(nil)
+
+    local characterPerkDetails =
+        ModData.get("characterPerkDetails")
+
+    local lines = {}
+
+    for i, v in pairs(characterPerkDetails) do
+        for s in v:gmatch("[^\r-]+") do
+            table.insert(lines,s)
+        end
+
+        ---@param perk
+        ---@param level
+        ---@param xp
+        CharacterObj01:addPerkDetails(getPerkFromName_PZ(lines[1]), lines[2], lines[3])
+        --print(lines[1] .. " " .. lines[2] .. " " .. lines[3] )
+        lines =  {}
+    end
+end
+
+---Write Character Perk Details To Hd
+---@param character IsoGameCharacter
+local function writeCharacterPerkDetailsToHd(character)
+    local lines = {}
     local CharacterObj01 = CharacterObj:new(nil)
     CharacterObj01 = getCharacterAllSkills(character)
 
+    for i, v in pairs(CharacterObj01) do
+        local value = tostring(v:getPerk()) .. "-" .. tostring(v:getLevel()) .. "-" .. tostring(v:getXp())
+        lines[i] = value
+        ModData.add("characterPerkDetails", lines)
+    end
+end
+---Copy Character
+---@param character IsoGameCharacter
+---@param CharacterObj01 CharacterObj
+local function copyCharacter(character, CharacterObj01)
     for i, v in pairs(CharacterObj01) do
         setPerkLevel(character, v:getPerk(), v:getLevel())
     end
 end
 
+---Remove Character
+---@param character IsoGameCharacter
 local function deleteCharacter(character)
     local CharacterObj01 = CharacterObj:new(nil)
     CharacterObj01 = getCharacterAllSkills(character)
@@ -81,5 +171,5 @@ local function OnGameStart()
 
 end
 
-Events.OnGameStart.Add(OnGameStart)
+-- Events.OnGameStart.Add(OnGameStart)
 Events.OnCustomUIKeyPressed.Add(onCustomUIKeyPressed)

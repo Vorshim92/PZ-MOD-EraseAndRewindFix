@@ -32,6 +32,7 @@ local function professionsTable(perk, level)
 end
 
 ---Get Character Traits
+---@param character IsoGameCharacter
 ---@return table perk, level
 function getCharacterTraits(character)
     characterTraitsTable_ = { perk, level }
@@ -51,6 +52,7 @@ function getCharacterTraits(character)
 end
 
 ---Get Character Profession
+---@param character IsoGameCharacter
 ---@return table perk, level
 function getCharacterProfession(character)
     professionsTable_ = { perk, level }
@@ -73,6 +75,16 @@ end
 function getPerk_PZ(perk)
     return PerkFactory.getPerk(perk)
 end
+
+--- Get Perk from name
+---@param perk string
+---@return PerkFactory.Perk perk
+--- - zombie.characters.skills.PerkFactory
+function getPerkFromName_PZ(perk)
+    return PerkFactory.getPerkFromName(perk)
+end
+
+
 
 ---Add XP
 ---@param character IsoGameCharacter
@@ -254,6 +266,7 @@ function convertLevelToXp(perk, level)
     return nil
 end
 
+-- TODO da aggiungere gli xp esatti
 ---Set Perk Level and level
 ---@param character IsoGameCharacter
 ---@param perk PerkFactory.Perk
