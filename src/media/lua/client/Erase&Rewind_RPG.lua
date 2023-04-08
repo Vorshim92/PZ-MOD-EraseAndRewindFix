@@ -22,90 +22,17 @@ end
 ---@param character IsoGameCharacter
 function key34(character, key)
     if key == 34 then -- <<<< g
-        print("Key = g\n")
-
-        ModData.remove("characterPerkDetails")
+        print("Key = g > writeCharacterPerkDetailsToHd \n")
         writeCharacterPerkDetailsToHd(character)
-
-        -- ----------------------------------------------
-
-        --local value = {}
-        --local CharacterObj01 = CharacterObj:new(nil)
-        --CharacterObj01 = getCharacterAllSkills(character)
-        --
-        --for i, v in pairs(CharacterObj01) do
-        --    local aaa = tostring(v:getPerk()) .. "-" .. tostring(v:getLevel()) .. "-" .. tostring(v:getXp())
-        --    value[i] = aaa
-        --    ModData.add("characterPerkDetails", value)
-        --end
-        --
-        --
-        ---- ModData.create("characterPerkDetails")
-        ---- ModData.add("characterPerkDetails", value)
-        --local dbg1 = ModData.get("characterPerkDetails")
-        --
-        --local dgb
-
-        -- -------------------------------------------
-
-        --for i, v in pairs(CharacterObj01) do
-        --    value = tostring(v:getPerk()) .. "-" .. tostring(v:getLevel()) .. "-" .. tostring(v:getXp())
-        --    ModData.add("characterPerkDetails", value)
-        --    local dbg2 = value
-        --    local dbg
-        --end
-        --
-        --local dbg1 = ModData.get("characterPerkDetails")
-        --local dbg
     end
 end
 
 ---@param character IsoGameCharacter
 function key35(character, key)
     if key == 35 then -- <<< h
-        print("Key = h\n")
-
+        print("Key = h > readNCreateCharacter\n")
         readNCreateCharacter(character)
-
-        --[[
-str = "perk-level-xp"
-lines = {}
-for s in str:gmatch("[^\r-]+") do
-    table.insert(lines, s)
-end
-
-local val0 = lines[1]
-local val1 = lines[2]
-local val2 = lines[3]
-
-print(val0 .. " " .. val1 .. " " .. val2)
-]]
-
-        -- ----------------------------------------
-
-        --local characterPerkDetails = ModData.get("characterPerkDetails")
-        --local dbg
-        --local lines = {}
-        --
-        --for i, v in pairs(characterPerkDetails) do
-        --    for s in v:gmatch("[^\r-]+") do
-        --        table.insert(lines,s)
-        --    end
-        --
-        --    print(lines[1] .. " " .. lines[2] .. " " .. lines[3] )
-        --    lines =  {}
-        --end
-
-        --CharacterObj02 = getPlayer():getModData().nomeCane
-        --
-        --local dbg
-        --
-        --for i, v in pairs( getPlayer():getModData().nomeCane ) do
-        --    print(tostring(v.perk) .. "     " .. tostring(v.level))
-        --end
     end
-
-    -- ------------------------------------------------
 
 end
 
@@ -141,13 +68,9 @@ function readCharacterPerkDetailsFromHd()
         ---@param perk
         ---@param level
         ---@param xp
-        local dbg1 = lines[1] -- getPerkFromName_PZ()
+        local dbg1 = getPerkFromName_PZ(lines[1])
         local dbg
-        CharacterObj01:addPerkDetails(getPerkFromName_PZ(lines[1]) , tonumber(lines[2]), tonumber(lines[2]) + 0.0 )
-        --CharacterObj01:addPerkDetails(lines[1], lines[2]:intValue(), tonumber(lines[3]) + 0.0 )
-
-        --DBG_displayPerk("addPerkDetails", type(lines[1]),
-        --        type(tonumber(lines[2])), type(string.format("%.2f", lines[3]))  )
+        CharacterObj01:addPerkDetails(getPerkFromName_PZ(lines[1]) , tonumber(lines[2]), tonumber(lines[3]) + 0.0 )
 
         lines = {}
     end
@@ -158,16 +81,16 @@ end
 ---Write Character Perk Details To Hd
 ---@param character IsoGameCharacter
 function writeCharacterPerkDetailsToHd(character)
-    local dbg
+
+    ModData.remove("characterPerkDetails")
 
     local lines = {}
     local CharacterObj01 = CharacterObj:new(nil)
     CharacterObj01 = getCharacterAllSkills(character)
 
     for i, v in pairs(CharacterObj01) do
-        local value = tostring(v:getPerk()) .. "-" .. tostring(v:getLevel()) .. "-" .. tostring(v:getXp())
-        -- DBG_displayPerk("lines", v:getPerk(), v:getLevel(), v:getXp())
-
+        local value_ = tostring(v:getPerk():getName()) .. "-" .. tostring(v:getLevel()) .. "-" .. tostring(v:getXp())
+        local value = tostring(value_)
         lines[i] = value
         ModData.add("characterPerkDetails", lines)
     end
@@ -178,7 +101,7 @@ end
 ---@param CharacterObj01 CharacterObj
 function createCharacter(character, CharacterObj01)
     for i, v in pairs(CharacterObj01) do
-       setPerkLevel(character, v:getPerk(), v:getLevel(), v:getXp())
+        setPerkLevel(character, v:getPerk(), v:getLevel(), v:getXp())
     end
 end
 
@@ -198,9 +121,6 @@ end
 function readNCreateCharacter(character)
     local CharacterObj01 = CharacterObj:new(nil)
     CharacterObj01 = readCharacterPerkDetailsFromHd()
-
-    local dbg1 = CharacterObj01
-    local dbg
     createCharacter(character, CharacterObj01)
 end
 

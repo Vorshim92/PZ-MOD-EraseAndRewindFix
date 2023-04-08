@@ -314,34 +314,14 @@ function setPerkLevel(character, perk, levelPerk, xp)
         return nil
     end
 
-    print(type(xp))
     if xp == 0 then
         return
     end
 
-    if levelPerk == 0 and  xp > 0 then
-        addXP_PZ(character, perk, xp,
-                false, false, true )
-        return
-    end
-
-    local convertLevelToXp_ = 0.0
-
-    for level_ = 1, levelPerk do
-        convertLevelToXp_ = convertLevelToXp_ + convertLevelToXp(perk, level_)
-    end
-
-    local totalXp = ( convertLevelToXp_ -
-            getXpPerk_PZ( character, perk ) ) -- * 2
-
-    if totalXp == 0 then
-        return
-    end
-
-    addXP_PZ(character, perk, convertLevelToXp_,
+    addXP_PZ(character, perk, xp,
             false, false, true )
-end
 
+end
 
 --[[
     Utilizza removePerkLevel(character, Perks.Maintenance, _)
