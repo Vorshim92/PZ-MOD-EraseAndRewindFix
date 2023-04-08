@@ -50,7 +50,7 @@ function CharacterObj:getPerkDetailsObj()
 end
 
 ---Get Perk Details
----@return table perk, level, xp
+---@return CharacterObj table - PerkFactory.Perk perk, int level, float xp
 function CharacterObj:getPerkDetails()
     return self.perkDetails_LIST
 end

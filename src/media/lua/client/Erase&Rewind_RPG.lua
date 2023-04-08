@@ -6,7 +6,7 @@
 --- ISSkillProgressBar:updateTooltip(lvlSelected)
 
 require("media.lua.shared.DbgLeleLib")
-require("media.lua.shared.objects.CharacterObj")
+--require("media.lua.shared.objects.CharacterObj")
 
 local function onCustomUIKeyPressed(key)
     local character = getPlayer()
@@ -24,22 +24,29 @@ function key34(character, key)
     if key == 34 then -- <<<< g
         print("Key = g\n")
 
-        local value = {}
-        local CharacterObj01 = CharacterObj:new(nil)
-        CharacterObj01 = getCharacterAllSkills(character)
+        ModData.remove("characterPerkDetails")
+        writeCharacterPerkDetailsToHd(character)
 
-        for i, v in pairs(CharacterObj01) do
-            local aaa = tostring(v:getPerk()) .. "-" .. tostring(v:getLevel()) .. "-" .. tostring(v:getXp())
-            value[i] = aaa
-            ModData.add("characterPerkDetails", value)
-        end
+        -- ----------------------------------------------
 
+        --local value = {}
+        --local CharacterObj01 = CharacterObj:new(nil)
+        --CharacterObj01 = getCharacterAllSkills(character)
+        --
+        --for i, v in pairs(CharacterObj01) do
+        --    local aaa = tostring(v:getPerk()) .. "-" .. tostring(v:getLevel()) .. "-" .. tostring(v:getXp())
+        --    value[i] = aaa
+        --    ModData.add("characterPerkDetails", value)
+        --end
+        --
+        --
+        ---- ModData.create("characterPerkDetails")
+        ---- ModData.add("characterPerkDetails", value)
+        --local dbg1 = ModData.get("characterPerkDetails")
+        --
+        --local dgb
 
-        -- ModData.create("characterPerkDetails")
-        -- ModData.add("characterPerkDetails", value)
-        local dbg1 = ModData.get("characterPerkDetails")
-
-        local dgb
+        -- -------------------------------------------
 
         --for i, v in pairs(CharacterObj01) do
         --    value = tostring(v:getPerk()) .. "-" .. tostring(v:getLevel()) .. "-" .. tostring(v:getXp())
@@ -58,6 +65,8 @@ function key35(character, key)
     if key == 35 then -- <<< h
         print("Key = h\n")
 
+        readNCreateCharacter(character)
+
         --[[
 str = "perk-level-xp"
 lines = {}
@@ -72,18 +81,20 @@ local val2 = lines[3]
 print(val0 .. " " .. val1 .. " " .. val2)
 ]]
 
-        local characterPerkDetails = ModData.get("characterPerkDetails")
-        local dbg
-        local lines = {}
+        -- ----------------------------------------
 
-        for i, v in pairs(characterPerkDetails) do
-            for s in v:gmatch("[^\r-]+") do
-                table.insert(lines,s)
-            end
-
-            print(lines[1] .. " " .. lines[2] .. " " .. lines[3] )
-            lines =  {}
-        end
+        --local characterPerkDetails = ModData.get("characterPerkDetails")
+        --local dbg
+        --local lines = {}
+        --
+        --for i, v in pairs(characterPerkDetails) do
+        --    for s in v:gmatch("[^\r-]+") do
+        --        table.insert(lines,s)
+        --    end
+        --
+        --    print(lines[1] .. " " .. lines[2] .. " " .. lines[3] )
+        --    lines =  {}
+        --end
 
         --CharacterObj02 = getPlayer():getModData().nomeCane
         --
@@ -93,6 +104,8 @@ print(val0 .. " " .. val1 .. " " .. val2)
         --    print(tostring(v.perk) .. "     " .. tostring(v.level))
         --end
     end
+
+    -- ------------------------------------------------
 
 end
 
@@ -112,7 +125,7 @@ end
 -- ------------------------------------------------------------
 
 ---Read Character Perk Details From Hd
-local function readCharacterPerkDetailsFromHd()
+function readCharacterPerkDetailsFromHd()
     local CharacterObj01 = CharacterObj:new(nil)
 
     local characterPerkDetails =
@@ -122,49 +135,73 @@ local function readCharacterPerkDetailsFromHd()
 
     for i, v in pairs(characterPerkDetails) do
         for s in v:gmatch("[^\r-]+") do
-            table.insert(lines,s)
+            table.insert(lines, s)
         end
 
         ---@param perk
         ---@param level
         ---@param xp
-        CharacterObj01:addPerkDetails(getPerkFromName_PZ(lines[1]), lines[2], lines[3])
-        --print(lines[1] .. " " .. lines[2] .. " " .. lines[3] )
-        lines =  {}
+        local dbg1 = lines[1] -- getPerkFromName_PZ()
+        local dbg
+        CharacterObj01:addPerkDetails(getPerkFromName_PZ(lines[1]) , tonumber(lines[2]), tonumber(lines[2]) + 0.0 )
+        --CharacterObj01:addPerkDetails(lines[1], lines[2]:intValue(), tonumber(lines[3]) + 0.0 )
+
+        --DBG_displayPerk("addPerkDetails", type(lines[1]),
+        --        type(tonumber(lines[2])), type(string.format("%.2f", lines[3]))  )
+
+        lines = {}
     end
+
+    return CharacterObj01:getPerkDetails()
 end
 
 ---Write Character Perk Details To Hd
 ---@param character IsoGameCharacter
-local function writeCharacterPerkDetailsToHd(character)
+function writeCharacterPerkDetailsToHd(character)
+    local dbg
+
     local lines = {}
     local CharacterObj01 = CharacterObj:new(nil)
     CharacterObj01 = getCharacterAllSkills(character)
 
     for i, v in pairs(CharacterObj01) do
         local value = tostring(v:getPerk()) .. "-" .. tostring(v:getLevel()) .. "-" .. tostring(v:getXp())
+        -- DBG_displayPerk("lines", v:getPerk(), v:getLevel(), v:getXp())
+
         lines[i] = value
         ModData.add("characterPerkDetails", lines)
     end
 end
+
 ---Copy Character
 ---@param character IsoGameCharacter
 ---@param CharacterObj01 CharacterObj
-local function copyCharacter(character, CharacterObj01)
+function createCharacter(character, CharacterObj01)
     for i, v in pairs(CharacterObj01) do
-        setPerkLevel(character, v:getPerk(), v:getLevel())
+       setPerkLevel(character, v:getPerk(), v:getLevel(), v:getXp())
     end
 end
 
 ---Remove Character
 ---@param character IsoGameCharacter
-local function deleteCharacter(character)
+function deleteCharacter(character)
     local CharacterObj01 = CharacterObj:new(nil)
     CharacterObj01 = getCharacterAllSkills(character)
 
     for i, v in pairs(CharacterObj01) do
         removePerkLevel(character, v:getPerk(), _)
     end
+end
+
+---@param character IsoGameCharacter
+---@param CharacterObj01 CharacterObj
+function readNCreateCharacter(character)
+    local CharacterObj01 = CharacterObj:new(nil)
+    CharacterObj01 = readCharacterPerkDetailsFromHd()
+
+    local dbg1 = CharacterObj01
+    local dbg
+    createCharacter(character, CharacterObj01)
 end
 
 local function OnGameStart()

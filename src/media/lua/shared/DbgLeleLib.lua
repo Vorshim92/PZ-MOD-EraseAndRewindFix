@@ -14,14 +14,13 @@ function DBG_displayPerk(displayName, perk, level, xp)
     local dbg2 = level
     local dbg3 = xp
     print("--------------------------------")
-    print("DBG_displayPerk ".. displayName .. " - "
-            .. tostring(perk).. " - "
-            .. tostring(level).. " - "
+    print("DBG_displayPerk " .. displayName .. " - "
+            .. tostring(perk) .. " - "
+            .. tostring(level) .. " - "
             .. tostring(xp))
     print("--------------------------------")
     local dbg
 end
-
 
 ---@param displayName string
 ---@param perk_ PerkFactory.Perk
@@ -44,6 +43,7 @@ function DBG_GetCheckPerk(displayName, perk_, perk, level )
 
         local dbg
     end
+
     local dbg
 end
 
