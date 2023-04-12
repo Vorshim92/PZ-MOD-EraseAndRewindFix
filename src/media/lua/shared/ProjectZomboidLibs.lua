@@ -8,53 +8,10 @@
 
 require("media.lua.shared.objects.CharacterObj")
 
-local characterTraitsTable_ = { perk, level }
-local professionsTable_ = { perk, level }
-
----Add character Trait Table
----@param perk PerkFactory.Perk
----@param level int
-local function characterTraitTable(perk, level)
-    table.insert(characterTraitsTable_,{
-        perk = perk,
-        level = level
-    })
-end
-
----Add professions Table
----@param perk PerkFactory.Perk
----@param level int
-local function professionsTable(perk, level)
-    table.insert(professionsTable_,{
-        perk = perk,
-        level = level
-    })
-end
-
----Get Character Traits
----@param character IsoGameCharacter
----@return table perk, level
-function getCharacterTraits(character)
-    characterTraitsTable_ = { perk, level }
-
-    local traits_PZ = getTraits_PZ(character)
-
-    for i = 0, traits_PZ:size() - 1 do
-        local traitMap = TraitFactory.getTrait(traits_PZ:get(i) ):getXPBoostMap()
-        local traitKahluaTable = transformIntoKahluaTable(traitMap)
-
-        for perk, level in pairs(traitKahluaTable) do
-            characterTraitTable(perk, level)
-        end
-    end
-
-    return characterTraitsTable_
-end
-
 ---Get Character Traits
 ---@param character IsoGameCharacter
 ---@return CharacterObj table - PerkFactory.Perk perk, int level
-function getCharacterTraitsX(character)
+function getCharacterTraits(character)
     local CharacterObj01 = CharacterObj:new(nil)
 
     local traits_PZ = getTraits_PZ(character)
@@ -64,7 +21,7 @@ function getCharacterTraitsX(character)
         local traitKahluaTable = transformIntoKahluaTable(traitMap)
 
         for perk, level in pairs(traitKahluaTable) do
-            CharacterObj01:addPerkDetails(perk, level:intValue(), _)
+            CharacterObj01:addPerkDetails(perk, level:intValue(), nil)
         end
     end
 
@@ -73,25 +30,8 @@ end
 
 ---Get Character Profession
 ---@param character IsoGameCharacter
----@return table perk, level
-function getCharacterProfession(character)
-    professionsTable_ = { perk, level }
-
-    local characterProfession_PZ = getCharacterProfession_PZ(character)
-    local professionMap = ProfessionFactory.getProfession(characterProfession_PZ):getXPBoostMap()
-    local professionKahluaTable = transformIntoKahluaTable(professionMap)
-
-    for perk, level in pairs(professionKahluaTable) do
-        professionsTable(perk, level)
-    end
-
-    return professionsTable_
-end
-
----Get Character Profession
----@param character IsoGameCharacter
 ---@return CharacterObj table - PerkFactory.Perk perk, int level
-function getCharacterProfessionX(character)
+function getCharacterProfession(character)
     local CharacterObj01 = CharacterObj:new(nil)
 
     local characterProfession_PZ = getCharacterProfession_PZ(character)
@@ -99,7 +39,7 @@ function getCharacterProfessionX(character)
     local professionKahluaTable = transformIntoKahluaTable(professionMap)
 
     for perk, level in pairs(professionKahluaTable) do
-        CharacterObj01:addPerkDetails(perk, level:intValue(), _)
+        CharacterObj01:addPerkDetails(perk, level:intValue(), nil)
     end
 
     return CharacterObj01:getPerkDetails()
@@ -309,7 +249,6 @@ end
 ---@param levelPerk int
 --- - IsoGameCharacter.XP : zombie.characters.IsoGameCharacter.XP
 function setPerkLevel(character, perk, levelPerk, xp)
-    -- TODO da aggiungere gli xp esatti
     if not character or not perk or not levelPerk then
         return nil
     end
@@ -365,6 +304,12 @@ function removePerkLevel(character, perk, levelPerk)
 
 end
 
+---Get Parent_PZ
+---@param perk PerkFactory.Perk
+function getParent_PZ(perk)
+    return perk:getParent():getName()
+end
+
 -- ----------------------
 
 --- Get Charater profession
@@ -402,9 +347,5 @@ local function setXpLevelToZero(character, perk)
 end
 
 
----@param character IsoGameCharacter
-function getParent_PZ(character)
-    -- TODO getParent_PZ
-end
 
 -- char:getDescriptor():getForename();

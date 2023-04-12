@@ -17,6 +17,9 @@ function PerkDetailsObj:new(t)
     t = t or {}
     setmetatable(t, self)
     self.__index = self
+    self.perk = ""
+    self.level = ""
+    self.xp = ""
     return t
 end
 

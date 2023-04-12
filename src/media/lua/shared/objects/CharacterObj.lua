@@ -18,6 +18,7 @@ function CharacterObj:new(t)
     setmetatable(t, self)
     self.__index = self
     self.perkDetails_LIST = {}
+    self.profession = ""
     return t
 end
 
