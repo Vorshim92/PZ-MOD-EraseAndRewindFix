@@ -4,39 +4,13 @@
 --- DateTime: 01/04/23 21:20
 ---
 
-local function create()
-    
+function readBook(character)
+    createCharacterSkill(character)
+    createKilledZombies(character)
+
 end
 
-local function destroy()
-    
+function writeBook(character)
+    writeCharacterPerkDetailsToHd(character)
+    writeKilledZombiesToHd(character)
 end
-
-function save(CharacterObj)
-    
-end
-
-function restore(CharacterObj)
-    
-end
-
---[[
-Questo per moddata del player lato client
-Init:
-if getPlayer():getModData().nomeModData == nil then
-    getPlayer():getModData().nomeModData = valore (può essere qualsiasi cosa tu voglia,
-     anche un altra table)
-
-Lettura:
-Local val = getPlayer():getModData().nomeModData
-    print(val)
-
-Scrittura:
-    getPlayer():getModData().nomeModData = getPlayer():getModData().nomeModData + 1
-
-Cancellazione:
-    getPlayer():getModData().nomeModData = nil
-
-
-Per moddata globale lato server sostituisci getPlayer() con getGameTime()
-]]

@@ -6,123 +6,72 @@
 --- ISSkillProgressBar:updateTooltip(lvlSelected)
 
 require("media.lua.shared.DbgLeleLib")
---require("media.lua.shared.objects.CharacterObj")
+require("media.lua.shared.objects.CharacterTableX")
 
 local function onCustomUIKeyPressed(key)
     local character = getPlayer()
 
-
     key34(character, key)
     key35(character, key)
-    --key36(character, key)
+    key36(character, key)
 end
+
 -- Perks.Maintenance
 -- Perks.Woodwork
 -- Perks.Sprinting
 ---@param character IsoGameCharacter
 function key34(character, key)
     if key == 34 then -- <<<< g
-        print("Key = g > writeCharacterPerkDetailsToHd \n")
-        writeCharacterPerkDetailsToHd(character)
+        print("Key = g > writeBook \n")
+        -- writeBook(character)
+        -- writeKilledZombiesToHd(character)
+        writeLifeTimeToHd(character)
     end
 end
 
 ---@param character IsoGameCharacter
 function key35(character, key)
     if key == 35 then -- <<< h
-        print("Key = h > readNCreateCharacter\n")
-        readNCreateCharacter(character)
+        print("Key = h > readBook \n")
+        createLifeTime()
     end
 
 end
 
+---@param character IsoGameCharacter
 function key36(character, key)
     if key == 36 then -- <<<< j
-        print("Key = J\n")
-        local value = {"asd-awd-bbb"}
-
-        ModData.create("characterPerkDetails")
-        ModData.add("characterPerkDetails", value)
-        local dbg1 = ModData.get("characterPerkDetails")
-
-        local dgb
+        print("Key = j > delete \n")
+        IsoPlayer.getInstance():setHoursSurvived(15)
     end
 end
 
 -- ------------------------------------------------------------
 
----Read Character Perk Details From Hd
-function readCharacterPerkDetailsFromHd()
-    local CharacterObj01 = CharacterObj:new(nil)
+local function lifeTime(character)
+    print(tostring(getGameTime():getDaysSurvived() ) .. " - " .. tostring(getGameTime():getHoursSurvived()))
 
-    local characterPerkDetails =
-        ModData.get("characterPerkDetails")
+    print("-------------------------------------------------")
+    print(tostring(character:getHoursSurvived()/24))
+    print("-------------------------------------------------")
 
-    local lines = {}
 
-    for i, v in pairs(characterPerkDetails) do
-        for s in v:gmatch("[^\r-]+") do
-            table.insert(lines, s)
-        end
 
-        ---@param perk
-        ---@param level
-        ---@param xp
-        local dbg1 = getPerkFromName_PZ(lines[1])
-        local dbg
-        CharacterObj01:addPerkDetails(getPerkFromName_PZ(lines[1]) , tonumber(lines[2]), tonumber(lines[3]) + 0.0 )
+    local lifeTimes = getGameTime():getTimeSurvived(character)
 
-        lines = {}
-    end
-
-    return CharacterObj01:getPerkDetails()
-end
-
----Write Character Perk Details To Hd
----@param character IsoGameCharacter
-function writeCharacterPerkDetailsToHd(character)
-
-    ModData.remove("characterPerkDetails")
-
-    local lines = {}
-    local CharacterObj01 = CharacterObj:new(nil)
-    CharacterObj01 = getCharacterAllSkills(character)
-
-    for i, v in pairs(CharacterObj01) do
-        local value_ = tostring(v:getPerk():getName()) .. "-" .. tostring(v:getLevel()) .. "-" .. tostring(v:getXp())
-        local value = tostring(value_)
-        lines[i] = value
-        ModData.add("characterPerkDetails", lines)
-    end
-end
-
----Copy Character
----@param character IsoGameCharacter
----@param CharacterObj01 CharacterObj
-function createCharacter(character, CharacterObj01)
-    for i, v in pairs(CharacterObj01) do
-        setPerkLevel(character, v:getPerk(), v:getLevel(), v:getXp())
-    end
-end
-
----Remove Character
----@param character IsoGameCharacter
-function deleteCharacter(character)
-    local CharacterObj01 = CharacterObj:new(nil)
-    CharacterObj01 = getCharacterAllSkills(character)
-
-    for i, v in pairs(CharacterObj01) do
-        removePerkLevel(character, v:getPerk(), _)
+    for s in lifeTimes:gmatch("[%d]+") do
+        print(s)
     end
 end
 
 ---@param character IsoGameCharacter
----@param CharacterObj01 CharacterObj
-function readNCreateCharacter(character)
-    local CharacterObj01 = CharacterObj:new(nil)
-    CharacterObj01 = readCharacterPerkDetailsFromHd()
-    createCharacter(character, CharacterObj01)
+local function killedZombies(character)
+    character:setZombieKills(15)
+    print("Killed zombies " .. character:getZombieKills() )
 end
+
+-- ------------------------------------------------------------
+
 
 local function OnGameStart()
 

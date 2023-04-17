@@ -10,15 +10,17 @@ require("media.lua.shared.objects.PerkDetailsObj")
 
 CharacterObj = {
     profession = "",
-    perkDetails_LIST = {}
+    perkDetails_LIST = {},
+    PerkDetailsObj01 = ""
 }
 
 function CharacterObj:new(t)
     t = t or {}
     setmetatable(t, self)
     self.__index = self
-    self.perkDetails_LIST = {}
     self.profession = ""
+    self.perkDetails_LIST = {}
+    self.PerkDetailsObj01 = nil
     return t
 end
 
@@ -34,14 +36,14 @@ function CharacterObj:currentCharacter(profession, perk, level, xp)
 end
 
 ---Add Perk Details ( in to list )
----@param profession string
 ---@param perk PerkFactory.Perk
 ---@param level int
 function CharacterObj:addPerkDetails(perk, level, xp)
-    local PerkDetailsObj01 = PerkDetailsObj:new(nil)
+    self.PerkDetailsObj01 = PerkDetailsObj:new(nil)
 
-    PerkDetailsObj01:addPerkDetails(perk, level, xp)
-    table.insert(self.perkDetails_LIST, PerkDetailsObj01)
+    self.PerkDetailsObj01:addPerkDetails(perk, level, xp)
+
+    table.insert(self.perkDetails_LIST, self.PerkDetailsObj01)
 end
 
 ---Get object PerkDetailsObj

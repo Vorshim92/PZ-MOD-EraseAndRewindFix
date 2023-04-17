@@ -52,9 +52,12 @@ end
 function DBG_displayListPerks(displayName, perks_list)
     print("--------------------------------")
     for i, v in pairs(perks_list) do
-        print("dbg_displayName ".. displayName ..
-                " " .. tostring(v.perk) .. " - " .. tostring(v.level))
-        DBG_GetCheckPerk("DBG_GetCheckPerk", v.perk_, v.perk, _ )
+        print("dbg_displayName " ..
+                displayName .. "   i " ..
+                tostring(i) .. " >>>>> " ..
+                tostring(v.perk) .. " - " ..
+                tostring(v.level))
+        -- DBG_GetCheckPerk("DBG_GetCheckPerk", v.perk_, v.perk, _ )
     end
     print("--------------------------------")
 end
