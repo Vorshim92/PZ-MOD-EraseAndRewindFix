@@ -4,13 +4,30 @@
 --- DateTime: 01/04/23 21:20
 ---
 
+local function removeMoData()
+    ModData.remove(EnumModData.ZOMBIEKILLS)
+    ModData.remove(EnumModData.CHARACTER_LIFE_TIME)
+    ModData.remove(EnumModData.CHARACTER_PERK_DETAILS)
+    ModData.remove(EnumModData.PROFESSION)
+    ModData.remove(EnumModData.CALORIES)
+    ModData.remove(EnumModData.WEIGHT)
+end
+---Read Book
+---@param character IsoGameCharacter
+--- - IsoGameCharacter : zombie.characters.IsoGameCharacter
 function readBook(character)
     createCharacterSkill(character)
     createZombieKills(character)
 
+    -- removeMoData()
 end
 
+---Write Book
+---@param character IsoGameCharacter
+--- - IsoGameCharacter : zombie.characters.IsoGameCharacter
 function writeBook(character)
     writeCharacterPerkDetailsToHd(character)
     writeZombieKillsToHd(character)
+    writeLifeTimeToHd()
 end
+

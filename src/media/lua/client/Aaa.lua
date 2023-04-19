@@ -6,7 +6,6 @@
 --- ISSkillProgressBar:updateTooltip(lvlSelected)
 
 require("media.lua.shared.DbgLeleLib")
-require("media.lua.shared.objects.CharacterTableX")
 
 local function onCustomUIKeyPressed(key)
     local character = getPlayer()
@@ -22,19 +21,20 @@ end
 ---@param character IsoGameCharacter
 function key34(character, key)
     if key == 34 then -- <<<< g
-        print("Key = g > writeBook \n")
-        -- writeBook(character)
-        -- writeKilledZombiesToHd(character)
+        print("Key = g > get profession \n")
+        -- print(tostring(IsoPlayer.getInstance():getNutrition():getWeight()))
+        -- print(tostring(IsoPlayer.getInstance():getNutrition():getCalories()))
 
-        writeLifeTimeToHd(character)
+        --writeLifeTimeToHd(character)
     end
 end
 
 ---@param character IsoGameCharacter
 function key35(character, key)
     if key == 35 then -- <<< h
-        print("Key = h > readBook \n")
-        createLifeTime()
+        print("Key = h > set profession \n")
+        -- IsoPlayer.getInstance():getNutrition():setWeight(70.0)
+        IsoPlayer.getInstance()
     end
 
 end

@@ -4,47 +4,46 @@
 --- DateTime: 15/04/23 18:54
 ---
 
-local nameModData = "zombieKills"
+require("media.lua.client.EnumModData")
 
 ---Read Zombies Killed From Hd
 ---@return int
-local function readZombieKillsFromHd()
-    local lines = {}
+local function readZombieKillsFromHd(character)
 
-    lines = ModData.get(nameModData)
-    return lines[1]
-end
+    local zombieKills =
+        readSingleValueIntoModData( EnumModData.ZOMBIEKILLS)
 
----Set Zombies Killed
----@param character IsoGameCharacter
----@param killZombies int
-local function setZombieKills_PZ(character, killZombies)
-    character:setZombieKills(killZombies)
-end
+    setZombieKills_PZ(character, zombieKills)
 
----Get Zombies Killed
----@param character IsoGameCharacter
----return int
-local function getZombieKills_PZ(character)
-    return character:getZombieKills()
+    --local lines = {}
+    --
+    --lines = ModData.get(EnumModData.ZOMBIEKILLS )
+    --return lines[1]
 end
 
 ---Create Zombies Kills
 ---@param character IsoGameCharacter
+--- - zombie.characters.IsoGameCharacter
 function createZombieKills(character)
-    local zombieKills = readZombieKillsFromHd()
-    setZombieKills_PZ(character, zombieKills)
+    readZombieKillsFromHd(character)
+
+    --local zombieKills = readZombieKillsFromHd()
+    --setZombieKills_PZ(character, zombieKills)
 end
 
 ---Write Zombies Kills To Hd
 ---@param character IsoGameCharacter
+--- - zombie.characters.IsoGameCharacter
 function writeZombieKillsToHd(character)
-    ModData.remove(nameModData)
+    insertSingleValueIntoModData(EnumModData.ZOMBIEKILLS,
+            getZombieKills_PZ(character) )
 
-    local zombieKills = getZombieKills_PZ(character)
-
-    local lines = {}
-    table.insert(lines, zombieKills)
-
-    ModData.add(nameModData, lines)
+    --ModData.remove(EnumModData.ZOMBIEKILLS)
+    --
+    --local zombieKills = getZombieKills_PZ(character)
+    --
+    --local lines = {}
+    --table.insert(lines, zombieKills)
+    --
+    --ModData.add(EnumModData.ZOMBIEKILLS, lines)
 end

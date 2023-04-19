@@ -5,15 +5,14 @@
 ---
 
 require("media.lua.shared.objects.CharacterObj")
-
-local nameModData = "characterPerkDetails"
+require("media.lua.client.EnumModData")
 
 ---Read Character Perk Details From Hd
----@return table string profession, PerkFactory.Perk perk, int level, float xp, boolean flag
+---@return CharacterObj getPerkDetails() -- table PerkFactory.Perk perk, int level, float xp
 local function readCharacterPerkDetailsFromHd()
 
     local characterPerkDetails =
-        ModData.get(nameModData)
+        ModData.get(EnumModData.CHARACTER_PERK_DETAILS )
 
     local lines = {}
 
@@ -24,18 +23,25 @@ local function readCharacterPerkDetailsFromHd()
             table.insert(lines, s)
         end
 
-        CharacterObj01:addPerkDetails(getPerkFromName_PZ(lines[1]),
+        CharacterObj01:addPerkDetails(
+                getPerkFromName_PZ(lines[1]),
                 tonumber(lines[2]),
                 tonumber(lines[3]) + 0.0)
 
+
         lines = {}
     end
+
+
+    lines[1] = ModData.get(EnumModData.PROFESSION )
+    CharacterObj01:setProfession(lines[1])
 
     return CharacterObj01:getPerkDetails()
 end
 
 ---Delete  all skills Character
 ---@param character IsoGameCharacter
+--- - IsoGameCharacter : zombie.characters.IsoGameCharacter
 local function deleteCharacter(character)
     local CharacterAllSkillsObj = CharacterObj:new(nil)
 
@@ -44,25 +50,30 @@ local function deleteCharacter(character)
     for _, v in pairs(CharacterAllSkillsObj) do
         removePerkLevel(character, v:getPerk())
     end
+
+    setCharacterProfession_PZ("")
 end
 
 ---Copy Character Skill
 ---@param character IsoGameCharacter
 function createCharacterSkill(character)
-    local characterSkills = {}
-    characterSkills = readCharacterPerkDetailsFromHd()
+    local CharacterAllSkillsObj = CharacterObj:new(nil)
+    CharacterAllSkillsObj = readCharacterPerkDetailsFromHd()
 
     deleteCharacter(character)
 
-    for _, v in pairs(characterSkills) do
+    for _, v in pairs(CharacterAllSkillsObj) do
         setPerkLevel(character, v.perk, v.xp)
     end
+
+    setCharacterProfession_PZ( CharacterAllSkillsObj:getProfession() )
 end
 
 ---Write Character Perk Details To Hd
 ---@param character IsoGameCharacter
+--- - IsoGameCharacter : zombie.characters.IsoGameCharacter
 function writeCharacterPerkDetailsToHd(character)
-    ModData.remove(nameModData)
+    ModData.remove(EnumModData.CHARACTER_PERK_DETAILS )
 
     local lines = {}
 
@@ -75,9 +86,16 @@ function writeCharacterPerkDetailsToHd(character)
                 tostring(v:getlevel())  .. "-" ..
                 tostring(v:getXp()) )
 
-        ModData.add(nameModData, lines)
+        ModData.add(EnumModData.CHARACTER_PERK_DETAILS, lines)
     end
+
+    lines = {}
+    table.insert(lines, CharacterAllSkillsObj:getProfession() )
+
+    ModData.add(EnumModData.PROFESSION, lines)
 end
+
+
 
 
 
