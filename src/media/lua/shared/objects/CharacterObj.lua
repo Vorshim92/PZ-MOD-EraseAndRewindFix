@@ -10,6 +10,8 @@ require("media.lua.shared.objects.PerkDetailsObj")
 
 CharacterObj = {
     profession = "",
+    weight = "",
+    calories = "",
     perkDetails_LIST = {},
     PerkDetailsObj01 = ""
 }
@@ -19,6 +21,8 @@ function CharacterObj:new(t)
     setmetatable(t, self)
     self.__index = self
     self.profession = ""
+    self.weight = ""
+    self.calories = ""
     self.perkDetails_LIST = {}
     self.PerkDetailsObj01 = nil
     return t
@@ -32,7 +36,8 @@ end
 function CharacterObj:currentCharacter(profession, perk, level, xp)
     self.profession = profession
 
-    PerkDetailsObj:addPerkDetails(perk, level, xp)
+    self.PerkDetailsObj01 = PerkDetailsObj:new(nil)
+    self.PerkDetailsObj01:addPerkDetails(perk, level, xp)
 end
 
 ---Add Perk Details ( in to list )
@@ -40,7 +45,6 @@ end
 ---@param level int
 function CharacterObj:addPerkDetails(perk, level, xp)
     self.PerkDetailsObj01 = PerkDetailsObj:new(nil)
-
     self.PerkDetailsObj01:addPerkDetails(perk, level, xp)
 
     table.insert(self.perkDetails_LIST, self.PerkDetailsObj01)
@@ -69,3 +73,28 @@ end
 function CharacterObj:getProfession()
     return self.profession
 end
+
+---Set calories
+---@param calories
+function CharacterObj:setCalories(calories)
+    self.calories = calories
+end
+
+---Get profession
+---@return
+function CharacterObj:getCalories()
+    return self.calories
+end
+
+---Set Weight
+---@param weight
+function CharacterObj:setWeight(weight)
+    self.weight = weight
+end
+
+---Get Weight
+---@return
+function CharacterObj:getWeight()
+    return self.weight
+end
+

@@ -25,6 +25,7 @@ function key34(character, key)
         print("Key = g > writeBook \n")
         -- writeBook(character)
         -- writeKilledZombiesToHd(character)
+
         writeLifeTimeToHd(character)
     end
 end

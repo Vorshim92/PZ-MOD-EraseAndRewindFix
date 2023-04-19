@@ -4,45 +4,47 @@
 --- DateTime: 15/04/23 18:54
 ---
 
-local nameModData = "killedZombies"
+local nameModData = "zombieKills"
 
----Read Killed Zombies From Hd
+---Read Zombies Killed From Hd
 ---@return int
-local function readKilledZombiesFromHd()
+local function readZombieKillsFromHd()
     local lines = {}
 
     lines = ModData.get(nameModData)
     return lines[1]
 end
 
----Set Killed Zombies
+---Set Zombies Killed
 ---@param character IsoGameCharacter
----@param killedZombies int
-local function setKilledZombies(character, killedZombies)
-    character:setZombieKills(killedZombies)
+---@param killZombies int
+local function setZombieKills_PZ(character, killZombies)
+    character:setZombieKills(killZombies)
 end
 
----Get Killed Zombies
+---Get Zombies Killed
 ---@param character IsoGameCharacter
 ---return int
-local function getKilledZombies(character)
+local function getZombieKills_PZ(character)
     return character:getZombieKills()
 end
 
-function createKilledZombies(character)
-    local killedZombies = readKilledZombiesFromHd()
-    setKilledZombies(character, killedZombies)
+---Create Zombies Kills
+---@param character IsoGameCharacter
+function createZombieKills(character)
+    local zombieKills = readZombieKillsFromHd()
+    setZombieKills_PZ(character, zombieKills)
 end
 
----Write Killed Zombies To Hd
+---Write Zombies Kills To Hd
 ---@param character IsoGameCharacter
-function writeKilledZombiesToHd(character)
+function writeZombieKillsToHd(character)
     ModData.remove(nameModData)
 
-    local killedZombies = getKilledZombies(character)
+    local zombieKills = getZombieKills_PZ(character)
 
     local lines = {}
-    table.insert(lines, killedZombies)
+    table.insert(lines, zombieKills)
 
     ModData.add(nameModData, lines)
 end

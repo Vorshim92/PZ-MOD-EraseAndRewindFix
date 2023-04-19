@@ -66,14 +66,14 @@ function writeCharacterPerkDetailsToHd(character)
 
     local lines = {}
 
-    local CharacterAllSkillsObj = getCharacterAllSkills(character)
+    local CharacterAllSkillsObj = CharacterObj:new(nil)
 
     CharacterAllSkillsObj = getCharacterAllSkills(character)
 
     for i, v in pairs(CharacterAllSkillsObj) do
-        lines[i] = ( v.perk:getName() .. "-" ..
-                tostring(v.level)  .. "-" ..
-                tostring(v.xp) )
+        lines[i] = ( v:getPerk():getName() .. "-" ..
+                tostring(v:getlevel())  .. "-" ..
+                tostring(v:getXp()) )
 
         ModData.add(nameModData, lines)
     end

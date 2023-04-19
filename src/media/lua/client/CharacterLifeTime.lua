@@ -7,7 +7,7 @@
 local nameModData = "characterLifeTime"
 
 ---Read Life Time From Hd
-function readLifeTimeFromHd()
+local function readLifeTimeFromHd()
     local lines = {}
 
     lines = ModData.get(nameModData)
@@ -16,27 +16,27 @@ end
 
 ---Set Life Time
 ---@param lifeTime double
-function setLifeTime(lifeTime)
+local function setHoursSurvived_PZ(lifeTime)
     IsoPlayer.getInstance():setHoursSurvived(lifeTime)
 end
 
 ---Get Life Time
 ---@return double
-function getLifeTime()
+local function getHoursSurvived_PZ()
     return IsoPlayer.getInstance():getHoursSurvived()
 end
 
 ---Create Life Time
 function createLifeTime()
     local lifeTime = readLifeTimeFromHd()
-    setLifeTime(lifeTime)
+    setHoursSurvived_PZ(lifeTime)
 end
 
 ---Write Life Time To Hd
 function writeLifeTimeToHd()
     ModData.remove(nameModData)
 
-    local lifeTime = getLifeTime()
+    local lifeTime = getHoursSurvived_PZ()
 
     local lines = {}
     table.insert(lines, lifeTime)

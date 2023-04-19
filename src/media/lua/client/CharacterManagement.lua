@@ -6,11 +6,11 @@
 
 function readBook(character)
     createCharacterSkill(character)
-    createKilledZombies(character)
+    createZombieKills(character)
 
 end
 
 function writeBook(character)
     writeCharacterPerkDetailsToHd(character)
-    writeKilledZombiesToHd(character)
+    writeZombieKillsToHd(character)
 end

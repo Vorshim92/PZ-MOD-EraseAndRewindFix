@@ -68,6 +68,31 @@ function getCharacterCurrentSkill(character, perk)
     return CharacterObj01:getPerkDetailsObj()
 end
 
+---Get character and get All skills/traits
+---@param character IsoGameCharacter
+---@return CharacterObj getPerkDetails() -- table PerkFactory.Perk perk, int level, float xp
+--- - IsoGameCharacter : zombie.characters.IsoGameCharacter
+function getCharacterAllSkills(character)
+    if not character then
+        return nil
+    end
+
+    local CharacterObj01 = CharacterObj:new(nil)
+
+    for i = 0, Perks.getMaxIndex() - 1 do
+        local perk = getPerk_PZ(Perks.fromIndex(i))
+        local level = getPerkLevel_PZ(character, perk)
+        local xp = getXpPerk_PZ(character, perk)
+
+        -- Add to objects
+        CharacterObj01:addPerkDetails(perk, level, xp)
+    end
+
+    CharacterObj01:setProfession( getCharacterProfession_PZ(character) )
+
+    return CharacterObj01:getPerkDetails()
+end
+
 --- Get Perk
 ---@param perk PerkFactory
 ---@return PerkFactory.Perk perk
@@ -107,31 +132,6 @@ end
 ---@return int
 function trunkFloatTo2Decimal(value)
     return tonumber(string.format("%.2f", value)) + 0.0
-end
-
----Get character and get All skills/traits
----@param character IsoGameCharacter
----@return CharacterObj getPerkDetails() -- table PerkFactory.Perk perk, int level, float xp
---- - IsoGameCharacter : zombie.characters.IsoGameCharacter
-function getCharacterAllSkills(character)
-    if not character then
-        return nil
-    end
-
-    local CharacterObj01 = CharacterObj:new(nil)
-
-    for i = 0, Perks.getMaxIndex() - 1 do
-        local perk = getPerk_PZ(Perks.fromIndex(i))
-        local level = getPerkLevel_PZ(character, perk)
-        local xp = getXpPerk_PZ(character, perk)
-
-        -- Add to objects
-        CharacterObj01:addPerkDetails(perk, level, xp)
-    end
-
-    CharacterObj01:setProfession( getCharacterProfession_PZ(character) )
-
-    return CharacterObj01:getPerkDetails()
 end
 
 --- Get Perk Level
