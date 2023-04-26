@@ -6,21 +6,18 @@
 
 ---@class PerkDetailsObj
 
-PerkDetailsObj = {
-    perk = "",
-    level = 0,
-    xp = 0.0,
-    flag = false
-}
+require("media.lua.shared.objects.BaseObject")
+PerkDetailsObj = BaseObject:derive("PerkDetailsObj")
 
-function PerkDetailsObj:new(t)
-    t = t or {}
-    setmetatable(t, self)
+function PerkDetailsObj:new()
+    local o =  {}
+    setmetatable(o, self)
     self.__index = self
-    self.perk = ""
-    self.level = ""
-    self.xp = ""
-    return t
+    o.perk = ""
+    o.level = ""
+    o.xp = ""
+    o.flag = false
+    return o
 end
 
 ---Add Perk Details

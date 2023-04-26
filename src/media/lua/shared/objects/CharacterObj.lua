@@ -6,26 +6,28 @@
 
 ---@class CharacterObj
 
+require("media.lua.shared.objects.BaseObject")
 require("media.lua.shared.objects.PerkDetailsObj")
+CharacterObj = BaseObject:derive("CharacterObj")
 
-CharacterObj = {
-    profession = "",
-    weight = "",
-    calories = "",
-    perkDetails_LIST = {},
-    PerkDetailsObj01 = ""
-}
-
-function CharacterObj:new(t)
-    t = t or {}
-    setmetatable(t, self)
+function CharacterObj:new()
+    local o = {}
+    setmetatable(o, self)
     self.__index = self
-    self.profession = ""
-    self.weight = ""
-    self.calories = ""
-    self.perkDetails_LIST = {}
-    self.PerkDetailsObj01 = nil
-    return t
+    o.profession = ""
+    o.weight = ""
+    o.calories = ""
+    o.perkDetails_LIST = {}
+    o.traits_List = {}
+    return o
+end
+
+function CharacterObj:setTrait(trait)
+    table.insert(self.traits_List, trait)
+end
+
+function CharacterObj:getTraits()
+    return self.traits_List
 end
 
 ---Current Character
@@ -36,18 +38,18 @@ end
 function CharacterObj:currentCharacter(profession, perk, level, xp)
     self.profession = profession
 
-    self.PerkDetailsObj01 = PerkDetailsObj:new(nil)
-    self.PerkDetailsObj01:addPerkDetails(perk, level, xp)
+    local PerkDetailsObj01 = PerkDetailsObj:new()
+    PerkDetailsObj01:addPerkDetails(perk, level, xp)
 end
 
 ---Add Perk Details ( in to list )
 ---@param perk PerkFactory.Perk
 ---@param level int
 function CharacterObj:addPerkDetails(perk, level, xp)
-    self.PerkDetailsObj01 = PerkDetailsObj:new(nil)
-    self.PerkDetailsObj01:addPerkDetails(perk, level, xp)
+    local PerkDetailsObj01 = PerkDetailsObj:new()
+    PerkDetailsObj01:addPerkDetails(perk, level, xp)
 
-    table.insert(self.perkDetails_LIST, self.PerkDetailsObj01)
+    table.insert(self.perkDetails_LIST, PerkDetailsObj01)
 end
 
 ---Get object PerkDetailsObj
