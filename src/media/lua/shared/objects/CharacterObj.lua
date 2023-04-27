@@ -22,14 +22,6 @@ function CharacterObj:new()
     return o
 end
 
-function CharacterObj:setTrait(trait)
-    table.insert(self.traits_List, trait)
-end
-
-function CharacterObj:getTraits()
-    return self.traits_List
-end
-
 ---Current Character
 ---@param profession string
 ---@param perk PerkFactory.Perk
@@ -50,6 +42,18 @@ function CharacterObj:addPerkDetails(perk, level, xp)
     PerkDetailsObj01:addPerkDetails(perk, level, xp)
 
     table.insert(self.perkDetails_LIST, PerkDetailsObj01)
+end
+
+---Add Trait
+---@param trait String
+function CharacterObj:addTrait(trait)
+    table.insert(self.traits_List, trait)
+end
+
+---Get Traits
+---return table string
+function CharacterObj:getTraits()
+    return self.traits_List
 end
 
 ---Get object PerkDetailsObj

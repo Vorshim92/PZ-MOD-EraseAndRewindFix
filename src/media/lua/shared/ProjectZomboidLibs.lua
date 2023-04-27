@@ -14,6 +14,8 @@ require("media.lua.shared.DbgLeleLib")
 ---@return CharacterObj table - PerkFactory.Perk perk, int level
 --- - IsoGameCharacter : zombie.characters.IsoGameCharacter
 function getCharacterTraitsPerk(character)
+
+    ---@type CharacterObj
     local CharacterObj01 = CharacterObj:new()
 
     local traits_PZ = getTraitsPerk_PZ(character)
@@ -22,9 +24,8 @@ function getCharacterTraitsPerk(character)
 
         ---@type TraitFactory.Trait
         local trait = TraitFactory.getTrait(traits_PZ:get(i) )
-        DBG_displayPerk("Trait", trait, nil, nil )
 
-        CharacterObj01:setTrait(trait:getType())
+        CharacterObj01:addTrait( trait:getType() )
 
         ---@type TraitFactory.Trait
         local traitMap = trait:getXPBoostMap()
@@ -45,6 +46,7 @@ end
 ---@return CharacterObj getPerkDetails() -- table PerkFactory.Perk perk, int level, float xp
 --- - IsoGameCharacter : zombie.characters.IsoGameCharacter
 function getCharacterProfession(character)
+    ---@type CharacterObj
     local CharacterObj01 = CharacterObj:new()
 
     ---@type SurvivorDesc
@@ -77,6 +79,7 @@ function getCharacterCurrentSkill(character, perk)
         return nil
     end
 
+    ---@type CharacterObj
     local CharacterObj01 = CharacterObj:new(nil)
 
     ---@type SurvivorDesc
@@ -105,6 +108,7 @@ function getCharacterAllSkills(character)
         return nil
     end
 
+    ---@type CharacterObj
     local CharacterObj01 = CharacterObj:new()
 
     for i = 0, Perks.getMaxIndex() - 1 do

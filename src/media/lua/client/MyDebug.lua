@@ -5,6 +5,7 @@
 ---
 
 require("media.lua.shared.DbgLeleLib")
+require("media.lua.shared.objects.CharacterObj")
 
 local function onCustomUIKeyPressed(key)
     local character = getPlayer()
@@ -23,12 +24,7 @@ end
 function key34(character, key)
     if key == 34 then -- <<<< g
         print("Key = g > get profession \n")
-        -- removeMoData()
-        -- writeCharacterPerkDetailsToHd(character) -- ok
-        -- writeZombieKillsToHd(character) -- ok
-        -- writeLifeTimeToHd() -- ok
-        -- writeCharacterNutrition() -- ok
-        writeTraitToHd(character) -- no
+
     end
 end
 
@@ -36,11 +32,7 @@ end
 function key35(character, key)
     if key == 35 then -- <<< h
         print("Key = h > set profession \n")
-        -- createCharacterPerkDetails(character) -- ok
-        -- createZombieKills(character) -- ok
-        -- createLifeTime() -- ok
-        -- createCharacterNutrition() -- ok
-        createTrait(character) -- no
+
     end
 end
 
@@ -48,7 +40,7 @@ end
 function key36(character, key)
     if key == 36 then -- <<<< j
         print("Key = j > delete \n")
-        removeMoData()
+        -- removeMoData()
         -- setZombieKills_PZ(character, 15)
     end
 end
@@ -64,6 +56,37 @@ end
 
 -- ------------------------------------------------------------
 
+---Get Character Traits
+---@param character IsoGameCharacter
+---@return CharacterObj table - PerkFactory.Perk perk, int level
+--- - IsoGameCharacter : zombie.characters.IsoGameCharacter
+function getCharacterTraitsPerkX(character)
+    local CharacterObj01 = CharacterObj:new()
+
+    local traits_PZ = getTraitsPerk_PZ(character)
+
+    for i = 0, traits_PZ:size() - 1 do
+
+        ---@type TraitFactory.Trait
+        local trait = TraitFactory.getTrait(traits_PZ:get(i) )
+
+        -- print(trait:getType())
+        CharacterObj01:addTrait(trait:getType())
+
+        ---@type TraitFactory.Trait
+        local traitMap = trait:getXPBoostMap()
+
+        ---@type KahluaTable
+        local traitKahluaTable = transformIntoKahluaTable(traitMap)
+
+        for perk, level in pairs(traitKahluaTable) do
+            CharacterObj01:addPerkDetails(perk, level:intValue(), nil)
+        end
+    end
+
+    CharacterObj01:setProfession("cane")
+    return CharacterObj01
+end
 -- ------------------------------------------------------------
 
 local function OnGameStart()

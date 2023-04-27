@@ -48,5 +48,5 @@ function writeTraitToHd(character)
     local trait = CharacterObj:new()
     trait = getCharacterTraitsPerk(character)
 
-    modDataInsertMultipleValue(EnumModData.CHARACTER_TRAITS, trait:getPerkDetails())
+    modDataInsertMultipleValue(EnumModData.CHARACTER_TRAITS, trait:getTraits())
 end
