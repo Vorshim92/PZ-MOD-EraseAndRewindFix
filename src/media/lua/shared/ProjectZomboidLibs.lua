@@ -6,10 +6,10 @@
 
 ---@class ProjectZomboidLibs
 
-require("media.lua.shared.objects.CharacterObj")
 require("media.lua.shared.DbgLeleLib")
+require("media.lua.shared.objects.CharacterObj")
 
----Get Character Traits
+---Get Character Traits Perk
 ---@param character IsoGameCharacter
 ---@return CharacterObj table - PerkFactory.Perk perk, int level
 --- - IsoGameCharacter : zombie.characters.IsoGameCharacter
@@ -24,6 +24,13 @@ function getCharacterTraitsPerk(character)
 
         ---@type TraitFactory.Trait
         local trait = TraitFactory.getTrait(traits_PZ:get(i) )
+
+        local recipes = trait:getFreeRecipes()
+
+        for i2 = 0, recipes:size() - 1 do
+            local recipe = recipes:get(i2)
+            CharacterObj01:addRecipe(recipe)
+        end
 
         CharacterObj01:addTrait( trait:getType() )
 
@@ -80,7 +87,7 @@ function getCharacterCurrentSkill(character, perk)
     end
 
     ---@type CharacterObj
-    local CharacterObj01 = CharacterObj:new(nil)
+    local CharacterObj01 = CharacterObj:new()
 
     ---@type SurvivorDesc
     local profession = getCharacterProfession_PZ(character)
@@ -372,6 +379,10 @@ end
 ---@param killZombies int
 --- - IsoGameCharacter : zombie.characters.IsoGameCharacter
 function setZombieKills_PZ(character, killZombies)
+    if not character then
+        return nil
+    end
+
     character:setZombieKills(killZombies)
 end
 
@@ -380,6 +391,10 @@ end
 ---return int
 --- - IsoGameCharacter : zombie.characters.IsoGameCharacter
 function getZombieKills_PZ(character)
+    if not character then
+        return nil
+    end
+
     return character:getZombieKills()
 end
 
@@ -387,6 +402,10 @@ end
 ---@param lifeTime double
 --- - IsoPlayer : zombie.characters.IsoPlayer
 function setHoursSurvived_PZ(lifeTime)
+    if not lifeTime then
+        return nil
+    end
+
     IsoPlayer.getInstance():setHoursSurvived(lifeTime)
 end
 
@@ -401,6 +420,10 @@ end
 ---@param value double
 --- - IsoPlayer : zombie.characters.BodyDamage.Nutrition
 function setWeight_PZ(value)
+    if not value then
+        return nil
+    end
+
     IsoPlayer.getInstance():getNutrition():setWeight(value)
 end
 
@@ -415,6 +438,10 @@ end
 ---@param value float
 --- - IsoPlayer : zombie.characters.BodyDamage.Nutrition
 function setCalories_PZ(value)
+    if not value then
+        return nil
+    end
+
     IsoPlayer.getInstance():getNutrition():setCalories(value)
 end
 
@@ -430,7 +457,7 @@ end
 ---@param value
 --- - ModData : zombie.world.moddata.ModData
 function modDataInsertSingleValue(modData, value)
-    if not value then
+    if not modData or not value then
         return nil
     end
 
@@ -446,20 +473,22 @@ end
 ---@param EnumModData
 --- - ModData : zombie.world.moddata.ModData
 function modDataReadSingleValue(modData)
+    if not modData then
+        return nil
+    end
+
     local lines = {}
 
     lines = ModData.get(modData)
     return lines[1]
 end
 
---- --------------------------------------------------------------------------------------------------------------
-
 ---Insert Multiple Value Into Mod Data
 ---@param modData EnumModData
 ---@param values table
 --- - ModData : zombie.world.moddata.ModData
 function modDataInsertMultipleValue(modData, values)
-    if not values then
+    if not modData or not values then
         return nil
     end
 
@@ -482,6 +511,10 @@ end
 ---@return ArrayList
 --- - IsoGameCharacter : zombie.characters.IsoGameCharacter
 function getKnownRecipes_PZ(character)
+    if not character then
+        return nil
+    end
+
     return character:getKnownRecipes()
 end
 
@@ -490,6 +523,10 @@ end
 ---@return boolean
 --- - IsoGameCharacter : zombie.characters.IsoGameCharacter
 function learnRecipe_PZ(character, nameRecipe)
+    if not character or not nameRecipe then
+        return nil
+    end
+
     return character:learnRecipe(nameRecipe)
 end
 
@@ -499,6 +536,10 @@ end
 --- - IsoGameCharacter : zombie.characters.IsoGameCharacter
 --- - TraitCollection.TraitSlot : zombie.characters.traits.TraitCollection.TraitSlot
 function setTrait_PZ(character, trait)
+    if not character or not trait then
+        return nil
+    end
+
     character:getTraits():add(trait)
 end
 
@@ -508,6 +549,10 @@ end
 --- - IsoGameCharacter : zombie.characters.IsoGameCharacter
 --- - TraitCollection.TraitSlot : zombie.characters.traits.TraitCollection.TraitSlot
 function removeTrait_PZ(character, trait)
+    if not character or not trait then
+        return nil
+    end
+
     character:getTraits():remove(trait)
 end
 
@@ -516,5 +561,91 @@ end
 --- - IsoGameCharacter : zombie.characters.IsoGameCharacter
 --- - TraitCollection.TraitSlot : zombie.characters.traits.TraitCollection.TraitSlot
 function removeAllTraits_PZ(character)
+    if not character then
+        return nil
+    end
+
     character:getTraits():clear()
+end
+
+---Get Multiplier
+---@param character IsoGameCharacter
+---@param perk PerkFactory.Perk
+---@return float
+--- - IsoGameCharacter : zombie.characters.IsoGameCharact
+--- - PerkFactory.Perk : zombie.characters.skills.PerkFactory
+function getMultiplier_PZ(character, perk)
+    if not character or not perk then
+        return nil
+    end
+
+    return character:getXp():getMultiplier(perk)
+end
+
+---Add Xp Multiplier
+---@param character IsoGameCharacter
+---@param perk PerkFactory.Perk
+---@param value1 float
+---@param value2 int
+---@param value3 int
+--- - IsoGameCharacter : zombie.characters.IsoGameCharact
+--- - PerkFactory.Perk : zombie.characters.skills.PerkFactory
+function addXpMultiplier_PZ(character, perk, value1, value2, value3)
+    if not character or not perk or not
+    value1 or not value2 or not
+    value3 then
+
+        return nil
+    end
+
+    character:getXp():addXpMultiplier(perk, value1, value2, value3)
+
+    --[[
+    The addXpMultiplier() function is a method of the Xp class in the Project Zomboid Lua API.
+    It adds a multiplier to the XP gain of a specific perk for a set period of time.
+
+    The parameters of the function are:
+
+    perk (string): The name of the perk to apply the XP multiplier to.
+    value1 (float): The multiplier value to apply to the XP gain of the specified perk.
+    value2 (int, optional): The number of in-game minutes to apply the multiplier for. If not specified, the multiplier
+    will be applied indefinitely until removed.
+    value3 (boolean, optional): Whether to override existing multipliers for the specified perk. Defaults to false.
+    Here's an example of how to use the function:
+
+    css
+    Copy code
+    character:getXp():addXpMultiplier("Farming", 2.0, 60, true)
+    This would apply a 2x multiplier to the XP gain of the Farming perk for 60 in-game minutes,
+    and override any existing multipliers for that perk.
+    ]]
+end
+
+---Set PerkBoost 1 - 75%, 2 - 100%, 3 - 125%, default 0 ?? - 50%
+---@param character IsoGameCharacter
+---@param perk PerkFactory.Perk
+---@param levelBoost int
+--- - IsoGameCharacter : zombie.characters.IsoGameCharacter
+--- - PerkFactory.Perk : zombie.characters.skills.PerkFactory
+function setPerkBoost_PZ(character, perk, levelBoost)
+    -- Perks.Cooking
+    if not character or not perk or not levelBoost then
+        return nil
+    end
+
+    character:getXp():setPerkBoost(perk, levelBoost)
+end
+
+---Get Perk Boost
+---@param character IsoGameCharacter
+---@param perk PerkFactory.Perk
+--- - IsoGameCharacter : zombie.characters.IsoGameCharacter
+--- - PerkFactory.Perk : zombie.characters.skills.PerkFactory
+function getPerkBoost_PZ(character, perk)
+    -- Perks.Cooking
+    if not character or not perk then
+        return nil
+    end
+
+    return character:getXp():getPerkBoost(perk)
 end

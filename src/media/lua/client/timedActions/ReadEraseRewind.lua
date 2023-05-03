@@ -20,12 +20,11 @@ function ISReadABook:perform()
 	local journal = self.item
 
     if journal:getType() ~= eraseRewindJournal then
-        EROVERWRITE_ISReadABook_start(self)
+        EROVERWRITE_ISReadABook_perform(self)
     else
+        -- qua load moddata
         readBook(getPlayer())
     end
-    -- qua load moddata
-
 
     ISBaseTimedAction.perform(self)
 end
@@ -38,9 +37,11 @@ function ISReadABook:new(character, item, time)
     if eraseRewind and character and
             item:getType() == eraseRewindJournal then
 
+        character:playSound("CloseBook")
+
         eraseRewind.loopedAction = false
         eraseRewind.useProgressBar = false
-        eraseRewind.maxTime = 55
+        eraseRewind.maxTime = 80
         eraseRewind.stopOnWalk = false
     end
 

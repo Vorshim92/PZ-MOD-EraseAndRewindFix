@@ -24,6 +24,7 @@ end
 ---@param perk PerkFactory.Perk
 ---@param level int
 ---@param xp float
+--- - PerkFactory.Perk : zombie.characters.skills.PerkFactor
 function PerkDetailsObj:addPerkDetails(perk, level, xp)
     self.perk = perk
     self.level = level
@@ -31,7 +32,7 @@ function PerkDetailsObj:addPerkDetails(perk, level, xp)
 end
 
 ---Set Flag
----@param flag
+---@param flag boolean
 function PerkDetailsObj:setFlag(flag)
     self.flag = flag
 end
@@ -68,12 +69,14 @@ end
 
 ---Set perk
 ---@param perk PerkFactory.Perk
+--- - PerkFactory.Perk : zombie.characters.skills.PerkFactor
 function PerkDetailsObj:setPerk(perk)
     self.perk = perk
 end
 
 ---Get Perk
 ---@return PerkFactory.Perk perk
+--- - PerkFactory.Perk : zombie.characters.skills.PerkFactor
 function PerkDetailsObj:getPerk()
     return self.perk
 end

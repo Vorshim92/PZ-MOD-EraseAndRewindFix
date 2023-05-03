@@ -4,8 +4,9 @@
 --- DateTime: 26/04/23 17:41
 ---
 
-require("media.lua.shared.DbgLeleLib")
+require("media.lua.shared.ProjectZomboidLibs")
 require("media.lua.shared.objects.CharacterObj")
+require("media.lua.shared.DbgLeleLib")
 
 local function onCustomUIKeyPressed(key)
     local character = getPlayer()
@@ -25,6 +26,10 @@ function key34(character, key)
     if key == 34 then -- <<<< g
         print("Key = g > get profession \n")
 
+        -- ---@diagnostic disable-next-line
+        ---@type CharacterObj
+        local CharacterObj01 = CharacterObj:new()
+
     end
 end
 
@@ -32,6 +37,20 @@ end
 function key35(character, key)
     if key == 35 then -- <<< h
         print("Key = h > set profession \n")
+        ---@type CharacterObj
+        local CharacterObj01 = CharacterObj:new()
+
+        CharacterObj01 = getCharacterTraitsPerk(character)
+
+        for i, v in pairs(CharacterObj01:getPerkDetails()) do
+            print(v:getPerk())
+        end
+
+        print("-------------------------------")
+
+        for i, v in pairs(CharacterObj01:getRecipes()) do
+            print(v)
+        end
 
     end
 end
@@ -47,20 +66,18 @@ end
 
 ---@param character IsoGameCharacter
 function key37(character, key)
-    if key == 37 then -- <<<< j
+    if key == 37 then -- <<<< k
         print("Key = k > delete \n")
-        -- removeMoData()
-        -- setZombieKills_PZ(character, 3)
+        character:die()
     end
 end
 
 -- ------------------------------------------------------------
-
 ---Get Character Traits
 ---@param character IsoGameCharacter
 ---@return CharacterObj table - PerkFactory.Perk perk, int level
 --- - IsoGameCharacter : zombie.characters.IsoGameCharacter
-function getCharacterTraitsPerkX(character)
+local function getCharacterTraitsPerkX(character)
     local CharacterObj01 = CharacterObj:new()
 
     local traits_PZ = getTraitsPerk_PZ(character)

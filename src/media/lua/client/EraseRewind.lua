@@ -6,13 +6,4 @@
 --- ISSkillProgressBar:updateTooltip(lvlSelected)
 
 
--- ------------------------------------------------------------
-
--- ------------------------------------------------------------
-
-local function OnGameStart()
-
-end
-
--- Events.OnGameStart.Add(OnGameStart)
--- Events.OnCustomUIKeyPressed.Add(onCustomUIKeyPressed)
+--- Go to ReadEraseRewind or EraseRewindContextMenu and search writeBook or readBook

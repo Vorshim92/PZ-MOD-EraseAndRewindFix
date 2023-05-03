@@ -1,0 +1,16 @@
+module EraseRewindRPG 
+{
+    imports 
+    {
+        Base
+    }
+
+    item EraseRewindJournal 
+    {
+        Weight = 0.42,
+        Type = Literature,
+        DisplayName = Erase Rewind Journal,
+        Icon = Book,
+        StaticModel = Book
+    }
+}

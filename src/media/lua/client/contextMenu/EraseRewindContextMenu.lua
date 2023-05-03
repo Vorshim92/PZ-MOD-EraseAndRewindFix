@@ -4,8 +4,10 @@ local eraseRewindJournal = "EraseRewindJournal"
 local contextER = {}
 
 function contextER.addSaveContext(character, context, items)
+
     for _, v in ipairs(items) do
 
+        local character = getPlayer()
         -- check per item annidato
 		local item = v
 
@@ -20,10 +22,15 @@ function contextER.addSaveContext(character, context, items)
     end
 end
 
----@param journal InventoryItem|Literature
-function contextER.onSavePlayer(journal, character)
+---Save
+---@param item InventoryItem
+---@param character Literature
+function contextER.onSavePlayer(item, character)
 	-- qua il salvataggio moddata
-    writeBook(getPlayer())
+    writeBook(character)
+    item:setName(eraseRewindJournal .. " - " .. character:getDisplayName() )
+    character:Say("Libro scritto")
+    character:playSound("OpenBook")
 end
 
 Events.OnPreFillInventoryObjectContextMenu.Add(contextER.addSaveContext)

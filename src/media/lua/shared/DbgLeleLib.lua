@@ -6,6 +6,35 @@
 
 ---@class DbgLeleLib
 
+EnumPerk = {
+    FITNESS = "Fitness",
+    STRENGTH = "Strength",
+    SPRINTING = "Sprinting",
+    LIGHTFOOT = "Lightfoot",
+    NIMBLE = "Nimble",
+    SNEAK = "Sneak",
+    AXE = "Axe",
+    BLUNT = "Blunt",
+    SMALL_BLUNT = "SmallBlunt",
+    LONG_BLADE = "LongBlade",
+    SMALL_BLADE = "SmallBlade",
+    SPEAR = "Spear",
+    MAINTENANCE = "Maintenance",
+    WOODWORK = "Woodwork",
+    COOKING = "Cooking",
+    FARMING = "Farming",
+    DOCTOR = "Doctor",
+    ELECTRICITY = "Electricity",
+    METAL_WELDING = "MetalWelding",
+    MECHANICS = "Mechanics",
+    TAILORING = "Tailoring",
+    AIMING = "Aiming",
+    RELOADING = "Reloading",
+    FISHING = "Fishing",
+    TRAPPING = "Trapping",
+    PLANT_SCAVENGING = "PlantScavenging"
+}
+
 ---@param displayName string
 ---@param perk
 ---@param level

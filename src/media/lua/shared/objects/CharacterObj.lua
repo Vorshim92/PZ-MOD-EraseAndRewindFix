@@ -19,6 +19,7 @@ function CharacterObj:new()
     o.calories = ""
     o.perkDetails_LIST = {}
     o.traits_List = {}
+    o.recipes_List = {}
     return o
 end
 
@@ -44,14 +45,32 @@ function CharacterObj:addPerkDetails(perk, level, xp)
     table.insert(self.perkDetails_LIST, PerkDetailsObj01)
 end
 
+---Get Perk Details
+---@return CharacterObj table - PerkFactory.Perk perk, int level, float xp
+function CharacterObj:getPerkDetails()
+    return self.perkDetails_LIST
+end
+
+---Add Trait
+---@param recipe string
+function CharacterObj:addRecipe(recipe)
+    table.insert(self.recipes_List, recipe)
+end
+
+---Get recipes list
+---@return CharacterObj table string
+function CharacterObj:getRecipes()
+    return self.recipes_List
+end
+
 ---Add Trait
 ---@param trait String
 function CharacterObj:addTrait(trait)
     table.insert(self.traits_List, trait)
 end
 
----Get Traits
----return table string
+---Get Traits list
+---@return CharacterObj table string
 function CharacterObj:getTraits()
     return self.traits_List
 end
@@ -60,12 +79,6 @@ end
 ---@return PerkDetailsObj
 function CharacterObj:getPerkDetailsObj()
     return PerkDetailsObj
-end
-
----Get Perk Details
----@return CharacterObj table - PerkFactory.Perk perk, int level, float xp
-function CharacterObj:getPerkDetails()
-    return self.perkDetails_LIST
 end
 
 ---Set profession
@@ -81,26 +94,27 @@ function CharacterObj:getProfession()
 end
 
 ---Set calories
----@param calories
+---@param calories double
 function CharacterObj:setCalories(calories)
     self.calories = calories
 end
 
----Get profession
----@return
+---Get Calories
+---@return double
 function CharacterObj:getCalories()
     return self.calories
 end
 
 ---Set Weight
----@param weight
+---@param weight double
 function CharacterObj:setWeight(weight)
     self.weight = weight
 end
 
 ---Get Weight
----@return
+---@return double weight
 function CharacterObj:getWeight()
     return self.weight
 end
+
 
