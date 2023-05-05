@@ -14,7 +14,7 @@ local function readRecipeFromHd()
 
     local CharacterObj01 = CharacterObj:new()
 
-    for i, v in pairs(characterKnowRecipe) do
+    for _, v in pairs(characterKnowRecipe) do
         CharacterObj01:addRecipe(v)
     end
 
@@ -46,7 +46,7 @@ function createRecipe(character)
     CharacterObj01 = readRecipeFromHd(character)
     deleteRecipe(character)
 
-    for i, v in pairs(CharacterObj01:getRecipes()) do
+    for _, v in pairs(CharacterObj01:getRecipes()) do
         addKnownRecipes(character, v)
     end
 end
@@ -58,7 +58,7 @@ function writeRecipeToHd(character)
 
     local lines = {}
 
-    for i, v in pairs(knownRecipesObj:getRecipes()) do
+    for _, v in pairs(knownRecipesObj:getRecipes()) do
         table.insert(lines, v)
     end
 

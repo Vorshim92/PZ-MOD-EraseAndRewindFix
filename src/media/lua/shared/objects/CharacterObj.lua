@@ -38,6 +38,7 @@ end
 ---Add Perk Details ( in to list )
 ---@param perk PerkFactory.Perk
 ---@param level int
+---@param xp double
 function CharacterObj:addPerkDetails(perk, level, xp)
     local PerkDetailsObj01 = PerkDetailsObj:new()
     PerkDetailsObj01:addPerkDetails(perk, level, xp)

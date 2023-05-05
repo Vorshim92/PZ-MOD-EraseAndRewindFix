@@ -53,7 +53,6 @@ function createBoost(character)
     deleteBoost(character)
 
     for _, v in pairs(boost) do
-        local dbg
         print(tostring(v.perk) .. " - " .. tostring(v.boostLevel))
         setPerkBoost_PZ(character, v.perk, v.boostLevel)
     end

@@ -3,6 +3,9 @@ require "ISUI/ISInventoryPaneContextMenu"
 local eraseRewindJournal = "EraseRewindJournal"
 local contextER = {}
 
+
+--- add Save Context
+---
 function contextER.addSaveContext(character, context, items)
 
     for _, v in ipairs(items) do
@@ -22,9 +25,10 @@ function contextER.addSaveContext(character, context, items)
     end
 end
 
----Save
+---Save player
 ---@param item InventoryItem
----@param character Literature
+---@param character IsoGameCharacter
+--- - zombie.characters.IsoGameCharacter
 function contextER.onSavePlayer(item, character)
 	-- qua il salvataggio moddata
     writeBook(character)
