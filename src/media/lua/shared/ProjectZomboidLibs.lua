@@ -14,8 +14,6 @@ require("media.lua.shared.objects.CharacterObj")
 ---@return CharacterObj table - PerkFactory.Perk perk, int level
 --- - IsoGameCharacter : zombie.characters.IsoGameCharacter
 function getCharacterTraitsPerk(character)
-
-    ---@type CharacterObj
     local CharacterObj01 = CharacterObj:new()
 
     local traits_PZ = getTraitsPerk_PZ(character)
@@ -24,13 +22,6 @@ function getCharacterTraitsPerk(character)
 
         ---@type TraitFactory.Trait
         local trait = TraitFactory.getTrait(traits_PZ:get(i) )
-
-        local recipes = trait:getFreeRecipes()
-
-        for i2 = 0, recipes:size() - 1 do
-            local recipe = recipes:get(i2)
-            CharacterObj01:addRecipe(recipe)
-        end
 
         CharacterObj01:addTrait( trait:getType() )
 
@@ -53,7 +44,6 @@ end
 ---@return CharacterObj getPerkDetails() -- table PerkFactory.Perk perk, int level, float xp
 --- - IsoGameCharacter : zombie.characters.IsoGameCharacter
 function getCharacterProfession(character)
-    ---@type CharacterObj
     local CharacterObj01 = CharacterObj:new()
 
     ---@type SurvivorDesc
@@ -68,6 +58,8 @@ function getCharacterProfession(character)
     for perk, level in pairs(professionKahluaTable) do
         CharacterObj01:addPerkDetails(perk, level:intValue(), nil)
     end
+
+    CharacterObj01:setProfession( characterProfession_PZ )
 
     return CharacterObj01
 end
@@ -86,7 +78,6 @@ function getCharacterCurrentSkill(character, perk)
         return nil
     end
 
-    ---@type CharacterObj
     local CharacterObj01 = CharacterObj:new()
 
     ---@type SurvivorDesc
@@ -115,7 +106,6 @@ function getCharacterAllSkills(character)
         return nil
     end
 
-    ---@type CharacterObj
     local CharacterObj01 = CharacterObj:new()
 
     for i = 0, Perks.getMaxIndex() - 1 do
@@ -133,6 +123,25 @@ function getCharacterAllSkills(character)
     end
 
     CharacterObj01:setProfession( getCharacterProfession_PZ(character) )
+
+    return CharacterObj01
+end
+
+---Get Character Known Recipes
+---@param character IsoGameCharacter
+---@return CharacterObj getRecipes()
+--- - IsoGameCharacter : zombie.characters.IsoGameCharacter
+function getCharacterKnownRecipes(character)
+    if not character then
+        return nil
+    end
+
+    local CharacterObj01 = CharacterObj:new()
+    local knowRecipes = character:getKnownRecipes()
+
+    for i = 0, knowRecipes:size() - 1 do
+        CharacterObj01:addRecipe(knowRecipes:get(i))
+    end
 
     return CharacterObj01
 end
@@ -452,23 +461,7 @@ function getCalories_PZ()
     return IsoPlayer.getInstance():getNutrition():getCalories()
 end
 
----Insert Single Value Into Mod Data
----@param EnumModData
----@param value
---- - ModData : zombie.world.moddata.ModData
-function modDataInsertSingleValue(modData, value)
-    if not modData or not value then
-        return nil
-    end
-
-    ModData.remove(modData)
-
-    local lines = {}
-    table.insert(lines, value)
-
-    ModData.add(modData, lines)
-end
-
+-- Todo Unify the moddata using two methods: write and read
 ---Read Single Value Into Mod Data
 ---@param EnumModData
 --- - ModData : zombie.world.moddata.ModData
@@ -483,6 +476,7 @@ function modDataReadSingleValue(modData)
     return lines[1]
 end
 
+-- Todo Unify the moddata using two methods: write and read
 ---Insert Multiple Value Into Mod Data
 ---@param modData EnumModData
 ---@param values table
@@ -500,22 +494,29 @@ function modDataInsertMultipleValue(modData, values)
     end
 end
 
+-- Todo Unify the moddata using two methods: write and read
+---Insert Single Value Into Mod Data
+---@param EnumModData
+---@param value
+--- - ModData : zombie.world.moddata.ModData
+function modDataInsertSingleValue(modData, value)
+    if not modData or not value then
+        return nil
+    end
+
+    ModData.remove(modData)
+
+    local lines = {}
+    table.insert(lines, value)
+
+    ModData.add(modData, lines)
+end
+
 ---Is Exist
 ---@param modData EnumModData
 --- - ModData : zombie.world.moddata.ModDa
 function modDataIsExist(modData)
     return ModData.exists(modData)
-end
-
----@param character IsoGameCharacter
----@return ArrayList
---- - IsoGameCharacter : zombie.characters.IsoGameCharacter
-function getKnownRecipes_PZ(character)
-    if not character then
-        return nil
-    end
-
-    return character:getKnownRecipes()
 end
 
 ---@param character IsoGameCharacter
@@ -648,4 +649,45 @@ function getPerkBoost_PZ(character, perk)
     end
 
     return character:getXp():getPerkBoost(perk)
+end
+
+---Add a single Recipe ( wrapper )
+---@param character IsoGameCharacter
+---@param recipe string
+--- - IsoGameCharacter : zombie.characters.IsoGameCharacter
+function addKnownRecipes(character, recipe)
+    learnRecipe_PZ(character, recipe)
+end
+
+---Get Known Recipes
+---@param character IsoGameCharacter
+---@return CharacterObj table recipe string
+--- - IsoGameCharacter : zombie.characters.IsoGameCharacter
+function getKnownRecipes_PZ(character)
+    if not character then
+        return nil
+    end
+
+    return character:getKnownRecipes()
+end
+
+---Get remove Known Recipe
+---@param character IsoGameCharacter
+---@param recipe string
+---@return CharacterObj table recipe string
+--- - IsoGameCharacter : zombie.characters.IsoGameCharacter
+function removeKnowRecipes(character, recipe)
+    character:getKnownRecipes():remove(recipe)
+end
+
+---learn (add) Recipe
+---@param character IsoGameCharacter
+---@param recipe string
+--- - IsoGameCharacter : zombie.characters.IsoGameCharacter
+function learnRecipe_PZ(character, recipe)
+    if not character or not recipe then
+        return nil
+    end
+
+    character:learnRecipe(recipe)
 end

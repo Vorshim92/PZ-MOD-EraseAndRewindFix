@@ -6,34 +6,76 @@
 
 ---@class DbgLeleLib
 
-EnumPerk = {
-    FITNESS = "Fitness",
-    STRENGTH = "Strength",
-    SPRINTING = "Sprinting",
-    LIGHTFOOT = "Lightfoot",
-    NIMBLE = "Nimble",
-    SNEAK = "Sneak",
-    AXE = "Axe",
-    BLUNT = "Blunt",
-    SMALL_BLUNT = "SmallBlunt",
-    LONG_BLADE = "LongBlade",
-    SMALL_BLADE = "SmallBlade",
-    SPEAR = "Spear",
-    MAINTENANCE = "Maintenance",
-    WOODWORK = "Woodwork",
-    COOKING = "Cooking",
-    FARMING = "Farming",
-    DOCTOR = "Doctor",
-    ELECTRICITY = "Electricity",
-    METAL_WELDING = "MetalWelding",
-    MECHANICS = "Mechanics",
-    TAILORING = "Tailoring",
-    AIMING = "Aiming",
-    RELOADING = "Reloading",
-    FISHING = "Fishing",
-    TRAPPING = "Trapping",
-    PLANT_SCAVENGING = "PlantScavenging"
+EnumProfession = {
+    UNEMPLOYED = "",
+    BURGER_FLIPPER = "burgerflipper",
+    BURGLAR = "burglar",
+    CARPENTER = "carpenter",
+    CHEF = "chef",
+    CONSTRUCTION_WORKER = "constructionworker",
+    DOCTOR = "doctor",
+    ELECTRICIAN = "electrician",
+    ENGINEER = "engineer",
+    FARMER = "farmer",
+    FISHERMAN = "fisherman",
+    FIRE_OFFICER = "fireofficer",
+    FITNESS_INSTRUCTOR = "fitnessInstructor",
+    LUMBERJACK = "lumberjack",
+    MECHANICS = "mechanics",
+    METAL_WORKER = "metalworker",
+    NURSE = "nurse",
+    PARK_RANGER = "parkranger",
+    POLICE_OFFICER = "policeofficer",
+    REPAIRMAN = "repairman",
+    SECURITY_GUARD = "securityguard",
+    VETERAN = "veteran"
 }
+
+--- Not tested, check the names
+EnumPerk = {
+--    UNEMPLOYED = "",
+--    NONE = "none",
+--    FITNESS = "Fitness",
+--    STRENGTH = "Strength",
+--    SPRINTING = "Sprinting",
+--    LIGHTFOOT = "Lightfoot",
+--    NIMBLE = "Nimble",
+--    SNEAK = "Sneak",
+--    AXE = "Axe",
+--    BLUNT = "Blunt",
+--    SMALL_BLUNT = "SmallBlunt",
+--    LONG_BLADE = "LongBlade",
+--    SMALL_BLADE = "SmallBlade",
+--    SPEAR = "Spear",
+--    MAINTENANCE = "Maintenance",
+--    WOODWORK = "Woodwork",
+--    COOKING = "Cooking",
+--    FARMING = "Farming",
+--    DOCTOR = "Doctor",
+--    ELECTRICITY = "Electricity",
+--    METAL_WELDING = "MetalWelding",
+--    MECHANICS = "Mechanics",
+--    TAILORING = "Tailoring",
+--    AIMING = "Aiming",
+--    RELOADING = "Reloading",
+--    FISHING = "Fishing",
+--    TRAPPING = "Trapping",
+--    PLANT_SCAVENGING = "PlantScavenging"
+}
+
+---display
+---@param index
+---@param perk
+---@param level
+---@param xp
+local function display(displayName, i, perk, level, xp)
+    print("DGB\n")
+    print(displayName .. " " ..
+            tostring(i) .. " >> " ..
+            type(perk) .. " " .. tostring(perk) .. " - " ..
+            type(level) .. " " .. tostring(level) .. " - " ..
+            type(xp) .. " " .. tostring(xp) )
+end
 
 ---@param displayName string
 ---@param perk
@@ -43,10 +85,7 @@ function DBG_displayPerk(displayName, perk, level, xp)
     local dbg2 = level
     local dbg3 = xp
     print("--------------------------------")
-    print("DBG_displayPerk " .. displayName .. " - "
-            .. tostring(perk) .. " - "
-            .. tostring(level) .. " - "
-            .. tostring(xp))
+    display(displayName, nil, perk, level, xp)
     print("--------------------------------")
     local dbg
 end
@@ -66,8 +105,7 @@ function DBG_GetCheckPerk(displayName, perk_, perk, level )
         dbg1 = perk_
         dbg2 = level
         print("--------------------------------")
-        print("dbg_displayName ".. displayName ..
-                " - " .. tostring(perk) .. " - " .. tostring(level))
+        display(displayName, nil, perk, level, nil)
         print("--------------------------------")
 
         local dbg
@@ -81,12 +119,13 @@ end
 function DBG_displayListPerks(displayName, perks_list)
     print("--------------------------------")
     for i, v in pairs(perks_list) do
-        print("dbg_displayName " ..
-                displayName .. "   i " ..
-                tostring(i) .. " >>>>> " ..
-                tostring(v.perk) .. " - " ..
-                tostring(v.level))
+        display(displayName, i, v.perk, v.level, nil)
         -- DBG_GetCheckPerk("DBG_GetCheckPerk", v.perk_, v.perk, _ )
     end
     print("--------------------------------")
 end
+
+
+
+
+

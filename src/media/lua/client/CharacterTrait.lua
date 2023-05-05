@@ -25,9 +25,6 @@ function createTrait(character)
     local trait = {}
     trait = readTraitFromHd(character)
 
-    local dbg1 = trait
-    local dbg
-
     if not trait then
         return nil
     end

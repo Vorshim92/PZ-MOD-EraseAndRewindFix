@@ -8,13 +8,40 @@ require("media.lua.shared.ProjectZomboidLibs")
 require("media.lua.shared.objects.CharacterObj")
 require("media.lua.shared.DbgLeleLib")
 
+-- https://theindiestone.com/forums/index.php?/topic/9799-key-code-reference/
 local function onCustomUIKeyPressed(key)
     local character = getPlayer()
 
-    key34(character, key)
-    key35(character, key)
-    key36(character, key)
-    key37(character, key)
+    if key == 34 then key34(character, key)  end -- <<<< g
+    if key == 35 then key35(character, key)  end -- <<<< h
+    if key == 36 then key36(character, key)  end -- <<<< j
+    if key == 37 then key37(character, key)  end -- <<<< kill
+    if key == 16 then key16(character, key)  end -- <<<< 1
+    if key == 17 then key17(character, key)  end -- <<<< 2
+
+end
+
+function key16(character, key)
+    if key == 16 then -- <<<< g
+        print("Key = q > learnRecipe) \n")
+        character:learnRecipe("Make Pizza")
+    end
+end
+
+---@param character IsoGameCharacter
+function key17(character, key)
+    if key == 17 then
+        print("Key = w > getKnownRecipes) \n")
+        local recipeManager = character:getKnownRecipes()
+
+        print("MAKE RECIPES")
+        for i = 0, recipeManager:size() - 1 do
+
+            local recipe = recipeManager:get(i)
+            print(recipe)
+        end
+        print("-----------------------------------------")
+    end
 end
 
 -- Perks.Maintenance
@@ -24,43 +51,24 @@ end
 ---@param character IsoGameCharacter
 function key34(character, key)
     if key == 34 then -- <<<< g
-        print("Key = g > get profession \n")
-
-        -- ---@diagnostic disable-next-line
-        ---@type CharacterObj
-        local CharacterObj01 = CharacterObj:new()
-
+        print("Key = g > writeRecipeToHd \n")
+        writeRecipeToHd(character)
     end
 end
 
 ---@param character IsoGameCharacter
 function key35(character, key)
     if key == 35 then -- <<< h
-        print("Key = h > set profession \n")
-        ---@type CharacterObj
-        local CharacterObj01 = CharacterObj:new()
-
-        CharacterObj01 = getCharacterTraitsPerk(character)
-
-        for i, v in pairs(CharacterObj01:getPerkDetails()) do
-            print(v:getPerk())
-        end
-
-        print("-------------------------------")
-
-        for i, v in pairs(CharacterObj01:getRecipes()) do
-            print(v)
-        end
-
+        print("Key = h > createRecipe \n")
+        createRecipe(character)
     end
 end
 
 ---@param character IsoGameCharacter
 function key36(character, key)
-    if key == 36 then -- <<<< j
-        print("Key = j > delete \n")
-        -- removeMoData()
-        -- setZombieKills_PZ(character, 15)
+    if key == 36 then
+        print("Key = j > remove Recipes \n")
+        removeKnowRecipes(character, "Make Pizza")
     end
 end
 
@@ -73,37 +81,6 @@ function key37(character, key)
 end
 
 -- ------------------------------------------------------------
----Get Character Traits
----@param character IsoGameCharacter
----@return CharacterObj table - PerkFactory.Perk perk, int level
---- - IsoGameCharacter : zombie.characters.IsoGameCharacter
-local function getCharacterTraitsPerkX(character)
-    local CharacterObj01 = CharacterObj:new()
-
-    local traits_PZ = getTraitsPerk_PZ(character)
-
-    for i = 0, traits_PZ:size() - 1 do
-
-        ---@type TraitFactory.Trait
-        local trait = TraitFactory.getTrait(traits_PZ:get(i) )
-
-        -- print(trait:getType())
-        CharacterObj01:addTrait(trait:getType())
-
-        ---@type TraitFactory.Trait
-        local traitMap = trait:getXPBoostMap()
-
-        ---@type KahluaTable
-        local traitKahluaTable = transformIntoKahluaTable(traitMap)
-
-        for perk, level in pairs(traitKahluaTable) do
-            CharacterObj01:addPerkDetails(perk, level:intValue(), nil)
-        end
-    end
-
-    CharacterObj01:setProfession("cane")
-    return CharacterObj01
-end
 -- ------------------------------------------------------------
 
 local function OnGameStart()
@@ -111,4 +88,4 @@ local function OnGameStart()
 end
 
 -- Events.OnGameStart.Add(OnGameStart)
-Events.OnCustomUIKeyPressed.Add(onCustomUIKeyPressed)
+-- Events.OnCustomUIKeyPressed.Add(onCustomUIKeyPressed)

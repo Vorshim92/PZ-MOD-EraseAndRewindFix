@@ -10,10 +10,6 @@ require("media.lua.shared.objects.CharacterObj")
 ---Read Character Perk Details From Hd
 ---@return CharacterObj PerkFactory.Perk perk, int level, float xp, boolean flag
 local function readCharacterPerkDetailsFromHd()
-    if not modDataIsExist(EnumModData.CHARACTER_PERK_DETAILS) then
-        return nil
-    end
-
     local characterPerkDetails =
     ModData.get(EnumModData.CHARACTER_PERK_DETAILS )
 
@@ -89,7 +85,7 @@ function writeCharacterPerkDetailsToHd(character)
         lines[i] = ( v.perk:getName() .. "-" ..
                 tostring(v:getLevel())  .. "-" ..
                 tostring(v:getXp()) )
-
+        -- TODO replace with modDataInsertSingleValue
         ModData.add(EnumModData.CHARACTER_PERK_DETAILS, lines)
     end
 

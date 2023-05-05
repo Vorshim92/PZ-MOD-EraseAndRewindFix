@@ -4,53 +4,63 @@
 --- DateTime: 15/04/23 18:54
 ---
 require("media.lua.client.EnumModData")
+require("media.lua.shared.objects.CharacterObj")
 
 ---Read Recipe From Hd
----@return int
-local function readRecipeFromHd(character)
-    return modDataReadSingleValue(EnumModData.CHARACTER_RECIPES)
+---@return CharacterObj getRecipes table string
+local function readRecipeFromHd()
+    local characterKnowRecipe =
+         ModData.get(EnumModData.CHARACTER_RECIPES )
+
+    local CharacterObj01 = CharacterObj:new()
+
+    for i, v in pairs(characterKnowRecipe) do
+        CharacterObj01:addRecipe(v)
+    end
+
+    return CharacterObj01
 end
 
 ---Delete Trait
 ---@param character IsoGameCharacter
 --- - zombie.characters.IsoGameCharacter
 local function deleteRecipe(character)
-    local _, recipe = {}
-    -- TODO cosa mettere?
-    -- recipe = ??? -- getCharacterTraitsPerk(character)
+    local characterKnowRecipe = CharacterObj:new()
 
-    for _, v in pairs(recipe) do
-        -- removeTrait_PZ(character, v)
+    characterKnowRecipe = getCharacterKnownRecipes(character)
+
+    for _, v in pairs(characterKnowRecipe:getRecipes()) do
+        removeKnowRecipes(character, v)
     end
 end
-
 
 ---Create Recipe
 ---@param character IsoGameCharacter
 --- - zombie.characters.IsoGameCharacter
 function createRecipe(character)
-    local recipe = readRecipeFromHd(character)
+    if not modDataIsExist(EnumModData.CHARACTER_RECIPES) then
+        return nil
+    end
+    local CharacterObj01 = CharacterObj:new()
+
+    CharacterObj01 = readRecipeFromHd(character)
     deleteRecipe(character)
 
-    for i, v in pairs(recipe) do
-        -- TODO cosa mettere?
-        -- ??? setZombieKills_PZ(character, recipe)
+    for i, v in pairs(CharacterObj01:getRecipes()) do
+        addKnownRecipes(character, v)
     end
-
 end
 
 ---Write Recipe To Hd
----@param character IsoGameCharacter
---- - zombie.characters.IsoGameCharacter
 function writeRecipeToHd(character)
-    local _, recipe = {}
-    -- recipe TODO cosa mettere?
-    modDataInsertMultipleValue(EnumModData.CHARACTER_RECIPES, recipe)
+    local knownRecipesObj = CharacterObj:new()
+    knownRecipesObj = getCharacterKnownRecipes(character)
 
-    --local lines = {}
-    --
-    --for i, v in pairs(recipe) do
-    --    lines[i] = v
-    --    ModData.add(EnumModData.CHARACTER_RECIPE, lines)
-    --end
+    local lines = {}
+
+    for i, v in pairs(knownRecipesObj:getRecipes()) do
+        table.insert(lines, v)
+    end
+
+    modDataInsertMultipleValue(EnumModData.CHARACTER_RECIPES, lines)
 end

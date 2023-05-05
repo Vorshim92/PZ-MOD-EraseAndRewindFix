@@ -23,8 +23,8 @@ function readBook(character)
     createLifeTime() -- ok
     createCharacterNutrition() -- ok
     createTrait(character) -- ok
-    -- createRecipe(character)
-    removeMoData()
+    createRecipe(character) -- ok
+    removeMoData() -- ok
 end
 
 ---Write Book
@@ -37,6 +37,6 @@ function writeBook(character)
     writeLifeTimeToHd() -- ok
     writeCharacterNutrition() -- ok
     writeTraitToHd(character) -- ok
-    -- writeRecipeToHd()
+    writeRecipeToHd(character) -- ok
 end
 

@@ -14,5 +14,5 @@ EnumModData = {
     CHARACTER_ZOMBIE_KILLS = "characterZombieKills",
     CHARACTER_WEIGHT = "characterWeight",
     CHARACTER_CALORIES = "characterCalories",
-    CHARACTER_RECIPES = "characterRecipes"
+    CHARACTER_RECIPES = "characterRecipes",
 }
