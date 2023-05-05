@@ -23,27 +23,21 @@ end
 
 function key16(character, key)
     if key == 16 then -- <<<< g
-        print("Key = q > learnRecipe) \n")
-        character:learnRecipe("Make Pizza")
+        print("Key = q > setPerkBoost_PZ) \n")
+        -- Perks.Woodwork
+        setPerkBoost_PZ(character, Perks.Cooking, 3)
     end
 end
 
 ---@param character IsoGameCharacter
 function key17(character, key)
     if key == 17 then
-        print("Key = w > getKnownRecipes) \n")
-        local recipeManager = character:getKnownRecipes()
-
-        print("MAKE RECIPES")
-        for i = 0, recipeManager:size() - 1 do
-
-            local recipe = recipeManager:get(i)
-            print(recipe)
-        end
-        print("-----------------------------------------")
+        print("Key = w > writeBoostToHd) \n")
+        setPerkBoost_PZ(character, Perks.Cooking, 0)
     end
 end
 
+-- Perks.Cooking
 -- Perks.Maintenance
 -- Perks.Woodwork
 -- Perks.Sprinting
@@ -51,24 +45,24 @@ end
 ---@param character IsoGameCharacter
 function key34(character, key)
     if key == 34 then -- <<<< g
-        print("Key = g > writeRecipeToHd \n")
-        writeRecipeToHd(character)
+        print("Key = g > writeBook \n")
+        writeBook(character)
     end
 end
 
 ---@param character IsoGameCharacter
 function key35(character, key)
     if key == 35 then -- <<< h
-        print("Key = h > createRecipe \n")
-        createRecipe(character)
+        print("Key = h > readBook \n")
+        readBook(character)
     end
 end
 
 ---@param character IsoGameCharacter
 function key36(character, key)
     if key == 36 then
-        print("Key = j > remove Recipes \n")
-        removeKnowRecipes(character, "Make Pizza")
+        print("Key = j > modDataRemove \n")
+        modDataRemove(EnumModData.CHARACTER_BOOST)
     end
 end
 
@@ -88,4 +82,4 @@ local function OnGameStart()
 end
 
 -- Events.OnGameStart.Add(OnGameStart)
--- Events.OnCustomUIKeyPressed.Add(onCustomUIKeyPressed)
+Events.OnCustomUIKeyPressed.Add(onCustomUIKeyPressed)

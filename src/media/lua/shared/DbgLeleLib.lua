@@ -64,6 +64,7 @@ EnumPerk = {
 }
 
 ---display
+---@param displayName
 ---@param index
 ---@param perk
 ---@param level
@@ -80,12 +81,12 @@ end
 ---@param displayName string
 ---@param perk
 ---@param level
-function DBG_displayPerk(displayName, perk, level, xp)
+function DBG_displayPerk(displayName, i, perk, level, xp)
     local dbg1 = perk
     local dbg2 = level
     local dbg3 = xp
     print("--------------------------------")
-    display(displayName, nil, perk, level, xp)
+    display(displayName, i, perk, level, xp)
     print("--------------------------------")
     local dbg
 end

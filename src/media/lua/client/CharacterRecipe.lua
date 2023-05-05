@@ -21,7 +21,7 @@ local function readRecipeFromHd()
     return CharacterObj01
 end
 
----Delete Trait
+---Delete Recipe
 ---@param character IsoGameCharacter
 --- - zombie.characters.IsoGameCharacter
 local function deleteRecipe(character)
@@ -30,7 +30,7 @@ local function deleteRecipe(character)
     characterKnowRecipe = getCharacterKnownRecipes(character)
 
     for _, v in pairs(characterKnowRecipe:getRecipes()) do
-        removeKnowRecipes(character, v)
+        removeKnowRecipes_PZ(character, v)
     end
 end
 

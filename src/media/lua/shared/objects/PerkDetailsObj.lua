@@ -16,6 +16,7 @@ function PerkDetailsObj:new()
     o.perk = ""
     o.level = ""
     o.xp = ""
+    o.boostLevel = ""
     o.flag = false
     return o
 end
@@ -81,6 +82,17 @@ function PerkDetailsObj:getPerk()
     return self.perk
 end
 
+---Set Boost
+---@param boostLevel int
+function PerkDetailsObj:setBoostLevel(boostLevel)
+    self.boostLevel = boostLevel
+end
+
+---Get Boost
+---@return int boostLevel
+function PerkDetailsObj:getBoostLevel()
+    return self.boostLevel
+end
 
 
 

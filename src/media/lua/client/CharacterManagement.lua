@@ -5,13 +5,14 @@
 ---
 
 function removeMoData()
-    ModData.remove(EnumModData.CHARACTER_ZOMBIE_KILLS)
-    ModData.remove(EnumModData.CHARACTER_LIFE_TIME)
-    ModData.remove(EnumModData.CHARACTER_PERK_DETAILS)
-    ModData.remove(EnumModData.CHARACTER_PROFESSION)
-    ModData.remove(EnumModData.CHARACTER_CALORIES)
-    ModData.remove(EnumModData.CHARACTER_WEIGHT)
-    ModData.remove(EnumModData.CHARACTER_TRAITS)
+    modDataRemove(EnumModData.CHARACTER_BOOST)
+    modDataRemove(EnumModData.CHARACTER_CALORIES)
+    modDataRemove(EnumModData.CHARACTER_LIFE_TIME)
+    modDataRemove(EnumModData.CHARACTER_PERK_DETAILS)
+    modDataRemove(EnumModData.CHARACTER_PROFESSION)
+    modDataRemove(EnumModData.CHARACTER_TRAITS)
+    modDataRemove(EnumModData.CHARACTER_WEIGHT)
+    modDataRemove(EnumModData.CHARACTER_ZOMBIE_KILLS)
 end
 
 ---Read Book
@@ -24,7 +25,8 @@ function readBook(character)
     createCharacterNutrition() -- ok
     createTrait(character) -- ok
     createRecipe(character) -- ok
-    removeMoData() -- ok
+    createBoost(character)
+    -- removeMoData() -- ok
 end
 
 ---Write Book
@@ -38,5 +40,6 @@ function writeBook(character)
     writeCharacterNutrition() -- ok
     writeTraitToHd(character) -- ok
     writeRecipeToHd(character) -- ok
+    writeBoostToHd(character)
 end
 

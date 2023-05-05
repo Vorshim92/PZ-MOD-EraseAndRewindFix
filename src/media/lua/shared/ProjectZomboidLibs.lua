@@ -127,6 +127,22 @@ function getCharacterAllSkills(character)
     return CharacterObj01
 end
 
+---Get character Perks Boosts
+---@param character IsoGameCharacter
+---@return CharacterObj getPerkDetails() -- table PerkFactory.Perk perk, int level, float xp
+--- - IsoGameCharacter : zombie.characters.IsoGameCharacter
+function getCharacterPerksBoost(character)
+    local CharacterObj01 = CharacterObj:new()
+    CharacterObj01 = getCharacterAllSkills(character)
+
+    for _, v in pairs(CharacterObj01:getPerkDetails()) do
+        local boost = getPerkBoost_PZ(character, v:getPerk())
+        v:setBoostLevel(boost)
+    end
+
+    return CharacterObj01
+end
+
 ---Get Character Known Recipes
 ---@param character IsoGameCharacter
 ---@return CharacterObj getRecipes()
@@ -519,6 +535,10 @@ function modDataIsExist(modData)
     return ModData.exists(modData)
 end
 
+function modDataRemove(modData)
+    ModData.remove(modData)
+end
+
 ---@param character IsoGameCharacter
 ---@param nameRecipe String
 ---@return boolean
@@ -573,7 +593,7 @@ end
 ---@param character IsoGameCharacter
 ---@param perk PerkFactory.Perk
 ---@return float
---- - IsoGameCharacter : zombie.characters.IsoGameCharact
+--- - IsoGameCharacter : zombie.characters.IsoGameCharacter
 --- - PerkFactory.Perk : zombie.characters.skills.PerkFactory
 function getMultiplier_PZ(character, perk)
     if not character or not perk then
@@ -625,12 +645,13 @@ end
 ---Set PerkBoost 1 - 75%, 2 - 100%, 3 - 125%, default 0 ?? - 50%
 ---@param character IsoGameCharacter
 ---@param perk PerkFactory.Perk
----@param levelBoost int
+---@param boostLevel int
 --- - IsoGameCharacter : zombie.characters.IsoGameCharacter
 --- - PerkFactory.Perk : zombie.characters.skills.PerkFactory
 function setPerkBoost_PZ(character, perk, levelBoost)
     -- Perks.Cooking
-    if not character or not perk or not levelBoost then
+    if not character or not perk or
+            not levelBoost or levelBoost > EnumNumbers.THREE then
         return nil
     end
 
@@ -676,7 +697,7 @@ end
 ---@param recipe string
 ---@return CharacterObj table recipe string
 --- - IsoGameCharacter : zombie.characters.IsoGameCharacter
-function removeKnowRecipes(character, recipe)
+function removeKnowRecipes_PZ(character, recipe)
     character:getKnownRecipes():remove(recipe)
 end
 
