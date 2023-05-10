@@ -224,7 +224,7 @@ end
 
 --- Get all Traits and Perk
 ---@param character IsoGameCharacter
----@return TraitCollection
+---@return List | TraitCollection
 --- - IsoGameCharacter : zombie.characters.IsoGameCharacter
 --- - TraitCollection : zombie.characters.traits.TraitCollection
 function getTraitsPerk_PZ(character)
@@ -606,20 +606,20 @@ end
 ---Add Xp Multiplier
 ---@param character IsoGameCharacter
 ---@param perk PerkFactory.Perk
----@param value1 float
----@param value2 int
----@param value3 int
+---@param multiplier float The multiplier value to apply to the XP gain of the specified perk.
+---@param minLevel int
+---@param maxLevel int
 --- - IsoGameCharacter : zombie.characters.IsoGameCharact
 --- - PerkFactory.Perk : zombie.characters.skills.PerkFactory
-function addXpMultiplier_PZ(character, perk, value1, value2, value3)
+function addXpMultiplier_PZ(character, perk, multiplier, minLevel, maxLevel)
     if not character or not perk or not
-    value1 or not value2 or not
-    value3 then
+    multiplier or not minLevel or not
+    maxLevel then
 
         return nil
     end
 
-    character:getXp():addXpMultiplier(perk, value1, value2, value3)
+    character:getXp():addXpMultiplier(perk, multiplier, minLevel, maxLevel)
 
     --[[
     The addXpMultiplier() function is a method of the Xp class in the Project Zomboid Lua API.
@@ -676,15 +676,15 @@ end
 ---@param character IsoGameCharacter
 ---@param recipe string
 --- - IsoGameCharacter : zombie.characters.IsoGameCharacter
-function addKnownRecipes(character, recipe)
+function addKnownRecipe(character, recipe)
     learnRecipe_PZ(character, recipe)
 end
 
 ---Get Known Recipes
 ---@param character IsoGameCharacter
----@return CharacterObj table recipe string
+---@return List
 --- - IsoGameCharacter : zombie.characters.IsoGameCharacter
-function getKnownRecipes_PZ(character)
+function getKnownRecipe_PZ(character)
     if not character then
         return nil
     end
@@ -695,9 +695,8 @@ end
 ---Get remove Known Recipe
 ---@param character IsoGameCharacter
 ---@param recipe string
----@return CharacterObj table recipe string
 --- - IsoGameCharacter : zombie.characters.IsoGameCharacter
-function removeKnowRecipes_PZ(character, recipe)
+function removeKnowRecipe_PZ(character, recipe)
     character:getKnownRecipes():remove(recipe)
 end
 

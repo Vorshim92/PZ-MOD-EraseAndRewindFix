@@ -30,7 +30,7 @@ local function deleteRecipe(character)
     characterKnowRecipe = getCharacterKnownRecipes(character)
 
     for _, v in pairs(characterKnowRecipe:getRecipes()) do
-        removeKnowRecipes_PZ(character, v)
+        removeKnowRecipe_PZ(character, v)
     end
 end
 
@@ -47,7 +47,7 @@ function createRecipe(character)
     deleteRecipe(character)
 
     for _, v in pairs(CharacterObj01:getRecipes()) do
-        addKnownRecipes(character, v)
+        addKnownRecipe(character, v)
     end
 end
 

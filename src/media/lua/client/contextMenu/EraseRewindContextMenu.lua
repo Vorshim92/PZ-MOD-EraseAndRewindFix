@@ -5,7 +5,6 @@ local contextER = {}
 
 
 --- add Save Context
----
 function contextER.addSaveContext(character, context, items)
 
     for _, v in ipairs(items) do

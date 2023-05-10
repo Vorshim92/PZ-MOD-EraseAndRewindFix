@@ -45,8 +45,8 @@ end
 ---@param character IsoGameCharacter
 function key34(character, key)
     if key == 34 then -- <<<< g
-        print("Key = g > writeBook \n")
-        writeBook(character)
+        print("Key = g > funcName3 \n")
+        funcName2()
     end
 end
 
@@ -82,4 +82,124 @@ local function OnGameStart()
 end
 
 -- Events.OnGameStart.Add(OnGameStart)
-Events.OnCustomUIKeyPressed.Add(onCustomUIKeyPressed)
+-- Events.OnCustomUIKeyPressed.Add(onCustomUIKeyPressed)
+
+ function funcName()
+    local player = getSpecificPlayer(0) -- ottieni il giocatore corrente
+    local item = player:getInventory():FindAndReturn("nomeOggetto") -- cerca l'oggetto per nome
+    if item then
+        player:getInventory():Remove(item) -- rimuovi e distruggi l'oggetto
+    end
+
+end
+
+ function funcName2()
+     local player = getSpecificPlayer(0)
+     local inv = player:getInventory()
+     ---@type InventoryItem
+     local item = inv:getFirstTypeRecurse("BookFarming1")
+
+     ---@type Literature
+    local book = item -- self.item -- assuming self.item is set to the "fishing rod" item
+    local lvlSkillTrained = book:getLvlSkillTrained()
+    local maxLevelTrained = book:getMaxLevelTrained()
+    local category = book:getCategory()
+    local skillTrained = book:getSkillTrained()
+
+    print("Mininum Level - ", lvlSkillTrained)
+    print("Maximum level - ", maxLevelTrained)
+    print("category - ", category)
+    print("skillTrained - ", skillTrained)
+end
+
+function funcName3()
+    -- Farming Vol. 1
+    local player = getSpecificPlayer(0)
+    ---@type InventoryItem
+    local inv = player:getInventory()
+    ---@type Item
+    local items = inv:getItems()
+
+    for i = 0, items:size() - 1 do
+        local item = items:get(i)
+        local name = item:getType() -- :getName()
+        local count = item:getCount()
+        print(name .. " - " .. count)
+    end
+end
+
+ function funcName4()
+    local player = getSpecificPlayer(0)
+    local inv = player:getInventory()
+     ---@type InventoryItem
+    local book = inv:getFirstTypeRecurse("BookFarming1")
+
+    if book then
+        ---@type InventoryItem
+        local stats = book:getStats()
+        --print("Boost XP: " .. stats:boostXP)
+        --print("Boost skill: " .. stats.boostSkill)
+    end
+end
+ function funcName5()
+     local lista = getCell():getInventory()
+
+     local dbg
+     for i, v in pairs(lista) do
+         print(lista)
+     end
+
+
+         -- Now you can use the literatureList table to do whatever you need with the literature items
+
+
+         --for i = 0, getCell():getInventory():size() - 1 do
+         --    local item = getCell():getInventory():getItems():get(i)
+         --    if instanceof(item, "Literature") then
+         --        table.insert(literatureList, item)
+         --    end
+         --end
+
+         -- Now you can use the literatureList table to do whatever you need with the literature items
+
+
+         -- Now you can use the literatureList table to do whatever you need with the literature items
+
+ end
+
+function funcName6()
+    local itemsList = {}
+
+    -- Get the player's inventory
+    local inventory = getPlayer():getInventory()
+
+    -- Loop through each item in the inventory
+    for i = 0, inventory:getItems():size() - 1 do
+        local item = inventory:getItems():get(i)
+        -- Check if the item is not null
+        if item then
+            -- Add the item to the itemsList table
+           print(item)
+        end
+    end
+
+end
+
+function funcName7()
+    local literatureList = {}
+
+    for x = 0, getWorld():getMap():getWidth() - 1 do
+        for y = 0, getWorld():getMap():getHeight() - 1 do
+            local square = getWorld():getCell():getGridSquare(x, y, 0)
+            if square ~= nil then
+                local inventory = square:getInventory()
+                for i = 0, inventory:size() - 1 do
+                    local item = inventory:getItems():get(i)
+                    if instanceof(item, "Literature") then
+                        print(item)
+                    end
+                end
+            end
+        end
+    end
+end

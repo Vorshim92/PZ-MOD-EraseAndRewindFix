@@ -4,6 +4,7 @@
 --- DateTime: 15/04/23 18:54
 ---
 require("media.lua.client.EnumModData")
+require("media.lua.shared.objects.CharacterObj")
 
 local lines_ = { perk, boostLevel }
 

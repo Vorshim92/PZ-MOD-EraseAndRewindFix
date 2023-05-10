@@ -10,6 +10,7 @@ EnumModData = {
     CHARACTER_BOOST = "characterBoost",
     CHARACTER_CALORIES = "characterCalories",
     CHARACTER_LIFE_TIME = "characterLifeTime",
+    CHARACTER_MULTIPLIER = "characterMultiplier",
     CHARACTER_PERK_DETAILS = "characterPerkDetails",
     CHARACTER_PROFESSION = "characterProfession",
     CHARACTER_RECIPES = "characterRecipes",

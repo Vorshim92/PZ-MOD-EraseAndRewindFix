@@ -17,6 +17,7 @@ function PerkDetailsObj:new()
     o.level = ""
     o.xp = ""
     o.boostLevel = ""
+    o.multiplier = ""
     o.flag = false
     return o
 end
@@ -94,6 +95,17 @@ function PerkDetailsObj:getBoostLevel()
     return self.boostLevel
 end
 
+---Set Multiplier
+---@param multiplier double
+function PerkDetailsObj:setMultiplier(multiplier)
+    self.multiplier = multiplier
+end
+
+---Get Multiplier
+---@return double multiplier
+function PerkDetailsObj:getMultiplier()
+    return self.multiplier
+end
 
 
 
