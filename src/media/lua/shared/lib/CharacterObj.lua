@@ -6,8 +6,8 @@
 
 ---@class CharacterObj
 
-require("media.lua.shared.objects.BaseObject")
-require("media.lua.shared.objects.PerkDetailsObj")
+require("lib/BaseObject")
+require("lib/PerkDetailsObj")
 CharacterObj = BaseObject:derive("CharacterObj")
 
 function CharacterObj:new()

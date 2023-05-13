@@ -33,34 +33,34 @@ EnumProfession = {
 
 --- Not tested, check the names
 EnumPerk = {
---    UNEMPLOYED = "",
---    NONE = "none",
---    FITNESS = "Fitness",
---    STRENGTH = "Strength",
---    SPRINTING = "Sprinting",
---    LIGHTFOOT = "Lightfoot",
---    NIMBLE = "Nimble",
---    SNEAK = "Sneak",
---    AXE = "Axe",
---    BLUNT = "Blunt",
---    SMALL_BLUNT = "SmallBlunt",
---    LONG_BLADE = "LongBlade",
---    SMALL_BLADE = "SmallBlade",
---    SPEAR = "Spear",
---    MAINTENANCE = "Maintenance",
---    WOODWORK = "Woodwork",
---    COOKING = "Cooking",
---    FARMING = "Farming",
---    DOCTOR = "Doctor",
---    ELECTRICITY = "Electricity",
---    METAL_WELDING = "MetalWelding",
---    MECHANICS = "Mechanics",
---    TAILORING = "Tailoring",
---    AIMING = "Aiming",
---    RELOADING = "Reloading",
---    FISHING = "Fishing",
---    TRAPPING = "Trapping",
---    PLANT_SCAVENGING = "PlantScavenging"
+    UNEMPLOYED = "",
+    NONE = "none",
+    AIMING = "Aiming",
+    AXE = "Axe",
+    BLUNT = "Blunt",
+    COOKING = "Cooking",
+    DOCTOR = "Doctor",
+    ELECTRICITY = "Electricity",
+    FARMING = "Farming",
+    FISHING = "Fishing",
+    FITNESS = "Fitness",
+    LIGHTFOOT = "Lightfoot",
+    LONG_BLADE = "LongBlade",
+    MAINTENANCE = "Maintenance",
+    MECHANICS = "Mechanics",
+    METAL_WELDING = "MetalWelding",
+    NIMBLE = "Nimble",
+    PLANT_SCAVENGING = "PlantScavenging",
+    RELOADING = "Reloading",
+    SMALL_BLUNT = "SmallBlunt",
+    SMALL_BLADE = "SmallBlade",
+    SNEAK = "Sneak",
+    SPEAR = "Spear",
+    SPRINTING = "Sprinting",
+    STRENGTH = "Strength",
+    TAILORING = "Tailoring",
+    TRAPPING = "Trapping",
+    WOODWORK = "Woodwork"
 }
 
 ---display
@@ -69,7 +69,7 @@ EnumPerk = {
 ---@param perk
 ---@param level
 ---@param xp
-local function display(displayName, i, perk, level, xp)
+function display(displayName, i, perk, level, xp)
     print("DGB\n")
     print(displayName .. " " ..
             tostring(i) .. " >> " ..
@@ -81,7 +81,7 @@ end
 ---@param displayName string
 ---@param perk
 ---@param level
-function DBG_displayPerk(displayName, i, perk, level, xp)
+function displayPerk(displayName, i, perk, level, xp)
     local dbg1 = perk
     local dbg2 = level
     local dbg3 = xp
@@ -95,7 +95,7 @@ end
 ---@param perk_ PerkFactory.Perk
 ---@param perk PerkFactory.Perk
 ---@param level int
-function DBG_GetCheckPerk(displayName, perk_, perk, level )
+function getCheckPerk(displayName, perk_, perk, level )
     -- Perks.Maintenance
     local dbg1
     local dbg2
@@ -117,7 +117,7 @@ end
 
 ---@param displayName string
 ---@param table
-function DBG_displayListPerks(displayName, perks_list)
+function displayListPerks(displayName, perks_list)
     print("--------------------------------")
     for i, v in pairs(perks_list) do
         display(displayName, i, v.perk, v.level, nil)

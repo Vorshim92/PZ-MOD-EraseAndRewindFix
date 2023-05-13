@@ -6,7 +6,7 @@
 
 ---@class PerkDetailsObj
 
-require("media.lua.shared.objects.BaseObject")
+require("lib/BaseObject")
 PerkDetailsObj = BaseObject:derive("PerkDetailsObj")
 
 function PerkDetailsObj:new()
