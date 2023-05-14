@@ -4,26 +4,36 @@
 --- DateTime: 01/04/23 21:20
 ---
 
-require("media.lua.client.EnumModData")
+local modDataX = require("lib/ModDataX")
+local isoPlayerPZ = require("lib/IsoPlayerPZ")
+require("EnumModData")
 
 ---Read Life Time From Hd
 ---@return double
 local function readLifeTimeFromHd()
-    return modDataReadSingleValue(EnumModData.CHARACTER_LIFE_TIME)
+    return modDataX.readModata(EnumModData.CHARACTER_LIFE_TIME)
 end
 
 ---Create Life Time
 function createLifeTime()
-    if not modDataIsExist(EnumModData.CHARACTER_LIFE_TIME) then
+    if not modDataX.isExists(EnumModData.CHARACTER_LIFE_TIME) then
         return nil
     end
 
     ---@type double
-    local lifeTime = readLifeTimeFromHd()
-    setHoursSurvived_PZ(lifeTime)
+    local lifeTime = {}
+    lifeTime = readLifeTimeFromHd()
+
+    for i, v in pairs(lifeTime) do
+        isoPlayerPZ.setHoursSurvived_PZ(v)
+    end
+
 end
 
 ---Write Life Time To Hd
 function writeLifeTimeToHd()
-    modDataInsertSingleValue(EnumModData.CHARACTER_LIFE_TIME, getHoursSurvived_PZ())
+    modDataX.remove(EnumModData.CHARACTER_LIFE_TIME)
+
+    modDataX.saveModata(EnumModData.CHARACTER_LIFE_TIME,
+            isoPlayerPZ.getHoursSurvived_PZ())
 end

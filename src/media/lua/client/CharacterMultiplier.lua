@@ -3,16 +3,25 @@
 --- Created by lele.
 --- DateTime: 15/04/23 18:54
 ---
-require("media.lua.client.EnumModData")
-require("media.lua.shared.objects.CharacterObj")
+
+local modDataX = require("lib/ModDataX")
+local characterPz = require("lib/CharacterPZ")
+local characterLib = require("CharacterLib")
+require("lib/CharacterObj")
+
+local lines_ = { perk, multiplier }
+
+local function lines(perk, multiplier)
+    table.insert(lines_, {
+        perk = perk,
+        multiplier = multiplier
+    })
+end
 
 ---Read Multiplier From Hd
 ---@return table
 local function readMultiplierFromHd()
-    local values = {}
-    values = ModData.get(EnumModData.CHARACTER_MULTIPLIER)
-
-   return values
+    return modDataX.readModata(EnumModData.CHARACTER_MULTIPLIER)
 end
 
 ---Delete Multiplier
@@ -20,10 +29,10 @@ end
 --- - zombie.characters.IsoGameCharacter
 local function deleteMultiplier(character)
     local CharacterMultiplierObJ = CharacterObj:new()
-    -- CharacterMultiplierObJ = getCharacterAllSkills(character)
+    CharacterMultiplierObJ = characterLib.getAllPerks(character)
 
     for _, v in pairs(CharacterMultiplierObJ:getPerkDetails()) do
-      --  setPerkBoost_PZ(v:getPerk(), EnumNumbers.ZERO)
+        characterPz.removeMultiplier(character, v:getPerk())
     end
 end
 
@@ -31,21 +40,22 @@ end
 ---@param character IsoGameCharacter
 --- - zombie.characters.IsoGameCharacter
 function createMultiplier(character)
-    if not modDataIsExist(EnumModData.CHARACTER_MULTIPLIER) then
+    if not modDataX.isExists(EnumModData.CHARACTER_MULTIPLIER) then
         return nil
     end
 
-    local boost = {}
-    boost = readMultiplierFromHd()
+    local multiplier = {}
+    multiplier = readMultiplierFromHd()
 
-    if not boost then
+    if not multiplier then
         return nil
     end
 
     deleteMultiplier(character)
 
-    for _, v in pairs(boost) do
---        setPerkBoost_PZ(character, v.perk, v.boostLevel)
+    for _, v in pairs(multiplier) do
+        characterPz.addXpMultiplier_PZ(character, v.perk, v.multiplier,
+            characterPz.EnumNumbers.ONE, characterPz.EnumNumbers.ONE)
     end
 end
 
@@ -53,16 +63,18 @@ end
 ---@param character IsoGameCharacter
 --- - zombie.characters.IsoGameCharacter
 function writeMultiplierToHd(character)
-    ModData.remove(EnumModData.CHARACTER_MULTIPLIER)
+    modDataX.remove(EnumModData.CHARACTER_MULTIPLIER)
 
     local CharacterMultiplierObJ = CharacterObj:new()
-     CharacterMultiplierObJ = getCharacterPerksBoost(character)
+     CharacterMultiplierObJ = characterLib.getMultiplier(character)
 
     for _, v in pairs(CharacterMultiplierObJ:getPerkDetails()) do
-
+        if v:getMultiplier() > 0.0 then
+            lines(v:getPerk(), v:getMultiplier())
+        end
     end
 
-    modDataInsertMultipleValue(EnumModData.CHARACTER_MULTIPLIER, lines_)
+    modDataX.saveModata(EnumModData.CHARACTER_MULTIPLIER, lines_)
 
-    lines_ = {}
+    lines = {}
 end

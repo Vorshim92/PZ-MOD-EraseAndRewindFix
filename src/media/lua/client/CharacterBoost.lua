@@ -3,8 +3,10 @@
 --- Created by lele.
 --- DateTime: 15/04/23 18:54
 ---
-require("media.lua.client.EnumModData")
-require("media.lua.shared.objects.CharacterObj")
+local characterPz = require("lib/CharacterPZ")
+local modDataX = require("lib/ModDataX")
+local characterLib = require("CharacterLib")
+require("lib/CharacterObj")
 
 local lines_ = { perk, boostLevel }
 
@@ -18,21 +20,18 @@ end
 ---Read Boost From Hd
 ---@return table
 local function readBoostFromHd()
-    local values = {}
-    values = ModData.get(EnumModData.CHARACTER_BOOST)
-
-   return values
+    return modDataX.readModata(EnumModData.CHARACTER_BOOST)
 end
 
 ---Delete Boost
 ---@param character IsoGameCharacter
 --- - zombie.characters.IsoGameCharacter
 local function deleteBoost(character)
-    local CharacterAllSkillsObJ = CharacterObj:new()
-    CharacterAllSkillsObJ = getCharacterAllSkills(character)
+    local CharacterAllPerksObJ = CharacterObj:new()
+    CharacterAllPerksObJ = characterLib.getAllPerks(character)
 
-    for _, v in pairs(CharacterAllSkillsObJ:getPerkDetails()) do
-        setPerkBoost_PZ(v:getPerk(), EnumNumbers.ZERO)
+    for _, v in pairs(CharacterAllPerksObJ:getPerkDetails()) do
+        characterPz.removePerkBoost(character, v:getPerk())
     end
 end
 
@@ -40,7 +39,7 @@ end
 ---@param character IsoGameCharacter
 --- - zombie.characters.IsoGameCharacter
 function createBoost(character)
-    if not modDataIsExist(EnumModData.CHARACTER_BOOST) then
+    if not modDataX.isExists(EnumModData.CHARACTER_BOOST) then
         return nil
     end
 
@@ -54,8 +53,7 @@ function createBoost(character)
     deleteBoost(character)
 
     for _, v in pairs(boost) do
-        print(tostring(v.perk) .. " - " .. tostring(v.boostLevel))
-        setPerkBoost_PZ(character, v.perk, v.boostLevel)
+        characterPz.setPerkBoost_PZ(character, v.perk, v.boostLevel)
     end
 end
 
@@ -63,17 +61,16 @@ end
 ---@param character IsoGameCharacter
 --- - zombie.characters.IsoGameCharacter
 function writeBoostToHd(character)
-    ModData.remove(EnumModData.CHARACTER_BOOST)
+    modDataX.remove(EnumModData.CHARACTER_BOOST)
 
     local CharacterPerksBoostObj = CharacterObj:new()
-    CharacterPerksBoostObj = getCharacterPerksBoost(character)
+    CharacterPerksBoostObj = characterLib.getPerksBoost(character)
 
     for _, v in pairs(CharacterPerksBoostObj:getPerkDetails()) do
         lines(v:getPerk(), v:getBoostLevel())
-        print(tostring(v:getPerk()) .. " - " .. tostring(v:getBoostLevel()))
     end
 
-    modDataInsertMultipleValue(EnumModData.CHARACTER_BOOST, lines_)
+    modDataX.saveModata(EnumModData.CHARACTER_BOOST, lines_)
 
     lines_ = {}
 end

@@ -4,45 +4,60 @@
 --- DateTime: 24/04/23 09:17
 ---
 
+local isoPlayerPZ = require("lib/IsoPlayerPZ")
+local modDataX = require("lib/ModDataX")
+
 ---Read Weight From Hd
 local function readWeightFromHd()
-    return modDataReadSingleValue( EnumModData.CHARACTER_WEIGHT)
+    return modDataX.readModata( EnumModData.CHARACTER_WEIGHT)
 end
 
 ---Read Calories From Hd
 local function readCaloriesFromHd()
-    return modDataReadSingleValue( EnumModData.CHARACTER_CALORIES)
+    return modDataX.readModata( EnumModData.CHARACTER_CALORIES)
 end
 
 ---Write Weight From Hd
 local function writeWeightFromHd()
-    modDataInsertSingleValue(EnumModData.CHARACTER_WEIGHT, getWeight_PZ())
+    modDataX.saveModata(EnumModData.CHARACTER_WEIGHT, isoPlayerPZ.getWeight_PZ())
 end
 
 ---Write Calories From Hd
 local function writeCaloriesFromHd()
-    modDataInsertSingleValue(EnumModData.CHARACTER_CALORIES, getCalories_PZ())
+    modDataX.saveModata(EnumModData.CHARACTER_CALORIES, isoPlayerPZ.getCalories_PZ())
 end
 
 ---Create Character Nutrition
 function createCharacterNutrition()
-    if not modDataIsExist(EnumModData.CHARACTER_WEIGHT) then
+    if not modDataX.isExists(EnumModData.CHARACTER_WEIGHT) then
         return nil
     end
 
-    local weight = readWeightFromHd()
-    setWeight_PZ(weight)
+    local weight = {}
+    weight = readWeightFromHd()
 
-    if not modDataIsExist(EnumModData.CHARACTER_CALORIES) then
+    for i, v in pairs(weight) do
+        isoPlayerPZ.setWeight_PZ(v)
+    end
+
+
+    if not modDataX.isExists(EnumModData.CHARACTER_CALORIES) then
         return nil
     end
 
-    local calories = readCaloriesFromHd()
-    setCalories_PZ(calories)
+    local calories = {}
+    calories = readCaloriesFromHd()
+
+    for i, v in pairs(calories) do
+        isoPlayerPZ.setCalories_PZ(v)
+    end
 end
 
 ---Wwrite Character Nutrition
 function writeCharacterNutrition()
+    modDataX.remove(EnumModData.CHARACTER_WEIGHT)
+    modDataX.remove(EnumModData.CHARACTER_CALORIES)
+
     writeWeightFromHd()
     writeCaloriesFromHd()
 end

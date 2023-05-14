@@ -3,22 +3,24 @@
 --- Created by lele.
 --- DateTime: 15/04/23 18:54
 ---
-require("media.lua.client.EnumModData")
 
+local characterPz = require("lib/CharacterPZ")
+local modDataX = require("lib/ModDataX")
+local characterLib = require("CharacterLib")
+
+require("EnumModData")
+require("lib/CharacterObj")
 ---Read Trait From Hd
 ---@return table
 local function readTraitFromHd()
-    local values = {}
-    values = ModData.get(EnumModData.CHARACTER_TRAITS)
-
-   return values
+    return modDataX.readModata(EnumModData.CHARACTER_TRAITS)
 end
 
 ---Create Trait
 ---@param character IsoGameCharacter
 --- - zombie.characters.IsoGameCharacter
 function createTrait(character)
-    if not modDataIsExist(EnumModData.CHARACTER_TRAITS) then
+    if not modDataX.isExists(EnumModData.CHARACTER_TRAITS) then
         return nil
     end
 
@@ -29,10 +31,10 @@ function createTrait(character)
         return nil
     end
 
-    removeAllTraits_PZ(character)
+    characterPz.removeAllTraits_PZ(character)
 
     for _, v in pairs(trait) do
-        setTrait_PZ(character, v)
+        characterPz.setTraitsPerk_PZ(character, v)
     end
 end
 
@@ -40,10 +42,10 @@ end
 ---@param character IsoGameCharacter
 --- - zombie.characters.IsoGameCharacter
 function writeTraitToHd(character)
-    ModData.remove(EnumModData.CHARACTER_TRAITS)
-
+    modDataX.remove(EnumModData.CHARACTER_TRAITS)
     local trait = CharacterObj:new()
-    trait = getCharacterTraitsPerk(character)
+    trait = characterLib.getTraitsPerk(character)
 
-    modDataInsertMultipleValue(EnumModData.CHARACTER_TRAITS, trait:getTraits())
+    modDataX.saveModata(EnumModData.CHARACTER_TRAITS,
+            trait:getTraits())
 end

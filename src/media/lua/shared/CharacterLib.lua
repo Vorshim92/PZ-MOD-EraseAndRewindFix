@@ -133,7 +133,7 @@ function CharacterLib.getAllPerks(character)
         CharacterObj01:addPerkDetails(perk, level, xp)
     end
 
-    CharacterObj01:setProfession(characterPz.getPerkLevel_PZ(character))
+    CharacterObj01:setProfession(characterPz.getProfession_PZ(character))
 
     return CharacterObj01
 end

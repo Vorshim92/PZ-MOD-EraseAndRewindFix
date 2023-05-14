@@ -80,7 +80,7 @@ local function baseZombieKills()
     characterPz.setZombieKills_PZ(character, 15)
 
     checkTest(characterPz.getZombieKills_PZ(character), 15,
-            "ZombieKills" )
+           "ZombieKills" )
 
 end
 
@@ -181,7 +181,7 @@ end
 local function baseConvertLevelToXp(perk, level)
     local xp = perkFactoryPZ.convertLevelToXp(Perks.Cooking, 1)
 
-    checkTest(xp, 75, "ConvertLevelToXp")
+   checkTest(xp, 75, "ConvertLevelToXp")
 end
 
 local function basePerkName()
@@ -325,8 +325,9 @@ end
 
 --- ------------------------------------------------------------
 
-local function characterLibAllSkills()
+local function characterLibAllPerks()
     local CharacterObj01 = CharacterObj:new()
+    character = getPlayer()
     CharacterObj01 = characterLib.getAllPerks(character)
 
     local flag = false
@@ -336,6 +337,12 @@ local function characterLibAllSkills()
 
     checkTest(true,
             true, "All Skills")
+
+    local profession = CharacterObj01:getProfession()
+    local profession_ = characterPz.getProfession_PZ(character)
+
+    checkTest(profession,
+            profession_, "All Skills - Profession")
 end
 
 local function characterLibPerksBoost()
@@ -389,12 +396,22 @@ end
 
 -- TODO finire
 local function characterLibMultiplier()
-    local boostLevel = 1
+    local multiplier = 1.0
 
-    characterPz.setPerkBoost_PZ(character, Perks.Cooking, boostLevel)
+    characterPz.addXpMultiplier_PZ(character, Perks.Cooking, multiplier,
+            characterPz.EnumNumbers.ONE, characterPz.EnumNumbers.ONE)
 
-    checkTest(characterPz.getPerkBoost_PZ(character, Perks.Cooking),
-            boostLevel, "PerkBoost")
+    local CharacterObj01 = CharacterObj:new()
+    CharacterObj01 = characterLib.getMultiplier(character)
+
+    local dbg1 = character
+    local dbg
+    for _, v in pairs(CharacterObj01:getPerkDetails()) do
+        if v:getPerk() == Perks.Cooking then
+            checkTest(v:getMultiplier(),
+                    multiplier, "Multiplier")
+        end
+    end
 
     characterPz.removePerkBoost(character, Perks.Cooking)
 end
@@ -407,7 +424,7 @@ end
 ---@param character IsoGameCharacter
 function key36(key)
     if key == 36 then
-        print("Key = j > addTrait \n")
+        print("Key = j > multiplier \n")
 
     end
 end
@@ -447,7 +464,7 @@ local function characterLibTest()
     traitsPerk()
     perkProfession()
     ---- -- currentSkill()
-    characterLibAllSkills()
+    characterLibAllPerks()
     characterLibPerksBoost()
     characterLibKnownRecipes()
     characterLibMultiplier()
@@ -462,4 +479,4 @@ local function onCustomUIKeyPressed(key)
 
 end
 
-Events.OnCustomUIKeyPressed.Add(onCustomUIKeyPressed)
+-- Events.OnCustomUIKeyPressed.Add(onCustomUIKeyPressed)

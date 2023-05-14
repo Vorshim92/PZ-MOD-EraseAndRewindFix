@@ -4,14 +4,20 @@
 --- DateTime: 15/04/23 13:52
 ---
 
-require("media.lua.client.EnumModData")
-require("media.lua.shared.objects.CharacterObj")
+local characterPz = require("lib/CharacterPZ")
+local perkFactoryPZ = require("lib/PerkFactoryPZ")
+local characterLib = require("CharacterLib")
+local modDataX = require("lib/ModDataX")
+
+
+require("EnumModData")
+require("lib/CharacterObj")
 
 ---Read Character Perk Details From Hd
 ---@return CharacterObj PerkFactory.Perk perk, int level, float xp, boolean flag
 local function readCharacterPerkDetailsFromHd()
     local characterPerkDetails =
-    ModData.get(EnumModData.CHARACTER_PERK_DETAILS )
+        modDataX.readModata(EnumModData.CHARACTER_PERK_DETAILS )
 
     local CharacterObj01 = CharacterObj:new()
 
@@ -23,7 +29,7 @@ local function readCharacterPerkDetailsFromHd()
         end
 
         -- perk, level, xp
-        CharacterObj01:addPerkDetails(getPerkFromName_PZ(lines[1]),
+        CharacterObj01:addPerkDetails(perkFactoryPZ.getPerkByName_PZ(lines[1]),
                 tonumber(lines[2]),
                 tonumber(lines[3]) + 0.0)
 
@@ -39,21 +45,21 @@ end
 local function deleteCharacter(character)
     local characterAllSkills = CharacterObj:new()
 
-    characterAllSkills = getCharacterAllSkills(character)
+    characterAllSkills = characterLib.getAllPerks(character)
 
     for _, v in pairs(characterAllSkills:getPerkDetails()) do
-        removePerkLevel(character, v:getPerk())
+        characterPz.removePerkLevel(character, v:getPerk())
     end
 
-    setCharacterProfession_PZ(character, "")
+    characterPz.removeProfession(character)
 end
 
 ---Copy Character Skill
 ---@param character IsoGameCharacter
 --- - IsoGameCharacter : zombie.characters.IsoGameCharacter
 function createCharacterPerkDetails(character)
-    if not modDataIsExist(EnumModData.CHARACTER_PROFESSION) or not
-            modDataIsExist(EnumModData.CHARACTER_PERK_DETAILS) then
+    if not modDataX.isExists(EnumModData.CHARACTER_PROFESSION) or not
+            modDataX.isExists(EnumModData.CHARACTER_PERK_DETAILS) then
         return nil
     end
 
@@ -63,35 +69,41 @@ function createCharacterPerkDetails(character)
     deleteCharacter(character)
 
     for _, v in pairs(characterSkills:getPerkDetails()) do
-        setPerkLevel(character, v:getPerk(), v:getXp())
+        characterPz.setPerkLevel(character, v:getPerk(), v:getXp())
     end
 
-    setCharacterProfession_PZ(character,
-        modDataReadSingleValue(EnumModData.CHARACTER_PROFESSION))
+    local profession = {}
+    profession = modDataX.readModata(EnumModData.CHARACTER_PROFESSION)
+
+    characterPz.setProfession_PZ(character,
+            profession[1])
 end
 
 ---Write Character Perk Details To Hd
 ---@param character IsoGameCharacter
 --- - IsoGameCharacter : zombie.characters.IsoGameCharacter
 function writeCharacterPerkDetailsToHd(character)
-    ModData.remove(EnumModData.CHARACTER_PERK_DETAILS )
+    modDataX.remove(EnumModData.CHARACTER_PERK_DETAILS )
+    modDataX.remove(EnumModData.CHARACTER_PROFESSION )
 
     local lines = {}
 
     local characterAllSkills = CharacterObj:new()
-    characterAllSkills = getCharacterAllSkills(character)
+    characterAllSkills = characterLib.getAllPerks(character)
 
-    for i, v in pairs(characterAllSkills:getPerkDetails()) do
-        lines[i] = ( v.perk:getName() .. "-" ..
+    for _, v in pairs(characterAllSkills:getPerkDetails()) do
+        local value = ( v.perk:getName() .. "-" ..
                 tostring(v:getLevel())  .. "-" ..
                 tostring(v:getXp()) )
-        -- TODO replace with modDataInsertSingleValue
-        ModData.add(EnumModData.CHARACTER_PERK_DETAILS, lines)
+
+        table.insert(lines, value)
     end
 
-    lines = {}
+    modDataX.saveModata(EnumModData.CHARACTER_PERK_DETAILS, lines)
 
-    modDataInsertSingleValue(EnumModData.CHARACTER_PROFESSION, characterAllSkills:getProfession() )
+    lines = {}
+    modDataX.saveModata(EnumModData.CHARACTER_PROFESSION,
+            characterAllSkills:getProfession() )
 end
 
 

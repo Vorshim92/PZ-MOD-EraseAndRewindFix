@@ -4,29 +4,32 @@
 --- DateTime: 01/04/23 21:20
 ---
 
+local modDataX = require("lib/ModDataX")
+
 function removeMoData()
-    modDataRemove(EnumModData.CHARACTER_BOOST)
-    modDataRemove(EnumModData.CHARACTER_CALORIES)
-    modDataRemove(EnumModData.CHARACTER_LIFE_TIME)
-    modDataRemove(EnumModData.CHARACTER_PERK_DETAILS)
-    modDataRemove(EnumModData.CHARACTER_PROFESSION)
-    modDataRemove(EnumModData.CHARACTER_TRAITS)
-    modDataRemove(EnumModData.CHARACTER_WEIGHT)
-    modDataRemove(EnumModData.CHARACTER_ZOMBIE_KILLS)
+    modDataX.remove(EnumModData.CHARACTER_BOOST)
+    modDataX.remove(EnumModData.CHARACTER_CALORIES)
+    modDataX.remove(EnumModData.CHARACTER_LIFE_TIME)
+    modDataX.remove(EnumModData.CHARACTER_PERK_DETAILS)
+    modDataX.remove(EnumModData.CHARACTER_PROFESSION)
+    modDataX.remove(EnumModData.CHARACTER_TRAITS)
+    modDataX.remove(EnumModData.CHARACTER_WEIGHT)
+    modDataX.remove(EnumModData.CHARACTER_ZOMBIE_KILLS)
 end
 
 ---Read Book
 ---@param character IsoGameCharacter
 --- - IsoGameCharacter : zombie.characters.IsoGameCharacter
 function readBook(character)
-    createCharacterPerkDetails(character) -- ok
-    createZombieKills(character) -- ok
-    createLifeTime() -- ok
-    createCharacterNutrition() -- ok
-    createTrait(character) -- ok
-    createRecipe(character) -- ok
+    createCharacterPerkDetails(character)
+    createZombieKills(character)
+    createLifeTime()
+    createCharacterNutrition()
+    createTrait(character)
+    createRecipe(character)
     createBoost(character)
-    removeMoData() -- ok
+    createMultiplier(character)
+    -- removeMoData()
 end
 
 ---Write Book
@@ -34,12 +37,13 @@ end
 --- - IsoGameCharacter : zombie.characters.IsoGameCharacter
 function writeBook(character)
     removeMoData()
-    writeCharacterPerkDetailsToHd(character) -- ok
-    writeZombieKillsToHd(character) -- ok
-    writeLifeTimeToHd() -- ok
-    writeCharacterNutrition() -- ok
-    writeTraitToHd(character) -- ok
-    writeRecipeToHd(character) -- ok
+    writeCharacterPerkDetailsToHd(character)
+    writeZombieKillsToHd(character)
+    writeLifeTimeToHd()
+    writeCharacterNutrition()
+    writeTraitToHd(character)
+    writeRecipeToHd(character)
     writeBoostToHd(character)
+    writeMultiplierToHd(character)
 end
 

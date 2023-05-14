@@ -57,13 +57,13 @@ end
 --Woodwork - 3
 
 local function createCharacter()
-    characterPz.setProfession_PZ(character, EnumProfession.DOCTOR)
+    characterPz.setProfession_PZ(character, EnumProfession.CARPENTER)
 
-    --characterPz.setPerkLevel(character, Perks.Fitness, 37500)
-    --characterPz.setPerkLevel(character, Perks.Strength, 37500)
-    --characterPz.setPerkLevel(character, Perks.Woodwork, 1275)
-    --characterPz.setPerkLevel(character, Perks.Maintenance, 75)
-    --characterPz.setPerkLevel(character, Perks.SmallBlunt, 75)
+    characterPz.setPerkLevel(character, Perks.Fitness, 37500)
+    characterPz.setPerkLevel(character, Perks.Strength, 37500)
+    characterPz.setPerkLevel(character, Perks.Woodwork, 1275)
+    characterPz.setPerkLevel(character, Perks.Maintenance, 75)
+    characterPz.setPerkLevel(character, Perks.SmallBlunt, 75)
 
     characterPz.setPerkBoost_PZ(character, Perks.Fitness, 3)
     characterPz.setPerkBoost_PZ(character, Perks.Strength, 3)
@@ -75,17 +75,12 @@ local function createCharacter()
 
     characterPz.setZombieKills_PZ(character, 15)
 
-    characterPz.addXpMultiplier_PZ()
+    characterPz.addXpMultiplier_PZ(character, Perks.Cooking, 1.0,
+            characterPz.EnumNumbers.ONE, characterPz.EnumNumbers.ONE)
 
     isoPlayerPZ.setWeight_PZ(79)
     isoPlayerPZ.setCalories_PZ(1500)
     isoPlayerPZ.setHoursSurvived_PZ(15.0)
-
-
-
-    characterPz.setPerkLevel(character, Perks.DOCTOR, 1500)
-    characterPz.setTraitsPerk_PZ(character,"Handy" )
-    characterPz.addXpMultiplier_PZ(character, Perks.DOCTOR, 0.8, 1 , 1)
 
 end
 --
