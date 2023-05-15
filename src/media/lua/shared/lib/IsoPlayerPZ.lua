@@ -4,6 +4,8 @@
 --- DateTime: 07/05/23 14:59
 ---
 
+---@class IsoPlayerPZ
+
 local IsoPlayerPZ = {}
 
 ---Set Life Time in hours

@@ -29,14 +29,13 @@ function readBook(character)
     createRecipe(character)
     createBoost(character)
     createMultiplier(character)
-    -- removeMoData()
+     removeMoData()
 end
 
 ---Write Book
 ---@param character IsoGameCharacter
 --- - IsoGameCharacter : zombie.characters.IsoGameCharacter
 function writeBook(character)
-    removeMoData()
     writeCharacterPerkDetailsToHd(character)
     writeZombieKillsToHd(character)
     writeLifeTimeToHd()

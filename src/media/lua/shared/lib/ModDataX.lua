@@ -4,6 +4,8 @@
 --- DateTime: 10/05/23 15:11
 ---
 
+---@class ModDataX
+
 local modDataX = {}
 
 ---Save ModData

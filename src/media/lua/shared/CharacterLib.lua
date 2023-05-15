@@ -4,6 +4,8 @@
 --- DateTime: 08/05/23 21:28
 ---
 
+---@class CharacterLib
+
 require("lib/CharacterObj")
 local characterPz = require("lib/CharacterPZ")
 local perkFactoryPZ = require("lib/PerkFactoryPZ")

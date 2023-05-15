@@ -394,7 +394,6 @@ local function characterLibKnownRecipes()
 
 end
 
--- TODO finire
 local function characterLibMultiplier()
     local multiplier = 1.0
 
@@ -417,12 +416,10 @@ local function characterLibMultiplier()
 end
 --- ------------------------------------------------------------
 
-
-
 --- ------------------------------------
 
 ---@param character IsoGameCharacter
-function key36(key)
+local function key36(key)
     if key == 36 then
         print("Key = j > multiplier \n")
 
@@ -430,7 +427,7 @@ function key36(key)
 end
 
 ---@param character IsoGameCharacter
-function key37(key)
+local function key37(key)
     if key == 37 then -- <<<< k
         print("Key = k > kill \n")
         character:die()
@@ -476,7 +473,6 @@ local function onCustomUIKeyPressed(key)
     key37(key)
     baseTest()
     characterLibTest()
-
 end
 
 -- Events.OnCustomUIKeyPressed.Add(onCustomUIKeyPressed)

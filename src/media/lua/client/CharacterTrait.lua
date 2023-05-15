@@ -43,6 +43,7 @@ end
 --- - zombie.characters.IsoGameCharacter
 function writeTraitToHd(character)
     modDataX.remove(EnumModData.CHARACTER_TRAITS)
+
     local trait = CharacterObj:new()
     trait = characterLib.getTraitsPerk(character)
 

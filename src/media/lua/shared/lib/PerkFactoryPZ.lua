@@ -4,6 +4,8 @@
 --- DateTime: 07/05/23 15:11
 ---
 
+---@class PerkFactoryPZ
+
 local PerkFactoryPZ = {}
 
 --- Get Perk

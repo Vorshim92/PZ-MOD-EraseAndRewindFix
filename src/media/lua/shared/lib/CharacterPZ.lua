@@ -3,9 +3,11 @@
 --- Created by lele.
 --- DateTime: 07/05/23 10:42
 ---
+
+---@class CharacterPZ
+
 local CharacterPz = {}
 
--- ok
 ---Add XP
 ---@param character IsoGameCharacter
 ---@param perk PerkFactory.Perk
@@ -28,7 +30,6 @@ function CharacterPz.addXP_PZ(character, perk, xp, flag1, flag2, flag3)
     character:getXp():AddXP(perk, xp, flag1, flag2, flag3);
 end
 
--- ok
 --- Get XP perk
 ---@param character IsoGameCharacter
 ---@param perk PerkFactory.Perk
@@ -41,7 +42,6 @@ function CharacterPz.getXp(character, perk)
     return CharacterPz.trunkFloatTo2Decimal( xp ) -- Perks.Maintenance
 end
 
--- ok
 --- Get XP perk
 ---@param character IsoGameCharacter
 ---@param perk PerkFactory.Perk
@@ -53,14 +53,12 @@ function CharacterPz.getXp_PZ(character, perk)
     return character:getXp():getXP(perk) -- Perks.Maintenance
 end
 
--- ok
 ---@param value double
 ---@return int
 function CharacterPz.trunkFloatTo2Decimal(value)
     return tonumber(string.format("%.2f", value)) + 0.0
 end
 
--- OK
 --- Get Charater profession
 ---@param character IsoGameCharacter
 ---@param profession String
@@ -74,7 +72,6 @@ function CharacterPz.setProfession_PZ(character, profession)
     character:getDescriptor():setProfession(profession)
 end
 
--- OK
 --- Get Character profession
 ---@param character IsoGameCharacter
 ---@return String
@@ -88,7 +85,6 @@ function CharacterPz.getProfession_PZ(character)
     return character:getDescriptor():getProfession()
 end
 
--- OK
 --- remove Character profession
 ---@param character IsoGameCharacter
 ---@return String
@@ -97,7 +93,6 @@ function CharacterPz.removeProfession(character)
     CharacterPz.setProfession_PZ(character, "")
 end
 
--- ok
 CharacterPz.EnumNumbers = {
     ZERO = 0,
     ONE = 1,
@@ -112,7 +107,6 @@ CharacterPz.EnumNumbers = {
     TEN = 10,
 }
 
--- ok
 ---Set Perk Level and level
 ---@param character IsoGameCharacter
 ---@param perk PerkFactory.Perk
@@ -134,7 +128,6 @@ function CharacterPz.setPerkLevel(character, perk, xp)
 
 end
 
--- ok
 --- Get Perk Level
 ---@param character IsoGameCharacter
 ---@param perk PerkFactory.Perk
@@ -149,7 +142,6 @@ function CharacterPz.getPerkLevel_PZ(character, perk)
     return character:getPerkLevel(perk)
 end
 
--- ok
 ---Set Perk Level and level
 ---@param character IsoGameCharacter
 ---@param perk PerkFactory.Perk
@@ -182,7 +174,6 @@ function CharacterPz.removePerkLevel(character, perk)
 
 end
 
--- OK
 ---Set Zombies Killed
 ---@param character IsoGameCharacter
 ---@param killZombies int
@@ -195,7 +186,6 @@ function CharacterPz.setZombieKills_PZ(character, killZombies)
     character:setZombieKills(killZombies)
 end
 
--- OK
 ---Get Zombies Killed
 ---@param character IsoGameCharacter
 ---return int
@@ -208,7 +198,6 @@ function CharacterPz.getZombieKills_PZ(character)
     return character:getZombieKills()
 end
 
--- ok
 ---@param character IsoGameCharacter
 ---@param nameRecipe String
 ---@return boolean
@@ -221,7 +210,6 @@ function CharacterPz.learnRecipe_PZ(character, nameRecipe)
     return character:learnRecipe(nameRecipe)
 end
 
--- ok
 ---Set Trait
 ---@param character IsoGameCharacter
 ---@param ---@return List | TraitCollection trait String
@@ -235,7 +223,6 @@ function CharacterPz.setTraitsPerk_PZ(character, trait)
     character:getTraits():add(trait)
 end
 
--- ok
 --- Get all Traits and Perk
 ---@param character IsoGameCharacter
 ---@return List | TraitCollection
@@ -276,7 +263,6 @@ function CharacterPz.removeTrait_PZ(character, trait)
     character:getTraits():remove(trait)
 end
 
--- ok
 ---Clear all Traits
 ---@param character IsoGameCharacter
 --- - IsoGameCharacter : zombie.characters.IsoGameCharacter
@@ -289,7 +275,6 @@ function CharacterPz.removeAllTraits_PZ(character)
     character:getTraits():clear()
 end
 
--- ok
 ---Add Xp Multiplier
 ---@param character IsoGameCharacter
 ---@param perk PerkFactory.Perk
@@ -329,7 +314,6 @@ function CharacterPz.addXpMultiplier_PZ(character, perk, multiplier, minLevel, m
     ]]
 end
 
--- ok
 ---Get Multiplier
 ---@param character IsoGameCharacter
 ---@param perk PerkFactory.Perk
@@ -344,7 +328,6 @@ function CharacterPz.getMultiplier_PZ(character, perk)
     return character:getXp():getMultiplier(perk)
 end
 
--- ok
 ---Get Multiplier
 ---@param character IsoGameCharacter
 ---@param perk PerkFactory.Perk
@@ -358,12 +341,15 @@ function CharacterPz.removeMultiplier(character, perk)
 
     local multiplier = character:getXp():getMultiplier(perk)
 
+    if multiplier == 0.0 or multiplier == nil then
+        return
+    end
+
     CharacterPz.addXpMultiplier_PZ(character, perk, -multiplier,
             1, 1)
 
 end
 
--- ok
 ---Set PerkBoost 1 - 75%, 2 - 100%, 3 - 125%, default 0 ?? - 50%
 ---@param character IsoGameCharacter
 ---@param perk PerkFactory.Perk
@@ -380,7 +366,6 @@ function CharacterPz.setPerkBoost_PZ(character, perk, levelBoost)
     character:getXp():setPerkBoost(perk, levelBoost)
 end
 
--- ok
 ---Get Perk Boost
 ---@param character IsoGameCharacter
 ---@param perk PerkFactory.Perk
@@ -395,7 +380,6 @@ function CharacterPz.getPerkBoost_PZ(character, perk)
     return character:getXp():getPerkBoost(perk)
 end
 
--- ok
 ---@param character IsoGameCharacter
 ---@param perk PerkFactory.Perk
 ---@param boostLevel int
@@ -410,7 +394,6 @@ function CharacterPz.removePerkBoost(character, perk)
     character:getXp():setPerkBoost(perk, CharacterPz.EnumNumbers.ZERO )
 end
 
--- ok
 ---Add a single Recipe ( wrapper )
 ---@param character IsoGameCharacter
 ---@param recipe string
@@ -419,7 +402,6 @@ function CharacterPz.addKnownRecipe(character, recipe)
     CharacterPz.learnRecipe_PZ(character, recipe)
 end
 
--- ok
 ---Get Known Recipes
 ---@param character IsoGameCharacter
 ---@return List
@@ -432,7 +414,6 @@ function CharacterPz.getKnownRecipes_PZ(character)
     return character:getKnownRecipes()
 end
 
--- ok
 ---Get remove Known Recipe
 ---@param character IsoGameCharacter
 ---@param recipe string
@@ -445,7 +426,6 @@ function CharacterPz.removeKnowRecipe_PZ(character, recipe)
     character:getKnownRecipes():remove(recipe)
 end
 
--- ok
 ---learn (add) Recipe
 ---@param character IsoGameCharacter
 ---@param recipe string

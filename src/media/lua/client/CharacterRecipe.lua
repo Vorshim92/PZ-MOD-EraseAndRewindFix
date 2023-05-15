@@ -58,6 +58,8 @@ end
 
 ---Write Recipe To Hd
 function writeRecipeToHd(character)
+    modDataX.remove(EnumModData.CHARACTER_RECIPES)
+
     local knownRecipesObj = CharacterObj:new()
     knownRecipesObj =  characterLib.getKnownRecipes(character)
 

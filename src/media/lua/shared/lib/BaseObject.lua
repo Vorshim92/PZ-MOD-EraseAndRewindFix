@@ -4,6 +4,8 @@
 --- DateTime: 26/04/23 17:12
 ---
 
+---@class BaseObject
+
 BaseObject = {}
 
 BaseObject.type = "BaseObject"

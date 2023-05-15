@@ -4,8 +4,62 @@
 --- DateTime: 26/04/23 17:41
 ---
 
+require("client/CharacterBoost")
+require("lib/DbgLeleLib")
 local characterPz = require("lib/CharacterPZ")
-require("lib/CharacterObj")
+
+
+local function key16(character, key)
+    if key == 16 then -- <<<< q
+        print("Key = q > setPerkBoost_PZ) \n")
+
+    end
+end
+
+---@param character IsoGameCharacter
+local function key17(character, key)
+    if key == 17 then
+        print("Key = w > writeBoostToHd) \n")
+
+    end
+end
+
+-- Perks.Cooking
+-- Perks.Maintenance
+-- Perks.Woodwork
+-- Perks.Sprinting
+-- Todo 		self.character:playSound("CloseBook")
+---@param character IsoGameCharacter
+local function key34(character, key)
+    if key == 34 then -- <<<< g
+        print("Key = g > writeBook \n")
+
+    end
+end
+
+---@param character IsoGameCharacter
+local function key35(character, key)
+    if key == 35 then -- <<< h
+        print("Key = h > readBook \n")
+
+    end
+end
+
+---@param character IsoGameCharacter
+local function key36(character, key)
+    if key == 36 then
+        print("Key = j > setZombieKills_PZ \n")
+        characterPz.setZombieKills_PZ(character, 15)
+    end
+end
+
+---@param character IsoGameCharacter
+local function key37(character, key)
+    if key == 37 then -- <<<< k
+        print("Key = k > delete \n")
+        character:die()
+    end
+end
 
 -- https://theindiestone.com/forums/index.php?/topic/9799-key-code-reference/
 local function onCustomUIKeyPressed(key)
@@ -20,57 +74,6 @@ local function onCustomUIKeyPressed(key)
 
 end
 
-function key16(character, key)
-    if key == 16 then -- <<<< q
-        print("Key = q > setPerkBoost_PZ) \n")
-
-    end
-end
-
----@param character IsoGameCharacter
-function key17(character, key)
-    if key == 17 then
-        print("Key = w > writeBoostToHd) \n")
-
-    end
-end
-
--- Perks.Cooking
--- Perks.Maintenance
--- Perks.Woodwork
--- Perks.Sprinting
--- Todo 		self.character:playSound("CloseBook")
----@param character IsoGameCharacter
-function key34(character, key)
-    if key == 34 then -- <<<< g
-        print("Key = g > writeBook \n")
-        writeBook(character)
-    end
-end
-
----@param character IsoGameCharacter
-function key35(character, key)
-    if key == 35 then -- <<< h
-        print("Key = h > readBook \n")
-        readBook(character)
-    end
-end
-
----@param character IsoGameCharacter
-function key36(character, key)
-    if key == 36 then
-        print("Key = j > setZombieKills_PZ \n")
-        characterPz.setZombieKills_PZ(character, 15)
-    end
-end
-
----@param character IsoGameCharacter
-function key37(character, key)
-    if key == 37 then -- <<<< k
-        print("Key = k > delete \n")
-        character:die()
-    end
-end
 
 -- ------------------------------------------------------------
 -- ------------------------------------------------------------
@@ -80,7 +83,7 @@ local function OnGameStart()
 end
 
 -- Events.OnGameStart.Add(OnGameStart)
-Events.OnCustomUIKeyPressed.Add(onCustomUIKeyPressed)
+-- Events.OnCustomUIKeyPressed.Add(onCustomUIKeyPressed)
 
  function funcName()
     local player = getSpecificPlayer(0) -- ottieni il giocatore corrente

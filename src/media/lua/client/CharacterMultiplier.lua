@@ -76,5 +76,5 @@ function writeMultiplierToHd(character)
 
     modDataX.saveModata(EnumModData.CHARACTER_MULTIPLIER, lines_)
 
-    lines = {}
+    lines_ = {}
 end
