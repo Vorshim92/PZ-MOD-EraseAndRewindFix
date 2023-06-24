@@ -4,10 +4,10 @@
 --- DateTime: 15/04/23 18:54
 ---
 
-local modDataX = require("lib/ModDataX")
+local modDataManager = require("lib/ModDataManager")
 local characterPz = require("lib/CharacterPZ")
 local characterLib = require("CharacterLib")
-require("lib/CharacterObj")
+require("lib/CharacterBaseObj")
 
 local lines_ = { perk, multiplier }
 
@@ -21,14 +21,14 @@ end
 ---Read Multiplier From Hd
 ---@return table
 local function readMultiplierFromHd()
-    return modDataX.readModata(EnumModData.CHARACTER_MULTIPLIER)
+    return modDataManager.read(EnumModData.CHARACTER_MULTIPLIER)
 end
 
 ---Delete Multiplier
 ---@param character IsoGameCharacter
 --- - zombie.characters.IsoGameCharacter
 local function deleteMultiplier(character)
-    local CharacterMultiplierObJ = CharacterObj:new()
+    local CharacterMultiplierObJ = CharacterBaseObj:new()
     CharacterMultiplierObJ = characterLib.getAllPerks(character)
 
     for _, v in pairs(CharacterMultiplierObJ:getPerkDetails()) do
@@ -40,7 +40,7 @@ end
 ---@param character IsoGameCharacter
 --- - zombie.characters.IsoGameCharacter
 function createMultiplier(character)
-    if not modDataX.isExists(EnumModData.CHARACTER_MULTIPLIER) then
+    if not modDataManager.isExists(EnumModData.CHARACTER_MULTIPLIER) then
         return nil
     end
 
@@ -63,9 +63,9 @@ end
 ---@param character IsoGameCharacter
 --- - zombie.characters.IsoGameCharacter
 function writeMultiplierToHd(character)
-    modDataX.remove(EnumModData.CHARACTER_MULTIPLIER)
+    modDataManager.remove(EnumModData.CHARACTER_MULTIPLIER)
 
-    local CharacterMultiplierObJ = CharacterObj:new()
+    local CharacterMultiplierObJ = CharacterBaseObj:new()
      CharacterMultiplierObJ = characterLib.getMultiplier(character)
 
     for _, v in pairs(CharacterMultiplierObJ:getPerkDetails()) do
@@ -74,7 +74,7 @@ function writeMultiplierToHd(character)
         end
     end
 
-    modDataX.saveModata(EnumModData.CHARACTER_MULTIPLIER, lines_)
+    modDataManager.save(EnumModData.CHARACTER_MULTIPLIER, lines_)
 
     lines_ = {}
 end

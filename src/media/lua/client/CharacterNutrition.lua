@@ -5,31 +5,31 @@
 ---
 
 local isoPlayerPZ = require("lib/IsoPlayerPZ")
-local modDataX = require("lib/ModDataX")
+local modDataManager = require("lib/ModDataManager")
 
 ---Read Weight From Hd
 local function readWeightFromHd()
-    return modDataX.readModata( EnumModData.CHARACTER_WEIGHT)
+    return modDataManager.read(EnumModData.CHARACTER_WEIGHT)
 end
 
 ---Read Calories From Hd
 local function readCaloriesFromHd()
-    return modDataX.readModata( EnumModData.CHARACTER_CALORIES)
+    return modDataManager.read(EnumModData.CHARACTER_CALORIES)
 end
 
 ---Write Weight From Hd
 local function writeWeightFromHd()
-    modDataX.saveModata(EnumModData.CHARACTER_WEIGHT, isoPlayerPZ.getWeight_PZ())
+    modDataManager.save(EnumModData.CHARACTER_WEIGHT, isoPlayerPZ.getWeight_PZ())
 end
 
 ---Write Calories From Hd
 local function writeCaloriesFromHd()
-    modDataX.saveModata(EnumModData.CHARACTER_CALORIES, isoPlayerPZ.getCalories_PZ())
+    modDataManager.save(EnumModData.CHARACTER_CALORIES, isoPlayerPZ.getCalories_PZ())
 end
 
 ---Create Character Nutrition
 function createCharacterNutrition()
-    if not modDataX.isExists(EnumModData.CHARACTER_WEIGHT) then
+    if not modDataManager.isExists(EnumModData.CHARACTER_WEIGHT) then
         return nil
     end
 
@@ -41,7 +41,7 @@ function createCharacterNutrition()
     end
 
 
-    if not modDataX.isExists(EnumModData.CHARACTER_CALORIES) then
+    if not modDataManager.isExists(EnumModData.CHARACTER_CALORIES) then
         return nil
     end
 
@@ -55,8 +55,8 @@ end
 
 ---Wwrite Character Nutrition
 function writeCharacterNutrition()
-    modDataX.remove(EnumModData.CHARACTER_WEIGHT)
-    modDataX.remove(EnumModData.CHARACTER_CALORIES)
+    modDataManager.remove(EnumModData.CHARACTER_WEIGHT)
+    modDataManager.remove(EnumModData.CHARACTER_CALORIES)
 
     writeWeightFromHd()
     writeCaloriesFromHd()

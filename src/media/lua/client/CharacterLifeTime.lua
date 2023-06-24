@@ -4,19 +4,19 @@
 --- DateTime: 01/04/23 21:20
 ---
 
-local modDataX = require("lib/ModDataX")
+local modDataManager = require("lib/ModDataManager")
 local isoPlayerPZ = require("lib/IsoPlayerPZ")
 require("EnumModData")
 
 ---Read Life Time From Hd
 ---@return double
 local function readLifeTimeFromHd()
-    return modDataX.readModata(EnumModData.CHARACTER_LIFE_TIME)
+    return modDataManager.read(EnumModData.CHARACTER_LIFE_TIME)
 end
 
 ---Create Life Time
 function createLifeTime()
-    if not modDataX.isExists(EnumModData.CHARACTER_LIFE_TIME) then
+    if not modDataManager.isExists(EnumModData.CHARACTER_LIFE_TIME) then
         return nil
     end
 
@@ -32,8 +32,8 @@ end
 
 ---Write Life Time To Hd
 function writeLifeTimeToHd()
-    modDataX.remove(EnumModData.CHARACTER_LIFE_TIME)
+    modDataManager.remove(EnumModData.CHARACTER_LIFE_TIME)
 
-    modDataX.saveModata(EnumModData.CHARACTER_LIFE_TIME,
+    modDataManager.save(EnumModData.CHARACTER_LIFE_TIME,
             isoPlayerPZ.getHoursSurvived_PZ())
 end

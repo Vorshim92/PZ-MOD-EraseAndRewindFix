@@ -4,17 +4,18 @@
 --- DateTime: 01/04/23 21:20
 ---
 
-local modDataX = require("lib/ModDataX")
+local modDataManager = require("lib/ModDataManager")
 
 function removeMoData()
-    modDataX.remove(EnumModData.CHARACTER_BOOST)
-    modDataX.remove(EnumModData.CHARACTER_CALORIES)
-    modDataX.remove(EnumModData.CHARACTER_LIFE_TIME)
-    modDataX.remove(EnumModData.CHARACTER_PERK_DETAILS)
-    modDataX.remove(EnumModData.CHARACTER_PROFESSION)
-    modDataX.remove(EnumModData.CHARACTER_TRAITS)
-    modDataX.remove(EnumModData.CHARACTER_WEIGHT)
-    modDataX.remove(EnumModData.CHARACTER_ZOMBIE_KILLS)
+    modDataManager.remove(EnumModData.CHARACTER_BOOST)
+    modDataManager.remove(EnumModData.CHARACTER_CALORIES)
+    modDataManager.remove(EnumModData.CHARACTER_LIFE_TIME)
+    --modDataManager.remove(EnumModData.CHARACTER_MULTIPLIER)
+    modDataManager.remove(EnumModData.CHARACTER_PERK_DETAILS)
+    modDataManager.remove(EnumModData.CHARACTER_PROFESSION)
+    modDataManager.remove(EnumModData.CHARACTER_TRAITS)
+    modDataManager.remove(EnumModData.CHARACTER_WEIGHT)
+    modDataManager.remove(EnumModData.CHARACTER_ZOMBIE_KILLS)
 end
 
 ---Read Book
@@ -28,8 +29,8 @@ function readBook(character)
     createTrait(character)
     createRecipe(character)
     createBoost(character)
-    createMultiplier(character)
-     removeMoData()
+    --createMultiplier(character)
+    removeMoData()
 end
 
 ---Write Book
@@ -43,6 +44,6 @@ function writeBook(character)
     writeTraitToHd(character)
     writeRecipeToHd(character)
     writeBoostToHd(character)
-    writeMultiplierToHd(character)
+    --writeMultiplierToHd(character)
 end
 

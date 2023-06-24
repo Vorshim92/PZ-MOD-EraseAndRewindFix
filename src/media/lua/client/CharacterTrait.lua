@@ -5,22 +5,22 @@
 ---
 
 local characterPz = require("lib/CharacterPZ")
-local modDataX = require("lib/ModDataX")
+local modDataManager = require("lib/ModDataManager")
 local characterLib = require("CharacterLib")
 
 require("EnumModData")
-require("lib/CharacterObj")
+require("lib/CharacterBaseObj")
 ---Read Trait From Hd
 ---@return table
 local function readTraitFromHd()
-    return modDataX.readModata(EnumModData.CHARACTER_TRAITS)
+    return modDataManager.read(EnumModData.CHARACTER_TRAITS)
 end
 
 ---Create Trait
 ---@param character IsoGameCharacter
 --- - zombie.characters.IsoGameCharacter
 function createTrait(character)
-    if not modDataX.isExists(EnumModData.CHARACTER_TRAITS) then
+    if not modDataManager.isExists(EnumModData.CHARACTER_TRAITS) then
         return nil
     end
 
@@ -42,11 +42,11 @@ end
 ---@param character IsoGameCharacter
 --- - zombie.characters.IsoGameCharacter
 function writeTraitToHd(character)
-    modDataX.remove(EnumModData.CHARACTER_TRAITS)
+    modDataManager.remove(EnumModData.CHARACTER_TRAITS)
 
-    local trait = CharacterObj:new()
+    local trait = CharacterBaseObj:new()
     trait = characterLib.getTraitsPerk(character)
 
-    modDataX.saveModata(EnumModData.CHARACTER_TRAITS,
+    modDataManager.save(EnumModData.CHARACTER_TRAITS,
             trait:getTraits())
 end

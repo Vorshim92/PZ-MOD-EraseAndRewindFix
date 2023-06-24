@@ -13,6 +13,10 @@ local PerkFactoryPZ = {}
 ---@return PerkFactory.Perk perk
 --- - PerkFactory.Perk : zombie.characters.skills.PerkFactory
 function PerkFactoryPZ.getPerk_PZ(perk)
+    if not perk then
+        return nil
+    end
+
     return PerkFactory.getPerk(perk)
 end
 
@@ -21,6 +25,10 @@ end
 ---@return PerkFactory.Perk perk
 --- - PerkFactory.Perk : zombie.characters.skills.PerkFactory
 function PerkFactoryPZ.getPerkByName_PZ(perk)
+    if not perk then
+        return nil
+    end
+
     return PerkFactory.getPerkFromName(perk)
 end
 
@@ -70,6 +78,10 @@ end
 ---@return String
 --- - PerkFactory.Perk : zombie.characters.skills.PerkFactory
 function PerkFactoryPZ.getParent_PZ(perk)
+    if not perk then
+        return nil
+    end
+
     return perk:getParent():getName()
 end
 

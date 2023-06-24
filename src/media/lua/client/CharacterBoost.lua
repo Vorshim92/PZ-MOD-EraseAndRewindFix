@@ -4,9 +4,9 @@
 --- DateTime: 15/04/23 18:54
 ---
 local characterPz = require("lib/CharacterPZ")
-local modDataX = require("lib/ModDataX")
+local modDataManager = require("lib/ModDataManager")
 local characterLib = require("CharacterLib")
-require("lib/CharacterObj")
+require("lib/CharacterBaseObj")
 
 local lines_ = { perk, boostLevel }
 
@@ -20,14 +20,14 @@ end
 ---Read Boost From Hd
 ---@return table
 local function readBoostFromHd()
-    return modDataX.readModata(EnumModData.CHARACTER_BOOST)
+    return modDataManager.read(EnumModData.CHARACTER_BOOST)
 end
 
 ---Delete Boost
 ---@param character IsoGameCharacter
 --- - zombie.characters.IsoGameCharacter
 local function deleteBoost(character)
-    local CharacterAllPerksObJ = CharacterObj:new()
+    local CharacterAllPerksObJ = CharacterBaseObj:new()
     CharacterAllPerksObJ = characterLib.getAllPerks(character)
 
     for _, v in pairs(CharacterAllPerksObJ:getPerkDetails()) do
@@ -39,7 +39,7 @@ end
 ---@param character IsoGameCharacter
 --- - zombie.characters.IsoGameCharacter
 function createBoost(character)
-    if not modDataX.isExists(EnumModData.CHARACTER_BOOST) then
+    if not modDataManager.isExists(EnumModData.CHARACTER_BOOST) then
         return nil
     end
 
@@ -61,16 +61,16 @@ end
 ---@param character IsoGameCharacter
 --- - zombie.characters.IsoGameCharacter
 function writeBoostToHd(character)
-    modDataX.remove(EnumModData.CHARACTER_BOOST)
+    modDataManager.remove(EnumModData.CHARACTER_BOOST)
 
-    local CharacterPerksBoostObj = CharacterObj:new()
+    local CharacterPerksBoostObj = CharacterBaseObj:new()
     CharacterPerksBoostObj = characterLib.getPerksBoost(character)
 
     for _, v in pairs(CharacterPerksBoostObj:getPerkDetails()) do
         lines(v:getPerk(), v:getBoostLevel())
     end
 
-    modDataX.saveModata(EnumModData.CHARACTER_BOOST, lines_)
+    modDataManager.save(EnumModData.CHARACTER_BOOST, lines_)
 
     lines_ = {}
 end

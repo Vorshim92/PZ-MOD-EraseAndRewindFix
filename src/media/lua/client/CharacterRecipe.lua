@@ -6,18 +6,18 @@
 
 local characterLib = require("CharacterLib")
 local characterPz = require("lib/CharacterPZ")
-local modDataX = require("lib/ModDataX")
+local modDataManager = require("lib/ModDataManager")
 
 require("EnumModData")
-require("lib/CharacterObj")
+require("lib/CharacterBaseObj")
 
 ---Read Recipe From Hd
----@return CharacterObj getRecipes table string
+---@return CharacterBaseObj getRecipes table string
 local function readRecipeFromHd()
     local characterKnowRecipe =
-        modDataX.readModata(EnumModData.CHARACTER_RECIPES )
+        modDataManager.read(EnumModData.CHARACTER_RECIPES )
 
-    local CharacterObj01 = CharacterObj:new()
+    local CharacterObj01 = CharacterBaseObj:new()
 
     for _, v in pairs(characterKnowRecipe) do
         CharacterObj01:addRecipe(v)
@@ -30,7 +30,7 @@ end
 ---@param character IsoGameCharacter
 --- - zombie.characters.IsoGameCharacter
 local function deleteRecipe(character)
-    local characterKnowRecipe = CharacterObj:new()
+    local characterKnowRecipe = CharacterBaseObj:new()
 
     characterKnowRecipe = characterLib.getKnownRecipes(character)
 
@@ -43,10 +43,10 @@ end
 ---@param character IsoGameCharacter
 --- - zombie.characters.IsoGameCharacter
 function createRecipe(character)
-    if not modDataX.isExists(EnumModData.CHARACTER_RECIPES) then
+    if not modDataManager.isExists(EnumModData.CHARACTER_RECIPES) then
         return nil
     end
-    local CharacterObj01 = CharacterObj:new()
+    local CharacterObj01 = CharacterBaseObj:new()
 
     CharacterObj01 = readRecipeFromHd(character)
     deleteRecipe(character)
@@ -58,9 +58,9 @@ end
 
 ---Write Recipe To Hd
 function writeRecipeToHd(character)
-    modDataX.remove(EnumModData.CHARACTER_RECIPES)
+    modDataManager.remove(EnumModData.CHARACTER_RECIPES)
 
-    local knownRecipesObj = CharacterObj:new()
+    local knownRecipesObj = CharacterBaseObj:new()
     knownRecipesObj =  characterLib.getKnownRecipes(character)
 
     local lines = {}
@@ -71,5 +71,5 @@ function writeRecipeToHd(character)
 
     lines = {}
 
-    modDataX.saveModata(EnumModData.CHARACTER_RECIPES, lines)
+    modDataManager.save(EnumModData.CHARACTER_RECIPES, lines)
 end

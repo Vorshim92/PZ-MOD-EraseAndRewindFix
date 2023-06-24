@@ -30,7 +30,7 @@ function CharacterPz.addXP_PZ(character, perk, xp, flag1, flag2, flag3)
     character:getXp():AddXP(perk, xp, flag1, flag2, flag3);
 end
 
---- Get XP perk
+--- Get XP perk with truncate to two decimal place
 ---@param character IsoGameCharacter
 ---@param perk PerkFactory.Perk
 ---@return float xp
@@ -38,6 +38,10 @@ end
 --- - PerkFactory.Perk : zombie.characters.skills.PerkFactory
 --- - IsoGameCharacter.XP : zombie.characters.IsoGameCharacter.XP
 function CharacterPz.getXp(character, perk)
+    if not character or not perk then
+        return nil
+    end
+
     local xp = CharacterPz.getXp_PZ(character, perk)
     return CharacterPz.trunkFloatTo2Decimal( xp ) -- Perks.Maintenance
 end
@@ -50,6 +54,10 @@ end
 --- - PerkFactory.Perk : zombie.characters.skills.PerkFactory
 --- - IsoGameCharacter.XP : zombie.characters.IsoGameCharacter.XP
 function CharacterPz.getXp_PZ(character, perk)
+    if not character or not perk then
+        return nil
+    end
+
     return character:getXp():getXP(perk) -- Perks.Maintenance
 end
 
@@ -65,7 +73,7 @@ end
 --- - IsoGameCharacter : zombie.characters.IsoGameCharacter
 --- - SurvivorDesc : zombie.characters.SurvivorDesc
 function CharacterPz.setProfession_PZ(character, profession)
-    if not character then
+    if not character or not profession then
         return nil
     end
 
@@ -90,7 +98,8 @@ end
 ---@return String
 --- - IsoGameCharacter : zombie.characters.IsoGameCharacter
 function CharacterPz.removeProfession(character)
-    CharacterPz.setProfession_PZ(character, "")
+    local unemployed = "unemployed"
+    CharacterPz.setProfession_PZ(character, unemployed)
 end
 
 CharacterPz.EnumNumbers = {
@@ -135,7 +144,7 @@ end
 --- - IsoGameCharacter : zombie.characters.IsoGameCharacter
 --- - PerkFactory.Perk : zombie.characters.skills.PerkFactory
 function CharacterPz.getPerkLevel_PZ(character, perk)
-    if not character then
+    if not character or not perk then
         return nil
     end
 
@@ -179,7 +188,7 @@ end
 ---@param killZombies int
 --- - IsoGameCharacter : zombie.characters.IsoGameCharacter
 function CharacterPz.setZombieKills_PZ(character, killZombies)
-    if not character then
+    if not character or not killZombies then
         return nil
     end
 
@@ -345,7 +354,10 @@ function CharacterPz.removeMultiplier(character, perk)
         return
     end
 
-    CharacterPz.addXpMultiplier_PZ(character, perk, -multiplier,
+    multiplier = CharacterPz.trunkFloatTo2Decimal(-multiplier)
+    local dbg1 = multiplier
+    print("----------------------------------------" .. tostring(multiplier))
+    CharacterPz.addXpMultiplier_PZ(character, perk, multiplier,
             1, 1)
 
 end
@@ -353,7 +365,7 @@ end
 ---Set PerkBoost 1 - 75%, 2 - 100%, 3 - 125%, default 0 ?? - 50%
 ---@param character IsoGameCharacter
 ---@param perk PerkFactory.Perk
----@param boostLevel int
+---@param levelBoost int
 --- - IsoGameCharacter : zombie.characters.IsoGameCharacter
 --- - PerkFactory.Perk : zombie.characters.skills.PerkFactory
 function CharacterPz.setPerkBoost_PZ(character, perk, levelBoost)
@@ -382,7 +394,6 @@ end
 
 ---@param character IsoGameCharacter
 ---@param perk PerkFactory.Perk
----@param boostLevel int
 --- - IsoGameCharacter : zombie.characters.IsoGameCharacter
 --- - PerkFactory.Perk : zombie.characters.skills.PerkFactory
 function CharacterPz.removePerkBoost(character, perk)
@@ -419,7 +430,7 @@ end
 ---@param recipe string
 --- - IsoGameCharacter : zombie.characters.IsoGameCharacter
 function CharacterPz.removeKnowRecipe_PZ(character, recipe)
-    if not character then
+    if not character or not recipe then
         return nil
     end
 

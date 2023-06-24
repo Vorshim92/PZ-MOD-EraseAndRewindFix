@@ -4,178 +4,56 @@
 --- DateTime: 12/05/23 15:30
 ---
 
-require("client/CharacterBoost")
-require("lib/DbgLeleLib")
+local dbgLeleLib = require("lib/DbgLeleLib")
 local characterPz = require("lib/CharacterPZ")
-local perkFactoryPZ = require("lib/PerkFactoryPZ")
 local isoPlayerPZ = require("lib/IsoPlayerPZ")
-local characterLib = require("CharacterLib")
 local character = getPlayer()
-
-local test_ = "Test - "
-local fail_ = " >>>>>>>>>>>>>> FAIL"
-local ok_ = " >>>>>>>>>>>>>> Ok"
-
----@type IsoGameCharacter
-local character = getPlayer()
-
-local function fail(value)
-    print(test_ .. value .. fail_)
-end
-
-local function ok(value)
-    print(test_ .. value .. ok_)
-end
-
-local function checkTest(value1, value2, nameTest)
-    if value1 == value2 then
-        ok(nameTest)
-    else
-        fail(nameTest)
-    end
-end
-
---    CharacterPerkDetails
---Fitness - 37500
---Strength - 37500
---Woodwork - 1275
---Maintenance - 75
---SmallBlunt - 75
---
---    CharacterTrait
---HardOfHearing
---SlowReader
---Handy
---
---    CharacterRecipe
---Basic Mechanics
---Intermediate Mechanics
---Herbalist
---
---    CharacterBoost
---Fitness - 3
---Strength - 3
---Woodwork - 3
-
-local function deleteCharacter()
-    character = getPlayer()
-    local zero = 0.0
-    local CharacterDeleteObj = CharacterObj:new()
-    CharacterDeleteObj = characterLib.getAllPerks(character)
-
-    for _, v in pairs(CharacterDeleteObj:getPerkDetails()) do
-        characterPz.removePerkBoost(character, v:getPerk())
-    end
-
-    characterPz.setZombieKills_PZ(character, characterPz.EnumNumbers.ZERO)
-    isoPlayerPZ.setHoursSurvived_PZ(zero)
-
-    for _, v in pairs(CharacterDeleteObj:getPerkDetails()) do
-        characterPz.removeMultiplier(character, v:getPerk())
-    end
-
-    isoPlayerPZ.setCalories_PZ(zero)
-    isoPlayerPZ.setWeight_PZ(zero)
-
-    for _, v in pairs(CharacterDeleteObj:getPerkDetails()) do
-        characterPz.removePerkLevel(character, v:getPerk())
-    end
-
-    characterPz.removeProfession(character)
-
-    CharacterDeleteObj = characterLib.getKnownRecipes(character)
-
-    for _, v in pairs(CharacterDeleteObj:getRecipes()) do
-        characterPz.removeKnowRecipe_PZ(character, v)
-    end
-
-    characterPz.removeAllTraits_PZ(character)
-
-    character = getPlayer()
-end
-
-local function createCharacter()
-    characterPz.setProfession_PZ(character, EnumProfession.CARPENTER)
-
-    characterPz.setPerkLevel(character, Perks.Fitness, 37500)
-    characterPz.setPerkLevel(character, Perks.Strength, 37500)
-    characterPz.setPerkLevel(character, Perks.Woodwork, 1275)
-    characterPz.setPerkLevel(character, Perks.Maintenance, 75)
-    characterPz.setPerkLevel(character, Perks.SmallBlunt, 75)
-
-    characterPz.setPerkBoost_PZ(character, Perks.Fitness, 3)
-    characterPz.setPerkBoost_PZ(character, Perks.Strength, 3)
-    characterPz.setPerkBoost_PZ(character, Perks.Woodwork, 3)
-
-    characterPz.setTraitsPerk_PZ(character,"HardOfHearing" )
-    characterPz.setTraitsPerk_PZ(character,"SlowReader" )
-    characterPz.setTraitsPerk_PZ(character,"Handy" )
-
-    characterPz.setZombieKills_PZ(character, 15)
-
-    characterPz.addXpMultiplier_PZ(character, Perks.Cooking, 1.0,
-            characterPz.EnumNumbers.ONE, characterPz.EnumNumbers.ONE)
-
-    local recipe = "Make Pizza"
-    characterPz.addKnownRecipe(character, recipe)
-
-    isoPlayerPZ.setHoursSurvived_PZ(10)
-    isoPlayerPZ.setCalories_PZ(1500)
-    isoPlayerPZ.setWeight_PZ(92)
-
-    character = getPlayer()
-end
 
 local function checkCharacter()
-    checkTest(characterPz.getProfession_PZ(character), EnumProfession.CARPENTER, "Profession" )
+    character = getPlayer()
 
-    checkTest( characterPz.getPerkLevel_PZ(character, Perks.Fitness), 37500, "PerkLevel Fitness")
-    checkTest( characterPz.getPerkLevel_PZ(character, Perks.Strength), 37500, "PerkLevel Strength")
-    checkTest( characterPz.getPerkLevel_PZ(character, Perks.Woodwork), 1275, "PerkLevel Woodwork")
-    checkTest( characterPz.getPerkLevel_PZ(character, Perks.Maintenance), 75, "PerkLevel Maintenance")
-    checkTest( characterPz.getPerkLevel_PZ(character, Perks.SmallBlunt), 75, "PerkLevel SmallBlunt")
+    dbgLeleLib.checkTest(characterPz.getProfession_PZ(character),
+            dbgLeleLib.EnumProfession.CARPENTER, "Profession" )
 
-    checkTest( characterPz.getPerkBoost_PZ(character, Perks.Fitness), 3, "PerkBoost Fitness")
-    checkTest( characterPz.getPerkBoost_PZ(character, Perks.Strength), 3, "PerkBoost Strength")
-    checkTest( characterPz.getPerkBoost_PZ(character, Perks.Woodwork), 3, "PerkBoost Woodwork")
+    dbgLeleLib.checkTest( characterPz.getXp(character, Perks.Fitness),
+            37500, "PerkLevel Fitness")
+    local db1 = characterPz.getXp(character, Perks.Fitness)
 
-    --checkTest( characterPz.getTraitsPerk_PZ(Perks.Woodwork), "HardOfHearing", "HardOfHearing")
-    --checkTest( characterPz.getTraitsPerk_PZ(Perks.Woodwork), "SlowReader", "SlowReader")
-    --checkTest( characterPz.getTraitsPerk_PZ(Perks.Woodwork), "Handy", "Handy")
+    dbgLeleLib.checkTest( characterPz.getXp(character, Perks.Strength),
+            37500, "PerkLevel Strength")
+    dbgLeleLib.checkTest( characterPz.getXp(character, Perks.Woodwork),
+            1275, "PerkLevel Woodwork")
+    dbgLeleLib.checkTest( characterPz.getXp(character, Perks.Maintenance),
+            75, "PerkLevel Maintenance")
+    dbgLeleLib.checkTest( characterPz.getXp(character, Perks.SmallBlunt),
+            75, "PerkLevel SmallBlunt")
 
-    --for i = 0, knowRecipes:size() - 1 do
-    --    CharacterObj01:addRecipe(knowRecipes:get(i))
-    --end
-    --
-    --
-    --local traitsPerk = characterPz.getTraitsPerk_PZ(character)
-    --
-    --for i = 0, traitsPerk:size() do
-    --    ---@type TraitCollection.TraitSlot
-    --    local trait = traitsPerk.get(i)
-    --    if (trait:toString() == "" ) then
-    --
-    --    end
-    --end
+    dbgLeleLib.checkTest( characterPz.getPerkBoost_PZ(character, Perks.Fitness),
+            3, "PerkBoost Fitness")
+    dbgLeleLib.checkTest( characterPz.getPerkBoost_PZ(character, Perks.Strength),
+            3, "PerkBoost Strength")
+    dbgLeleLib.checkTest( characterPz.getPerkBoost_PZ(character, Perks.Woodwork),
+            3, "PerkBoost Woodwork")
 
-    checkTest( characterPz.getZombieKills_PZ(character), 15, "Zombie")
+    dbgLeleLib.checkTest( characterPz.getZombieKills_PZ(character),
+            15, "Zombie")
 
-    checkTest(isoPlayerPZ.getHoursSurvived_PZ(), 10, "HoursSurvived")
-    checkTest(isoPlayerPZ.getCalories_PZ(), 1500, "HoursSurvived")
-    checkTest(isoPlayerPZ.getWeight_PZ(), 92, "Weight")
+    dbgLeleLib.checkTest(isoPlayerPZ.getHoursSurvived_PZ(),
+            10, "HoursSurvived")
+    dbgLeleLib.checkTest(isoPlayerPZ.getCalories_PZ(),
+            1500, "HoursSurvived")
+    dbgLeleLib.checkTest(isoPlayerPZ.getWeight_PZ(),
+            92, "Weight")
+
 end
 
--- Perks.Cooking
--- Perks.Maintenance
--- Perks.Woodwork
--- Perks.Sprinting
 -- Todo 		self.character:playSound("CloseBook")
 ---@param character IsoGameCharacter
 local function key34(character, key)
     if key == 34 then -- <<<< g
         print("Key = g > writeBook \n")
-        deleteCharacter()
-        createCharacter()
+        dbgLeleLib.deleteCharacter()
+        dbgLeleLib.createCharacter()
         writeBook(character)
         readBook(character)
         checkCharacter()

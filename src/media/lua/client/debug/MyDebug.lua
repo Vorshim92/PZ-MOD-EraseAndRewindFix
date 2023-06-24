@@ -8,23 +8,6 @@ require("client/CharacterBoost")
 require("lib/DbgLeleLib")
 local characterPz = require("lib/CharacterPZ")
 
-
-local function key16(character, key)
-    if key == 16 then -- <<<< q
-        print("Key = q > setPerkBoost_PZ) \n")
-
-    end
-end
-
----@param character IsoGameCharacter
-local function key17(character, key)
-    if key == 17 then
-        print("Key = w > writeBoostToHd) \n")
-
-    end
-end
-
--- Perks.Cooking
 -- Perks.Maintenance
 -- Perks.Woodwork
 -- Perks.Sprinting
@@ -32,7 +15,7 @@ end
 ---@param character IsoGameCharacter
 local function key34(character, key)
     if key == 34 then -- <<<< g
-        print("Key = g > writeBook \n")
+        print("Key = g >  \n")
 
     end
 end
@@ -40,16 +23,16 @@ end
 ---@param character IsoGameCharacter
 local function key35(character, key)
     if key == 35 then -- <<< h
-        print("Key = h > readBook \n")
+        print("Key = h >  \n")
 
     end
 end
 
 ---@param character IsoGameCharacter
 local function key36(character, key)
-    if key == 36 then
-        print("Key = j > setZombieKills_PZ \n")
-        characterPz.setZombieKills_PZ(character, 15)
+    if key == 36 then -- <<<< j
+        print("Key = j >  \n")
+
     end
 end
 
@@ -61,19 +44,14 @@ local function key37(character, key)
     end
 end
 
--- https://theindiestone.com/forums/index.php?/topic/9799-key-code-reference/
 local function onCustomUIKeyPressed(key)
     local character = getPlayer()
 
-    if key == 34 then key34(character, key)  end -- <<<< g
-    if key == 35 then key35(character, key)  end -- <<<< h
-    if key == 36 then key36(character, key)  end -- <<<< j
-    if key == 37 then key37(character, key)  end -- <<<< kill
-    if key == 16 then key16(character, key)  end -- <<<< 1
-    if key == 17 then key17(character, key)  end -- <<<< 2
-
+    key34(character, key)
+    key35(character, key)
+    key36(character, key)
+    key37(character, key)
 end
-
 
 -- ------------------------------------------------------------
 -- ------------------------------------------------------------
@@ -85,7 +63,33 @@ end
 -- Events.OnGameStart.Add(OnGameStart)
 -- Events.OnCustomUIKeyPressed.Add(onCustomUIKeyPressed)
 
- function funcName()
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+--[[
+local function funcName()
     local player = getSpecificPlayer(0) -- ottieni il giocatore corrente
     local item = player:getInventory():FindAndReturn("nomeOggetto") -- cerca l'oggetto per nome
     if item then
@@ -94,7 +98,7 @@ end
 
 end
 
- function funcName2()
+local function funcName2()
      local player = getSpecificPlayer(0)
      local inv = player:getInventory()
      ---@type InventoryItem
@@ -113,7 +117,7 @@ end
     print("skillTrained - ", skillTrained)
 end
 
-function funcName3()
+local function funcName3()
     -- Farming Vol. 1
     local player = getSpecificPlayer(0)
     ---@type InventoryItem
@@ -129,7 +133,7 @@ function funcName3()
     end
 end
 
- function funcName4()
+local  function funcName4()
     local player = getSpecificPlayer(0)
     local inv = player:getInventory()
      ---@type InventoryItem
@@ -142,7 +146,7 @@ end
         --print("Boost skill: " .. stats.boostSkill)
     end
 end
- function funcName5()
+local  function funcName5()
      local lista = getCell():getInventory()
 
      local dbg
@@ -168,7 +172,7 @@ end
 
  end
 
-function funcName6()
+local function funcName6()
     local itemsList = {}
 
     -- Get the player's inventory
@@ -186,7 +190,7 @@ function funcName6()
 
 end
 
-function funcName7()
+local function funcName7()
     local literatureList = {}
 
     for x = 0, getWorld():getMap():getWidth() - 1 do
@@ -203,4 +207,4 @@ function funcName7()
             end
         end
     end
-end
+end]]
