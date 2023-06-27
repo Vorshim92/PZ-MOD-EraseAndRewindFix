@@ -40,7 +40,6 @@ function createCharacterNutrition()
         isoPlayerPZ.setWeight_PZ(v)
     end
 
-
     if not modDataManager.isExists(EnumModData.CHARACTER_CALORIES) then
         return nil
     end

@@ -5,7 +5,9 @@
 ---
 
 require("client/CharacterBoost")
-require("lib/DbgLeleLib")
+local dbgLeleLib = require("lib/DbgLeleLib")
+local modDataManager = require("lib/ModDataManager")
+
 local characterPz = require("lib/CharacterPZ")
 
 -- Perks.Maintenance
@@ -15,24 +17,25 @@ local characterPz = require("lib/CharacterPZ")
 ---@param character IsoGameCharacter
 local function key34(character, key)
     if key == 34 then -- <<<< g
-        print("Key = g >  \n")
-
+        print("Key = g > writeBook \n")
+        writeBook(character)
     end
 end
 
 ---@param character IsoGameCharacter
 local function key35(character, key)
     if key == 35 then -- <<< h
-        print("Key = h >  \n")
-
+        print("Key = h > readBook \n")
+        readBook(character)
     end
 end
 
 ---@param character IsoGameCharacter
 local function key36(character, key)
     if key == 36 then -- <<<< j
-        print("Key = j >  \n")
-
+        print("Key = j > writeMil_kill_Reached \n")
+        character:getModData().kilMilReached = 15
+        character:getModData().milReached = 10
     end
 end
 
@@ -44,9 +47,58 @@ local function key37(character, key)
     end
 end
 
+---@param character IsoGameCharacter
+local function key16(character, key)
+    if key == 16 then -- <<<< q
+        print("Key = q > moddata milReached \n")
+        local milReached01 = character:getModData().milReached
+
+        print("-----------------------------------------------")
+        modDataManager.save("milReachedx", milReached01)
+        local readValues = {}
+        readValues = modDataManager.read("milReachedx")
+
+        for i, v in pairs(readValues) do
+            print(v)
+        end
+        print("-----------------------------------------------")
+
+        local kilMilReached01 = character:getModData().kilMilReached
+
+        print("-----------------------------------------------")
+        modDataManager.save("kilMilReachedx", kilMilReached01)
+        local readValues = {}
+        readValues = modDataManager.read("kilMilReachedx")
+
+        for i, v in pairs(readValues) do
+            print(v)
+        end
+        print("-----------------------------------------------")
+    end
+end
+
+---@param character IsoGameCharacter
+local function key17(character, key)
+    if key == 17 then -- <<<< w
+        print("Key = w >  \n")
+
+    end
+end
+
+---@param character IsoGameCharacter
+local function key18(character, key)
+    if key == 18 then -- <<<< e
+        print("Key = e >  \n")
+
+    end
+end
+
 local function onCustomUIKeyPressed(key)
     local character = getPlayer()
 
+    key16(character, key)
+    key17(character, key)
+    key18(character, key)
     key34(character, key)
     key35(character, key)
     key36(character, key)

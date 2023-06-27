@@ -16,6 +16,8 @@ function removeMoData()
     modDataManager.remove(EnumModData.CHARACTER_TRAITS)
     modDataManager.remove(EnumModData.CHARACTER_WEIGHT)
     modDataManager.remove(EnumModData.CHARACTER_ZOMBIE_KILLS)
+
+    removeMil_kill_Reached()
 end
 
 ---Read Book
@@ -29,7 +31,11 @@ function readBook(character)
     createTrait(character)
     createRecipe(character)
     createBoost(character)
-    --createMultiplier(character)
+     --createMultiplier(character)
+
+    ------- PATCH ------------
+    createMil_kill_Reached(character)
+    --------------------------
     removeMoData()
 end
 
@@ -44,6 +50,12 @@ function writeBook(character)
     writeTraitToHd(character)
     writeRecipeToHd(character)
     writeBoostToHd(character)
-    --writeMultiplierToHd(character)
+    -- --writeMultiplierToHd(character)
+
+    ------- PATCH ------------
+    --- survivalRewards 2797671069
+    --- https://steamcommunity.com/sharedfiles/filedetails/?id=2797671069&searchtext=2797671069
+    writeMil_kill_Reached(character)
+    --------------------------
 end
 

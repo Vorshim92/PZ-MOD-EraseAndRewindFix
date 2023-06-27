@@ -10,7 +10,7 @@ local characterPz = require("lib/CharacterPZ")
 require("EnumModData")
 
 ---Read Zombies Killed From Hd
----@return int
+---@return table
 local function readZombieKillsFromHd()
     return modDataManager.read(EnumModData.CHARACTER_ZOMBIE_KILLS)
 end
