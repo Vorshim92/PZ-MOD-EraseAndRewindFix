@@ -11,8 +11,8 @@ local modDataManager = {}
 ---Save ModData
 ---@param nameFile String
 ---@param values string or table
-function modDataManager.save(modData, values)
-    if not modData or not values then
+function modDataManager.save(nameFile, values)
+    if not nameFile or not values then
         return nil
     end
 
@@ -28,20 +28,20 @@ function modDataManager.save(modData, values)
 
     for i, v in pairs(values) do
         lines[i] = v
-        ModData.add(modData, lines)
+        ModData.add(nameFile, lines)
     end
 end
 
 ---Read ModData
 ---@param nameFile String
 ---@return table
-function modDataManager.read(modData)
-    if not modData then
+function modDataManager.read(nameFile)
+    if not nameFile then
         return nil
     end
 
     local lines = {}
-    lines = ModData.get(modData)
+    lines = ModData.get(nameFile)
 
     if #lines >= 2 then
         return lines
@@ -59,23 +59,23 @@ end
 ---Is modData Exists
 ---@param nameFile String
 --- - ModData : zombie.world.moddata.ModDa
-function modDataManager.isExists(modData)
-    if not modData then
+function modDataManager.isExists(nameFile)
+    if not nameFile then
         return nil
     end
 
-    return ModData.exists(modData)
+    return ModData.exists(nameFile)
 end
 
 --- Remove modData
 ---@param nameFile String
 --- - ModData : zombie.world.moddata.ModDa
-function modDataManager.remove(modData)
-    if not modData then
+function modDataManager.remove(nameFile)
+    if not nameFile then
         return nil
     end
 
-    ModData.remove(modData)
+    ModData.remove(nameFile)
 end
 
 return modDataManager

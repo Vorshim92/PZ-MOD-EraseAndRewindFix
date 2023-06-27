@@ -41,10 +41,10 @@ function createMil_kill_Reached(character)
         return nil
     end
 
-    local KilMilReached = {}
-    KilMilReached = readKilMilReachedFromHd()
+    local kilMilReached = {}
+    kilMilReached = readKilMilReachedFromHd()
 
-    for i, v in pairs(KilMilReached) do
+    for i, v in pairs(kilMilReached) do
         character:getModData().milReached = toInt(v)
     end
 

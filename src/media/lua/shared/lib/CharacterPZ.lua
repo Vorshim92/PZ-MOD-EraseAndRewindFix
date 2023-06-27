@@ -337,10 +337,9 @@ function CharacterPz.getMultiplier_PZ(character, perk)
     return character:getXp():getMultiplier(perk)
 end
 
----Get Multiplier
+---Remove Multiplier
 ---@param character IsoGameCharacter
 ---@param perk PerkFactory.Perk
----@return float
 --- - IsoGameCharacter : zombie.characters.IsoGameCharacter
 --- - PerkFactory.Perk : zombie.characters.skills.PerkFactory
 function CharacterPz.removeMultiplier(character, perk)
@@ -348,16 +347,7 @@ function CharacterPz.removeMultiplier(character, perk)
         return nil
     end
 
-    local multiplier = character:getXp():getMultiplier(perk)
-
-    if multiplier == 0.0 or multiplier == nil then
-        return
-    end
-
-    multiplier = CharacterPz.trunkFloatTo2Decimal(-multiplier)
-    local dbg1 = multiplier
-    print("----------------------------------------" .. tostring(multiplier))
-    CharacterPz.addXpMultiplier_PZ(character, perk, multiplier,
+    CharacterPz.addXpMultiplier_PZ(character, perk, CharacterPz.EnumNumbers.ZERO,
             1, 1)
 
 end

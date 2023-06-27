@@ -7,18 +7,23 @@
 local dbgLeleLib = require("lib/DbgLeleLib")
 local characterPz = require("lib/CharacterPZ")
 local isoPlayerPZ = require("lib/IsoPlayerPZ")
+local characterLib = require("CharacterLib")
+require("lib/CharacterBaseObj")
+
 local character = getPlayer()
 
 local function checkCharacter()
+    local CharacterDeleteObj = CharacterBaseObj:new()
+
     character = getPlayer()
 
+    -- check Profession
     dbgLeleLib.checkTest(characterPz.getProfession_PZ(character),
             dbgLeleLib.EnumProfession.CARPENTER, "Profession" )
 
+    -- check Perk Level
     dbgLeleLib.checkTest( characterPz.getXp(character, Perks.Fitness),
             37500, "PerkLevel Fitness")
-    local db1 = characterPz.getXp(character, Perks.Fitness)
-
     dbgLeleLib.checkTest( characterPz.getXp(character, Perks.Strength),
             37500, "PerkLevel Strength")
     dbgLeleLib.checkTest( characterPz.getXp(character, Perks.Woodwork),
@@ -28,6 +33,7 @@ local function checkCharacter()
     dbgLeleLib.checkTest( characterPz.getXp(character, Perks.SmallBlunt),
             75, "PerkLevel SmallBlunt")
 
+    -- check Perk Boost
     dbgLeleLib.checkTest( characterPz.getPerkBoost_PZ(character, Perks.Fitness),
             3, "PerkBoost Fitness")
     dbgLeleLib.checkTest( characterPz.getPerkBoost_PZ(character, Perks.Strength),
@@ -35,13 +41,34 @@ local function checkCharacter()
     dbgLeleLib.checkTest( characterPz.getPerkBoost_PZ(character, Perks.Woodwork),
             3, "PerkBoost Woodwork")
 
+    -- check Zombie Kills
     dbgLeleLib.checkTest( characterPz.getZombieKills_PZ(character),
             15, "Zombie")
 
-    dbgLeleLib.checkTest(isoPlayerPZ.getHoursSurvived_PZ(),
-            10, "HoursSurvived")
+    -- check recipe
+    local recipe = "Make Pizza"
+    CharacterDeleteObj = characterLib.getKnownRecipes(character)
+
+    for _, v in pairs(CharacterDeleteObj:getRecipes()) do
+        dbgLeleLib.checkTest(v,
+                recipe, "Recipe")
+    end
+
+    -- check multipier
+    local multipier1 =
+        characterPz.getMultiplier_PZ(character, Perks.Cooking)
+
+    multipier1 = characterPz.trunkFloatTo2Decimal(multipier1)
+
+    local multiplier2 = 1.0
+    dbgLeleLib.checkTest(multipier1,
+            multiplier2, "Multiplier")
+
+    -- check Calories
     dbgLeleLib.checkTest(isoPlayerPZ.getCalories_PZ(),
             1500, "HoursSurvived")
+
+    -- check Weight
     dbgLeleLib.checkTest(isoPlayerPZ.getWeight_PZ(),
             92, "Weight")
 
@@ -61,6 +88,22 @@ local function key34(character, key)
 end
 
 ---@param character IsoGameCharacter
+local function key35(character, key)
+    if key == 35 then -- <<< h
+        print("Key = h > deleteCharacter \n")
+        dbgLeleLib.deleteCharacter()
+    end
+end
+
+---@param character IsoGameCharacter
+local function key36(character, key)
+    if key == 36 then -- <<<< j
+        print("Key = j >  \n")
+
+    end
+end
+
+---@param character IsoGameCharacter
 local function key37(character, key)
     if key == 37 then -- <<<< k
         print("Key = k > delete \n")
@@ -68,17 +111,41 @@ local function key37(character, key)
     end
 end
 
+---@param character IsoGameCharacter
+local function key16(character, key)
+    if key == 16 then -- <<<< q
+        print("Key = q >  \n")
+
+    end
+end
+
+---@param character IsoGameCharacter
+local function key17(character, key)
+    if key == 17 then -- <<<< w
+        print("Key = w >  \n")
+
+    end
+end
+
+---@param character IsoGameCharacter
+local function key18(character, key)
+    if key == 18 then -- <<<< e
+        print("Key = e >  \n")
+
+    end
+end
+
 -- https://theindiestone.com/forums/index.php?/topic/9799-key-code-reference/
 local function onCustomUIKeyPressed(key)
     local character = getPlayer()
 
-    if key == 34 then key34(character, key)  end -- <<<< g
-    --if key == 35 then key35(character, key)  end -- <<<< h
-    --if key == 36 then key36(character, key)  end -- <<<< j
-    if key == 37 then key37(character, key)  end -- <<<< kill
-    --if key == 16 then key16(character, key)  end -- <<<< 1
-    --if key == 17 then key17(character, key)  end -- <<<< 2
-
+    key16(character, key)
+    key17(character, key)
+    key18(character, key)
+    key34(character, key)
+    key35(character, key)
+    key36(character, key)
+    key37(character, key)
 end
 
 -- Events.OnCustomUIKeyPressed.Add(onCustomUIKeyPressed)

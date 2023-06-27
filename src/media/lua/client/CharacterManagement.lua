@@ -10,7 +10,7 @@ function removeMoData()
     modDataManager.remove(EnumModData.CHARACTER_BOOST)
     modDataManager.remove(EnumModData.CHARACTER_CALORIES)
     modDataManager.remove(EnumModData.CHARACTER_LIFE_TIME)
-    --modDataManager.remove(EnumModData.CHARACTER_MULTIPLIER)
+    modDataManager.remove(EnumModData.CHARACTER_MULTIPLIER)
     modDataManager.remove(EnumModData.CHARACTER_PERK_DETAILS)
     modDataManager.remove(EnumModData.CHARACTER_PROFESSION)
     modDataManager.remove(EnumModData.CHARACTER_TRAITS)
@@ -31,9 +31,11 @@ function readBook(character)
     createTrait(character)
     createRecipe(character)
     createBoost(character)
-     --createMultiplier(character)
+    createMultiplier(character)
 
     ------- PATCH ------------
+    --- survivalRewards 2797671069
+    --- https://steamcommunity.com/sharedfiles/filedetails/?id=2797671069&searchtext=2797671069
     createMil_kill_Reached(character)
     --------------------------
     removeMoData()
@@ -50,7 +52,7 @@ function writeBook(character)
     writeTraitToHd(character)
     writeRecipeToHd(character)
     writeBoostToHd(character)
-    -- --writeMultiplierToHd(character)
+    writeMultiplierToHd(character)
 
     ------- PATCH ------------
     --- survivalRewards 2797671069
