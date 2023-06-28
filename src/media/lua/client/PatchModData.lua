@@ -63,7 +63,7 @@ end
 ---Wwrite Mil_kill_Reached
 ---@param character IsoGameCharacter
 --- - IsoGameCharacter : zombie.characters.IsoGameCharacter
-function writeMil_kill_Reached(character)
+function writeMil_kill_ReachedToHd(character)
     removeMil_kill_Reached()
 
     writeKilMilReachedtFromHd(character)

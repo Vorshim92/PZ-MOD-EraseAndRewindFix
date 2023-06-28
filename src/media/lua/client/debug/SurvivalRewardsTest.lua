@@ -10,11 +10,65 @@
 --- DateTime: 26/04/23 17:41
 ---
 
-require("client/CharacterBoost")
 local dbgLeleLib = require("lib/DbgLeleLib")
 local modDataManager = require("lib/ModDataManager")
-
 local characterPz = require("lib/CharacterPZ")
+
+local kilMilReachedValue = 15
+local milReachedValue = 10
+local reset = 0
+
+local kilMilReached = "kilMilReachedX"
+local milReached = "milReachedX"
+
+---@param character IsoGameCharacter
+--- - zombie.characters.IsoGameCharacter
+local function checkSurvivalRewards()
+    local character = getPlayer()
+
+    character:getModData().kilMilReached = kilMilReachedValue
+    character:getModData().milReached = milReachedValue
+
+    modDataManager.save(kilMilReached,
+            character:getModData().kilMilReached )
+
+    modDataManager.save(milReached,
+            character:getModData().milReached )
+
+    local readKilMilReacheds = {}
+    readKilMilReacheds = modDataManager.read(kilMilReached)
+
+    local readMilReacheds = {}
+    readMilReacheds =modDataManager.read(milReached)
+
+    local readKilMilReached = 0
+    local readMilReached = 0
+
+    for i, v in pairs(readKilMilReacheds) do
+        readKilMilReached = v
+    end
+
+    for i, v in pairs(readMilReacheds) do
+        readMilReached = v
+    end
+
+    dbgLeleLib.checkTest(kilMilReachedValue, readKilMilReached, "Read KilMilReached" )
+    dbgLeleLib.checkTest(milReachedValue, readMilReached, "Read MilReached" )
+
+    modDataManager.remove(kilMilReached)
+    modDataManager.remove(milReached)
+
+    dbgLeleLib.checkTest(modDataManager.isExists(kilMilReached),
+            false, "Remove KilMilReached" )
+
+    dbgLeleLib.checkTest(modDataManager.isExists(milReached),
+            false, "Remove MilReached" )
+
+    character:getModData().kilMilReached = reset
+    character:getModData().milReached = reset
+end
+
+
 
 -- Perks.Maintenance
 -- Perks.Woodwork
@@ -24,24 +78,23 @@ local characterPz = require("lib/CharacterPZ")
 local function key34(character, key)
     if key == 34 then -- <<<< g
         print("Key = g > writeBook \n")
-        writeBook(character)
+        checkSurvivalRewards()
     end
 end
 
 ---@param character IsoGameCharacter
 local function key35(character, key)
     if key == 35 then -- <<< h
-        print("Key = h > readBook \n")
-        readBook(character)
+        print("Key = h >  \n")
+
     end
 end
 
 ---@param character IsoGameCharacter
 local function key36(character, key)
     if key == 36 then -- <<<< j
-        print("Key = j > writeMil_kill_Reached \n")
-        character:getModData().kilMilReached = 15
-        character:getModData().milReached = 10
+        print("Key = j > \n")
+
     end
 end
 
@@ -56,30 +109,8 @@ end
 ---@param character IsoGameCharacter
 local function key16(character, key)
     if key == 16 then -- <<<< q
-        print("Key = q > moddata milReached \n")
-        local milReached01 = character:getModData().milReached
+        print("Key = q >  \n")
 
-        print("-----------------------------------------------")
-        modDataManager.save("milReachedx", milReached01)
-        local readValues = {}
-        readValues = modDataManager.read("milReachedx")
-
-        for i, v in pairs(readValues) do
-            print(v)
-        end
-        print("-----------------------------------------------")
-
-        local kilMilReached01 = character:getModData().kilMilReached
-
-        print("-----------------------------------------------")
-        modDataManager.save("kilMilReachedx", kilMilReached01)
-        local readValues = {}
-        readValues = modDataManager.read("kilMilReachedx")
-
-        for i, v in pairs(readValues) do
-            print(v)
-        end
-        print("-----------------------------------------------")
     end
 end
 
@@ -102,13 +133,13 @@ end
 local function onCustomUIKeyPressed(key)
     local character = getPlayer()
 
-    key16(character, key)
-    key17(character, key)
-    key18(character, key)
-    key34(character, key)
-    key35(character, key)
-    key36(character, key)
-    key37(character, key)
+    key16(character, key) -- <<<< q
+    key17(character, key) -- <<<< w
+    key18(character, key) -- <<<< e
+    key34(character, key) -- <<<< g
+    key35(character, key) -- <<<< h
+    key36(character, key) -- <<<< j
+    key37(character, key) -- <<<< k - Kill
 end
 
 -- ------------------------------------------------------------

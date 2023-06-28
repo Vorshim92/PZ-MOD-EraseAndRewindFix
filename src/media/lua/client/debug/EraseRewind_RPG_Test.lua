@@ -139,13 +139,13 @@ end
 local function onCustomUIKeyPressed(key)
     local character = getPlayer()
 
-    key16(character, key)
-    key17(character, key)
-    key18(character, key)
-    key34(character, key)
-    key35(character, key)
-    key36(character, key)
-    key37(character, key)
+    key16(character, key) -- <<<< q
+    key17(character, key) -- <<<< w
+    key18(character, key) -- <<<< e
+    key34(character, key) -- <<<< g
+    key35(character, key) -- <<<< h
+    key36(character, key) -- <<<< j
+    key37(character, key) -- <<<< k - Kill
 end
 
 -- Events.OnCustomUIKeyPressed.Add(onCustomUIKeyPressed)

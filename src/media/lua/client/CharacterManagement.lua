@@ -57,7 +57,7 @@ function writeBook(character)
     ------- PATCH ------------
     --- survivalRewards 2797671069
     --- https://steamcommunity.com/sharedfiles/filedetails/?id=2797671069&searchtext=2797671069
-    writeMil_kill_Reached(character)
+    writeMil_kill_ReachedToHd(character)
     --------------------------
 end
 
