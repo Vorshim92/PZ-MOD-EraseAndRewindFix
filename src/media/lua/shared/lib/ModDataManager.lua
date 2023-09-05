@@ -8,7 +8,7 @@
 
 local modDataManager = {}
 
----Save ModData
+--- **Save ModData**
 ---@param nameFile String
 ---@param values string or table
 function modDataManager.save(nameFile, values)
@@ -32,7 +32,7 @@ function modDataManager.save(nameFile, values)
     end
 end
 
----Read ModData
+--- **Read ModData**
 ---@param nameFile String
 ---@return table
 function modDataManager.read(nameFile)
@@ -56,7 +56,7 @@ function modDataManager.read(nameFile)
     end
 end
 
----Is modData Exists
+--- **Is modData Exists**
 ---@param nameFile String
 --- - ModData : zombie.world.moddata.ModDa
 function modDataManager.isExists(nameFile)
@@ -67,7 +67,7 @@ function modDataManager.isExists(nameFile)
     return ModData.exists(nameFile)
 end
 
---- Remove modData
+--- **Remove modData**
 ---@param nameFile String
 --- - ModData : zombie.world.moddata.ModDa
 function modDataManager.remove(nameFile)

@@ -18,13 +18,13 @@ local function lines(perk, multiplier)
     })
 end
 
----Read Multiplier From Hd
+--- **Read Multiplier From Hd**
 ---@return table
 local function readMultiplierFromHd()
     return modDataManager.read(EnumModData.CHARACTER_MULTIPLIER)
 end
 
----Delete Multiplier
+--- **Delete Multiplier**
 ---@param character IsoGameCharacter
 --- - zombie.characters.IsoGameCharacter
 local function deleteMultiplier(character)
@@ -36,7 +36,7 @@ local function deleteMultiplier(character)
     end
 end
 
----Create Multiplier
+--- **Create Multiplier**
 ---@param character IsoGameCharacter
 --- - zombie.characters.IsoGameCharacter
 function createMultiplier(character)
@@ -59,7 +59,7 @@ function createMultiplier(character)
     end
 end
 
----Write Trait To Hd
+--- **Write Trait To Hd**
 ---@param character IsoGameCharacter
 --- - zombie.characters.IsoGameCharacter
 function writeMultiplierToHd(character)

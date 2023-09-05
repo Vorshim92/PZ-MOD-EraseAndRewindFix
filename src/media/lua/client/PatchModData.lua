@@ -14,26 +14,26 @@ local function readKilMilReachedFromHd()
     return modDataManager.read(kilMilReached)
 end
 
----Read MilReached From Hd
+--- **Read MilReached From Hd**
 local function readMilReachedFromHd()
     return modDataManager.read(milReached)
 end
 
----Write kilMilReached From Hd
+--- **Write kilMilReached From Hd**
 ---@param character IsoGameCharacter
 --- - IsoGameCharacter : zombie.characters.IsoGameCharacter
 local function writeKilMilReachedtFromHd(character)
     modDataManager.save(kilMilReached, character:getModData().milReached )
 end
 
----Write milReached From Hd
+--- **Write milReached From Hd**
 ---@param character IsoGameCharacter
 --- - IsoGameCharacter : zombie.characters.IsoGameCharacter
 local function writeMilReachedFromHd(character)
     modDataManager.save(milReached, character:getModData().kilMilReached )
 end
 
----Create Mil_kill_Reached
+--- **Create Mil_kill_Reached**
 ------@param character IsoGameCharacter
 ----- - IsoGameCharacter : zombie.characters.IsoGameCharacter
 function createMil_kill_Reached(character)
@@ -60,7 +60,7 @@ function createMil_kill_Reached(character)
     end
 end
 
----Wwrite Mil_kill_Reached
+--- **Write Mil_kill_Reached**
 ---@param character IsoGameCharacter
 --- - IsoGameCharacter : zombie.characters.IsoGameCharacter
 function writeMil_kill_ReachedToHd(character)

@@ -8,7 +8,7 @@
 
 local PerkFactoryPZ = {}
 
---- Get Perk
+--- **Get Perk**
 ---@param perk PerkFactory
 ---@return PerkFactory.Perk perk
 --- - PerkFactory.Perk : zombie.characters.skills.PerkFactory
@@ -20,7 +20,7 @@ function PerkFactoryPZ.getPerk_PZ(perk)
     return PerkFactory.getPerk(perk)
 end
 
---- Get Perk from name
+--- **Get Perk from name**
 ---@param perk String
 ---@return PerkFactory.Perk perk
 --- - PerkFactory.Perk : zombie.characters.skills.PerkFactory
@@ -32,7 +32,7 @@ function PerkFactoryPZ.getPerkByName_PZ(perk)
     return PerkFactory.getPerkFromName(perk)
 end
 
---- Convert Level To Xp
+--- **Convert Level To Xp**
 ---@param level int
 ---@param perk PerkFactory.Perk
 ---@return float Xp
@@ -73,7 +73,7 @@ function PerkFactoryPZ.convertLevelToXp(perk, level)
 
 end
 
----Get Parent_PZ
+--- **Get Parent_PZ**
 ---@param perk PerkFactory.Perk
 ---@return String
 --- - PerkFactory.Perk : zombie.characters.skills.PerkFactory

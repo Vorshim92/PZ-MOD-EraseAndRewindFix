@@ -9,13 +9,13 @@ local characterPz = require("lib/CharacterPZ")
 
 require("EnumModData")
 
----Read Zombies Killed From Hd
+--- **Read Zombies Killed From Hd**
 ---@return table
 local function readZombieKillsFromHd()
     return modDataManager.read(EnumModData.CHARACTER_ZOMBIE_KILLS)
 end
 
----Create Zombies Kills
+--- **Create Zombies Kills**
 ---@param character IsoGameCharacter
 --- - zombie.characters.IsoGameCharacter
 function createZombieKills(character)
@@ -32,7 +32,7 @@ function createZombieKills(character)
 
 end
 
----Write Zombies Kills To Hd
+--- **Write Zombies Kills To Hd**
 ---@param character IsoGameCharacter
 --- - zombie.characters.IsoGameCharacter
 function writeZombieKillsToHd(character)

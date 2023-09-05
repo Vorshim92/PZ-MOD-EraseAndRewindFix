@@ -8,13 +8,13 @@ local modDataManager = require("lib/ModDataManager")
 local isoPlayerPZ = require("lib/IsoPlayerPZ")
 require("EnumModData")
 
----Read Life Time From Hd
+--- **Read Life Time From Hd**
 ---@return double
 local function readLifeTimeFromHd()
     return modDataManager.read(EnumModData.CHARACTER_LIFE_TIME)
 end
 
----Create Life Time
+--- **Create Life Time**
 function createLifeTime()
     if not modDataManager.isExists(EnumModData.CHARACTER_LIFE_TIME) then
         return nil
@@ -30,7 +30,7 @@ function createLifeTime()
 
 end
 
----Write Life Time To Hd
+--- **Write Life Time To Hd**
 function writeLifeTimeToHd()
     modDataManager.remove(EnumModData.CHARACTER_LIFE_TIME)
 

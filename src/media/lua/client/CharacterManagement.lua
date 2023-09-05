@@ -4,6 +4,8 @@
 --- DateTime: 01/04/23 21:20
 ---
 
+--- LAST UPDATE 05-09-2023
+
 local modDataManager = require("lib/ModDataManager")
 
 function removeMoData()
@@ -20,7 +22,7 @@ function removeMoData()
     removeMil_kill_Reached()
 end
 
----Read Book
+--- **Read Book**
 ---@param character IsoGameCharacter
 --- - IsoGameCharacter : zombie.characters.IsoGameCharacter
 function readBook(character)
@@ -41,7 +43,7 @@ function readBook(character)
     removeMoData()
 end
 
----Write Book
+--- **Write Book**
 ---@param character IsoGameCharacter
 --- - IsoGameCharacter : zombie.characters.IsoGameCharacter
 function writeBook(character)

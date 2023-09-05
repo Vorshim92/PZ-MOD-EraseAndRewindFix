@@ -12,14 +12,14 @@ require("lib/CharacterBaseObj")
 
 local character = getPlayer()
 
-local function checkCharacter()
+local function character_TDD()
     local CharacterDeleteObj = CharacterBaseObj:new()
 
     character = getPlayer()
 
     -- check Profession
     dbgLeleLib.checkTest(characterPz.getProfession_PZ(character),
-            dbgLeleLib.EnumProfession.CARPENTER, "Profession" )
+            dbgLeleLib.Profession.CARPENTER, "Profession" )
 
     -- check Perk Level
     dbgLeleLib.checkTest( characterPz.getXp(character, Perks.Fitness),
@@ -72,18 +72,22 @@ local function checkCharacter()
     dbgLeleLib.checkTest(isoPlayerPZ.getWeight_PZ(),
             92, "Weight")
 
+    dbgLeleLib.printLine()
+    dbgLeleLib.displayTest()
+    dbgLeleLib.printLine()
 end
 
 -- Todo 		self.character:playSound("CloseBook")
 ---@param character IsoGameCharacter
 local function key34(character, key)
     if key == 34 then -- <<<< g
-        print("Key = g > writeBook \n")
+        print("Key = g > EraseRewind_RPG TDD \n")
+        dbgLeleLib.enableAdvancedTest(false)
         dbgLeleLib.deleteCharacter()
         dbgLeleLib.createCharacter()
         writeBook(character)
         readBook(character)
-        checkCharacter()
+        character_TDD()
     end
 end
 
@@ -91,7 +95,7 @@ end
 local function key35(character, key)
     if key == 35 then -- <<< h
         print("Key = h > deleteCharacter \n")
-        dbgLeleLib.deleteCharacter()
+
     end
 end
 
@@ -148,4 +152,4 @@ local function onCustomUIKeyPressed(key)
     key37(character, key) -- <<<< k - Kill
 end
 
--- Events.OnCustomUIKeyPressed.Add(onCustomUIKeyPressed)
+--Events.OnCustomUIKeyPressed.Add(onCustomUIKeyPressed)

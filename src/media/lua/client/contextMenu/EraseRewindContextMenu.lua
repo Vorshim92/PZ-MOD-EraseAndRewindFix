@@ -4,7 +4,7 @@ local eraseRewindJournal = "EraseRewindJournal"
 local contextER = {}
 
 
---- add Save Context
+--- **Add Save Context**
 function contextER.addSaveContext(character, context, items)
 
     for _, v in ipairs(items) do
@@ -24,7 +24,7 @@ function contextER.addSaveContext(character, context, items)
     end
 end
 
----Save player
+--- **Save player**
 ---@param item InventoryItem
 ---@param character IsoGameCharacter
 --- - zombie.characters.IsoGameCharacter

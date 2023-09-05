@@ -12,7 +12,7 @@ local modDataManager = require("lib/ModDataManager")
 require("EnumModData")
 require("lib/CharacterBaseObj")
 
----Read Character Perk Details From Hd
+--- **Read Character Perk Details From Hd**
 ---@return CharacterBaseObj PerkFactory.Perk perk, int level, float xp, boolean flag
 local function readCharacterPerkDetailsFromHd()
     local characterPerkDetails =
@@ -38,7 +38,7 @@ local function readCharacterPerkDetailsFromHd()
     return CharacterObj01
 end
 
----Delete  all skills Character
+--- **Delete  all skills Character**
 ---@param character IsoGameCharacter
 --- - IsoGameCharacter : zombie.characters.IsoGameCharacter
 local function deleteCharacter(character)
@@ -53,7 +53,7 @@ local function deleteCharacter(character)
     characterPz.removeProfession(character)
 end
 
----Copy Character Skill
+--- **Copy Character Skill**
 ---@param character IsoGameCharacter
 --- - IsoGameCharacter : zombie.characters.IsoGameCharacter
 function createCharacterPerkDetails(character)
@@ -68,7 +68,7 @@ function createCharacterPerkDetails(character)
     deleteCharacter(character)
 
     for _, v in pairs(characterSkills:getPerkDetails()) do
-        characterPz.setPerkLevel(character, v:getPerk(), v:getXp())
+        characterPz.setPerkLevelFromXp(character, v:getPerk(), v:getXp())
     end
 
     local profession = {}
@@ -78,7 +78,7 @@ function createCharacterPerkDetails(character)
             profession[1])
 end
 
----Write Character Perk Details To Hd
+--- **Write Character Perk Details To Hd**
 ---@param character IsoGameCharacter
 --- - IsoGameCharacter : zombie.characters.IsoGameCharacter
 function writeCharacterPerkDetailsToHd(character)

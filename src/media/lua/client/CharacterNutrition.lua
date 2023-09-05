@@ -7,27 +7,27 @@
 local isoPlayerPZ = require("lib/IsoPlayerPZ")
 local modDataManager = require("lib/ModDataManager")
 
----Read Weight From Hd
+--- **Read Weight From Hd**
 local function readWeightFromHd()
     return modDataManager.read(EnumModData.CHARACTER_WEIGHT)
 end
 
----Read Calories From Hd
+--- **Read Calories From Hd**
 local function readCaloriesFromHd()
     return modDataManager.read(EnumModData.CHARACTER_CALORIES)
 end
 
----Write Weight From Hd
+--- **Write Weight From Hd**
 local function writeWeightFromHd()
     modDataManager.save(EnumModData.CHARACTER_WEIGHT, isoPlayerPZ.getWeight_PZ())
 end
 
----Write Calories From Hd
+--- **Write Calories From Hd**
 local function writeCaloriesFromHd()
     modDataManager.save(EnumModData.CHARACTER_CALORIES, isoPlayerPZ.getCalories_PZ())
 end
 
----Create Character Nutrition
+--- **Create Character Nutrition**
 function createCharacterNutrition()
     if not modDataManager.isExists(EnumModData.CHARACTER_WEIGHT) then
         return nil
@@ -52,7 +52,7 @@ function createCharacterNutrition()
     end
 end
 
----Wwrite Character Nutrition
+--- **Wwrite Character Nutrition**
 function writeCharacterNutrition()
     modDataManager.remove(EnumModData.CHARACTER_WEIGHT)
     modDataManager.remove(EnumModData.CHARACTER_CALORIES)

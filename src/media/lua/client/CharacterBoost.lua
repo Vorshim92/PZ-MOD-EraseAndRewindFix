@@ -17,13 +17,13 @@ local function lines(perk, boostLevel)
     })
 end
 
----Read Boost From Hd
+--- **Read Boost From Hd**
 ---@return table
 local function readBoostFromHd()
     return modDataManager.read(EnumModData.CHARACTER_BOOST)
 end
 
----Delete Boost
+--- **Delete Boost**
 ---@param character IsoGameCharacter
 --- - zombie.characters.IsoGameCharacter
 local function deleteBoost(character)
@@ -33,9 +33,10 @@ local function deleteBoost(character)
     for _, v in pairs(CharacterAllPerksObJ:getPerkDetails()) do
         characterPz.removePerkBoost(character, v:getPerk())
     end
+
 end
 
----Create Boost
+--- **Create Boost**
 ---@param character IsoGameCharacter
 --- - zombie.characters.IsoGameCharacter
 function createBoost(character)
@@ -57,7 +58,7 @@ function createBoost(character)
     end
 end
 
----Write Trait To Hd
+--- **Write Trait To Hd**
 ---@param character IsoGameCharacter
 --- - zombie.characters.IsoGameCharacter
 function writeBoostToHd(character)

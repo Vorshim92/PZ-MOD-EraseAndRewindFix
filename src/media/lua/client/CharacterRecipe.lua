@@ -11,7 +11,7 @@ local modDataManager = require("lib/ModDataManager")
 require("EnumModData")
 require("lib/CharacterBaseObj")
 
----Read Recipe From Hd
+--- **Read Recipe From Hd**
 ---@return CharacterBaseObj getRecipes table string
 local function readRecipeFromHd()
     local characterKnowRecipe =
@@ -26,7 +26,7 @@ local function readRecipeFromHd()
     return CharacterObj01
 end
 
----Delete Recipe
+--- **Delete Recipe**
 ---@param character IsoGameCharacter
 --- - zombie.characters.IsoGameCharacter
 local function deleteRecipe(character)
@@ -39,7 +39,7 @@ local function deleteRecipe(character)
     end
 end
 
----Create Recipe
+--- **Create Recipe**
 ---@param character IsoGameCharacter
 --- - zombie.characters.IsoGameCharacter
 function createRecipe(character)
@@ -56,7 +56,7 @@ function createRecipe(character)
     end
 end
 
----Write Recipe To Hd
+--- **Write Recipe To Hd**
 function writeRecipeToHd(character)
     modDataManager.remove(EnumModData.CHARACTER_RECIPES)
 

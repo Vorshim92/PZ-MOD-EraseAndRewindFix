@@ -12,7 +12,7 @@ local perkFactoryPZ = require("lib/PerkFactoryPZ")
 
 local CharacterLib = {}
 
----Get Character Traits Perk
+--- **Get Character Traits Perk**
 ---@param character IsoGameCharacter
 ---@return CharacterBaseObj table - PerkFactory.Perk perk, int level
 --- - IsoGameCharacter : zombie.characters.IsoGameCharacter
@@ -46,7 +46,7 @@ function CharacterLib.getTraitsPerk(character)
     return CharacterObj01
 end
 
----Get Character Profession
+--- **Get Character Profession**
 ---@param character IsoGameCharacter
 ---@return CharacterBaseObj getPerkDetails() -- table PerkFactory.Perk perk, int level, float xp
 --- - IsoGameCharacter : zombie.characters.IsoGameCharacter
@@ -76,7 +76,7 @@ function CharacterLib.getPerkProfession(character)
 end
 
 ---@deprecated
----Get character and get current skill/trait
+--- **Get character and get current skill/trait**
 ---@param character IsoGameCharacter
 ---@param perk PerkFactory.Perk
 ---@return PerkDetailsObj getPerkDetailsObj()
@@ -109,7 +109,7 @@ function CharacterLib.getCurrentSkill(character, perk)
     return CharacterObj01
 end
 
----Get character and get All skills/traits
+--- **Get character and get All skills/traits**
 ---@param character IsoGameCharacter
 ---@return CharacterBaseObj getPerkDetails() -- table PerkFactory.Perk perk, int level, float xp
 --- - IsoGameCharacter : zombie.characters.IsoGameCharacter
@@ -140,7 +140,7 @@ function CharacterLib.getAllPerks(character)
     return CharacterObj01
 end
 
----Get character Multiplier
+--- **Get character Multiplier**
 ---@param character IsoGameCharacter
 ---@return CharacterBaseObj getPerkDetails() -- table PerkFactory.Perk perk, int level, float xp
 --- - IsoGameCharacter : zombie.characters.IsoGameCharacter
@@ -161,7 +161,7 @@ function CharacterLib.getMultiplier(character)
 end
 
 
----Get character Perks Boosts
+--- **Get character Perks Boosts**
 ---@param character IsoGameCharacter
 ---@return CharacterBaseObj getPerkDetails() -- table PerkFactory.Perk perk, int level, float xp
 --- - IsoGameCharacter : zombie.characters.IsoGameCharacter
@@ -181,7 +181,7 @@ function CharacterLib.getPerksBoost(character)
     return CharacterObj01
 end
 
----Get Character Known Recipes
+--- **Get Character Known Recipes**
 ---@param character IsoGameCharacter
 ---@return CharacterBaseObj getRecipes()
 --- - IsoGameCharacter : zombie.characters.IsoGameCharacter
@@ -200,7 +200,7 @@ function CharacterLib.getKnownRecipes(character)
     return CharacterObj01
 end
 
----Encode Perk Details convert the CharaterObj into a table. The ModData only accepts a table
+--- **Encode Perk Details convert the CharaterObj into a table. The ModData only accepts a table**
 ---@param characterObj CharacterBaseObj
 ---@return table
 --- - IsoGameCharacter : zombie.characters.IsoGameCharacter
@@ -222,7 +222,7 @@ function CharacterLib.encodePerkDetails(characterObj)
     return lines
 end
 
----Decode Perk Details convert a table into CharacterObj
+--- **Decode Perk Details convert a table into CharacterObj**
 ---@param characterPerkDetails table
 ---@return CharacterBaseObj getPerkDetails()
 --- - IsoGameCharacter : zombie.characters.IsoGameCharacter
@@ -251,7 +251,7 @@ function CharacterLib.decodePerkDetails(characterPerkDetails)
     return CharacterObj01
 end
 
----Update all the characteristics of the character
+--- **Update all the characteristics of the character**
 function CharacterLib.charaterUpdate()
     return getPlayer()
 end

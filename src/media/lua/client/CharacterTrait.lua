@@ -16,7 +16,7 @@ local function readTraitFromHd()
     return modDataManager.read(EnumModData.CHARACTER_TRAITS)
 end
 
----Create Trait
+--- **Create Trait**
 ---@param character IsoGameCharacter
 --- - zombie.characters.IsoGameCharacter
 function createTrait(character)
@@ -38,7 +38,7 @@ function createTrait(character)
     end
 end
 
----Write Trait To Hd
+--- **Write Trait To Hd**
 ---@param character IsoGameCharacter
 --- - zombie.characters.IsoGameCharacter
 function writeTraitToHd(character)
