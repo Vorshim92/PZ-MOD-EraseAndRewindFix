@@ -5,5 +5,6 @@
 --- function ISSkillProgressBar:renderPerkRect()
 --- ISSkillProgressBar:updateTooltip(lvlSelected)
 
+-- Update 1850 - 14-09-2023
 
 --- Go to ReadEraseRewind or EraseRewindContextMenu and search writeBook or readBook

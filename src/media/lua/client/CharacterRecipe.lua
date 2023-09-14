@@ -69,7 +69,7 @@ function writeRecipeToHd(character)
         table.insert(lines, v)
     end
 
-    lines = {}
-
     modDataManager.save(EnumModData.CHARACTER_RECIPES, lines)
+
+    lines = {}
 end
