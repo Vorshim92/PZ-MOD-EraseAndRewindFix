@@ -6,36 +6,24 @@
 
 ---@class ModDataManager
 
-local modDataManager = {}
+local ModDataManager = {}
 
---- **Save ModData**
+--- **Save ModData to Harddisk**
 ---@param nameFile String
----@param values string or table
-function modDataManager.save(nameFile, values)
+---@param values table
+function ModDataManager.save(nameFile, values)
     if not nameFile or not values then
         return nil
     end
 
-    if type(values) ~= "table" then
-        local conversionTotable = {}
-        table.insert(conversionTotable, values)
-        values = {}
-        values = conversionTotable
-        conversionTotable = nil
-    end
-
-    local lines = {}
-
-    for i, v in pairs(values) do
-        lines[i] = v
-        ModData.add(nameFile, lines)
-    end
+    ModData.create(nameFile)
+    ModData.add(nameFile, values)
 end
 
 --- **Read ModData**
 ---@param nameFile String
 ---@return table
-function modDataManager.read(nameFile)
+function ModDataManager.read(nameFile)
     if not nameFile then
         return nil
     end
@@ -43,23 +31,20 @@ function modDataManager.read(nameFile)
     local lines = {}
     lines = ModData.get(nameFile)
 
-    if #lines >= 2 then
-        return lines
-    else
-        local conversionTotable ={}
+    local conversionTotable = {}
 
-        for _, v in pairs(lines) do
-            table.insert(conversionTotable, v)
-        end
-
-        return conversionTotable
+    for _, v in pairs(lines) do
+        table.insert(conversionTotable, v)
     end
+
+    return conversionTotable
 end
 
 --- **Is modData Exists**
 ---@param nameFile String
---- - ModData : zombie.world.moddata.ModDa
-function modDataManager.isExists(nameFile)
+---@return boolean
+--- - ModData : zombie.world.moddata.ModData
+function ModDataManager.isExists(nameFile)
     if not nameFile then
         return nil
     end
@@ -69,8 +54,8 @@ end
 
 --- **Remove modData**
 ---@param nameFile String
---- - ModData : zombie.world.moddata.ModDa
-function modDataManager.remove(nameFile)
+--- - ModData : zombie.world.moddata.ModData
+function ModDataManager.remove(nameFile)
     if not nameFile then
         return nil
     end
@@ -78,4 +63,4 @@ function modDataManager.remove(nameFile)
     ModData.remove(nameFile)
 end
 
-return modDataManager
+return ModDataManager

@@ -11,6 +11,10 @@ local IsoPlayerPZ = {}
 --- **Set Username**
 ---@param username string
 function IsoPlayerPZ.setUserName(username)
+    if not username then
+        return nil
+    end
+
     IsoPlayer.getInstance():setUsername(username)
 end
 

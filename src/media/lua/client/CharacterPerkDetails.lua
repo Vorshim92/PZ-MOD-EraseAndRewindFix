@@ -4,30 +4,44 @@
 --- DateTime: 15/04/23 13:52
 ---
 
-local characterPz = require("lib/CharacterPZ")
-local perkFactoryPZ = require("lib/PerkFactoryPZ")
-local characterLib = require("CharacterLib")
-local modDataManager = require("lib/ModDataManager")
+---@class CharacterPerkDetails
 
-require("EnumModData")
+local CharacterPerkDetails = {}
+
+local characterLib = require("CharacterLib")
+local characterPz = require("lib/CharacterPZ")
+local pageBook = require("PageBook")
+local modDataManager = require("lib/ModDataManager")
+local perkFactoryPZ = require("lib/PerkFactoryPZ")
+
 require("lib/CharacterBaseObj")
 
 --- **Read Character Perk Details From Hd**
 ---@return CharacterBaseObj PerkFactory.Perk perk, int level, float xp, boolean flag
 local function readCharacterPerkDetailsFromHd()
-    local characterPerkDetails =
-        modDataManager.read(EnumModData.CHARACTER_PERK_DETAILS )
 
+    ---@type table
+    ---@return table perk, level ( int ), xp ( float )
+    --- - PerkFactory.Perk : zombie.characters.skills.PerkFactory
+    local characterPerkDetails =
+        modDataManager.read(pageBook.Character.PERK_DETAILS)
+
+    ---@type CharacterBaseObj
     local CharacterObj01 = CharacterBaseObj:new()
 
+    ---@type table
     local lines_ = {}
 
     for _, v in pairs(characterPerkDetails) do
+        -- Format value1-value2-value3
         for s in v:gmatch("[^\r-]+") do
             table.insert(lines_, s)
         end
 
-        -- perk, level, xp
+        ---@param perk PerkFactory.Perk
+        ---@param level int
+        ---@param xp float
+        --- - PerkFactory.Perk : zombie.characters.skills.PerkFactory
         CharacterObj01:addPerkDetails(perkFactoryPZ.getPerkByName_PZ(lines_[1]),
                 tonumber(lines_[2]),
                 tonumber(lines_[3]) + 0.0)
@@ -42,10 +56,15 @@ end
 ---@param character IsoGameCharacter
 --- - IsoGameCharacter : zombie.characters.IsoGameCharacter
 local function deleteCharacter(character)
+
+    ---@type CharacterBaseObj
     local characterAllSkills = CharacterBaseObj:new()
 
     characterAllSkills = characterLib.getAllPerks(character)
 
+    ---@param character IsoGameCharacter
+    ---@param perk PerkFactory.Perk
+    --- - PerkFactory.Perk : zombie.characters.skills.PerkFactory
     for _, v in pairs(characterAllSkills:getPerkDetails()) do
         characterPz.removePerkLevel(character, v:getPerk())
     end
@@ -56,23 +75,31 @@ end
 --- **Copy Character Skill**
 ---@param character IsoGameCharacter
 --- - IsoGameCharacter : zombie.characters.IsoGameCharacter
-function createCharacterPerkDetails(character)
-    if not modDataManager.isExists(EnumModData.CHARACTER_PROFESSION) or not
-            modDataManager.isExists(EnumModData.CHARACTER_PERK_DETAILS) then
+function CharacterPerkDetails.readBook(character)
+    if not modDataManager.isExists(pageBook.Character.PROFESSION) or not
+            modDataManager.isExists(pageBook.Character.PERK_DETAILS) then
         return nil
     end
 
+    ---@type CharacterBaseObj
     local characterSkills = CharacterBaseObj:new()
     characterSkills = readCharacterPerkDetailsFromHd()
 
     deleteCharacter(character)
 
+    ---@param character IsoGameCharacter
+    ---@param perk PerkFactory.Perk
+    ---@param xp float
+    --- - zombie.characters.IsoGameCharacter
+    --- - IsoGameCharacter : zombie.characters.IsoGameCharacter
     for _, v in pairs(characterSkills:getPerkDetails()) do
         characterPz.setPerkLevelFromXp(character, v:getPerk(), v:getXp())
     end
 
+    ---@type table
+    ---@return table string
     local profession = {}
-    profession = modDataManager.read(EnumModData.CHARACTER_PROFESSION)
+    profession = modDataManager.read(pageBook.Character.PROFESSION)
 
     characterPz.setProfession_PZ(character,
             profession[1])
@@ -81,15 +108,21 @@ end
 --- **Write Character Perk Details To Hd**
 ---@param character IsoGameCharacter
 --- - IsoGameCharacter : zombie.characters.IsoGameCharacter
-function writeCharacterPerkDetailsToHd(character)
-    modDataManager.remove(EnumModData.CHARACTER_PERK_DETAILS )
-    modDataManager.remove(EnumModData.CHARACTER_PROFESSION )
+function CharacterPerkDetails.writeBook(character)
+    modDataManager.remove(pageBook.Character.PERK_DETAILS)
+    modDataManager.remove(pageBook.Character.PROFESSION)
 
+    ---@type table
     local lines = {}
 
+    ---@type CharacterBaseObj
     local characterAllSkills = CharacterBaseObj:new()
     characterAllSkills = characterLib.getAllPerks(character)
 
+    -- Format value1-value2-value3
+    ---@param perk PerkFactory.Perk
+    ---@param level int
+    ---@param xp float
     for _, v in pairs(characterAllSkills:getPerkDetails()) do
         local value = ( v.perk:getName() .. "-" ..
                 tostring(v:getLevel())  .. "-" ..
@@ -98,13 +131,15 @@ function writeCharacterPerkDetailsToHd(character)
         table.insert(lines, value)
     end
 
-    modDataManager.save(EnumModData.CHARACTER_PERK_DETAILS, lines)
+    modDataManager.save(pageBook.Character.PERK_DETAILS, lines)
 
     lines = {}
-    modDataManager.save(EnumModData.CHARACTER_PROFESSION,
-            characterAllSkills:getProfession() )
+
+    table.insert(lines, characterAllSkills:getProfession())
+    modDataManager.save(pageBook.Character.PROFESSION,
+            lines )
+
+    lines = {}
 end
 
-
-
-
+return CharacterPerkDetails

@@ -4,12 +4,16 @@
 --- DateTime: 27/06/23 10:28
 ---
 
+---@class PatchSurvivalRewards
+
+local PatchSurvivalRewards = {}
+
 local modDataManager = require("lib/ModDataManager")
 
 local kilMilReached = "kilMilReachedX"
 local milReached = "milReachedX"
 
----Read kilMilReached From Hd
+--- **Read kilMilReached From Hd
 local function readKilMilReachedFromHd()
     return modDataManager.read(kilMilReached)
 end
@@ -36,7 +40,7 @@ end
 --- **Create Mil_kill_Reached**
 ------@param character IsoGameCharacter
 ----- - IsoGameCharacter : zombie.characters.IsoGameCharacter
-function createMil_kill_Reached(character)
+function PatchSurvivalRewards.createMil_kill_Reached(character)
     if not modDataManager.isExists(kilMilReached) then
         return nil
     end
@@ -63,15 +67,17 @@ end
 --- **Write Mil_kill_Reached**
 ---@param character IsoGameCharacter
 --- - IsoGameCharacter : zombie.characters.IsoGameCharacter
-function writeMil_kill_ReachedToHd(character)
-    removeMil_kill_Reached()
+function PatchSurvivalRewards.writeMil_kill_ReachedToHd(character)
+    PatchSurvivalRewards.removeMil_kill_Reached()
 
     writeKilMilReachedtFromHd(character)
     writeMilReachedFromHd(character)
 end
 
----Remove Mil_kill_Reached moddata
-function removeMil_kill_Reached()
+---
+function PatchSurvivalRewards.removeMil_kill_Reached()
     modDataManager.remove(kilMilReached)
     modDataManager.remove(milReached)
 end
+
+return PatchSurvivalRewards

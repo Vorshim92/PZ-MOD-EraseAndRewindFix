@@ -6,9 +6,10 @@
 
 ---@class CharacterLib
 
-require("lib/CharacterBaseObj")
 local characterPz = require("lib/CharacterPZ")
 local perkFactoryPZ = require("lib/PerkFactoryPZ")
+local dataValidator = require("lib/DataValidator")
+require("lib/CharacterBaseObj")
 
 local CharacterLib = {}
 
@@ -21,8 +22,10 @@ function CharacterLib.getTraitsPerk(character)
         return nil
     end
 
+    ---@type CharacterBaseObj
     local CharacterObj01 = CharacterBaseObj:new()
 
+    ---@type List
     local traits_PZ = characterPz.getTraitsPerk_PZ(character)
 
     for i = 0, traits_PZ:size() - 1 do
@@ -55,6 +58,7 @@ function CharacterLib.getPerkProfession(character)
         return nil
     end
 
+    ---@type CharacterBaseObj
     local CharacterObj01 = CharacterBaseObj:new()
 
     ---@type SurvivorDesc
@@ -90,6 +94,7 @@ function CharacterLib.getCurrentSkill(character, perk)
         return nil
     end
 
+    ---@type CharacterBaseObj
     local CharacterObj01 = CharacterBaseObj:new()
 
     ---@type SurvivorDesc
@@ -118,6 +123,7 @@ function CharacterLib.getAllPerks(character)
         return nil
     end
 
+    ---@type CharacterBaseObj
     local CharacterObj01 = CharacterBaseObj:new()
 
     for i = 0, Perks.getMaxIndex() - 1 do
@@ -149,17 +155,17 @@ function CharacterLib.getMultiplier(character)
         return nil
     end
 
+    ---@type CharacterBaseObj
     local CharacterObj01 = CharacterBaseObj:new()
     CharacterObj01 = CharacterLib.getAllPerks(character)
 
     for _, v in pairs(CharacterObj01:getPerkDetails()) do
         local multiplier = characterPz.getMultiplier_PZ(character, v:getPerk())
-        v:setMultiplier(characterPz.trunkFloatTo2Decimal(multiplier))
+        v:setMultiplier(dataValidator.trunkFloatTo2Decimal(multiplier))
     end
 
     return CharacterObj01
 end
-
 
 --- **Get character Perks Boosts**
 ---@param character IsoGameCharacter
@@ -170,10 +176,12 @@ function CharacterLib.getPerksBoost(character)
         return nil
     end
 
+    ---@type CharacterBaseObj
     local CharacterObj01 = CharacterBaseObj:new()
     CharacterObj01 = CharacterLib.getAllPerks(character)
 
     for _, v in pairs(CharacterObj01:getPerkDetails()) do
+        ---@type int
         local boost = characterPz.getPerkBoost_PZ(character, v:getPerk())
         v:setBoostLevel(boost)
     end
@@ -190,7 +198,9 @@ function CharacterLib.getKnownRecipes(character)
         return nil
     end
 
+    ---@type CharacterBaseObj
     local CharacterObj01 = CharacterBaseObj:new()
+    ---@type List
     local knowRecipes = characterPz.getKnownRecipes_PZ(character)
 
     for i = 0, knowRecipes:size() - 1 do
@@ -209,8 +219,12 @@ function CharacterLib.encodePerkDetails(characterObj)
         return nil
     end
 
+    ---@type table
     local lines = {}
 
+    ---@param perk PerkFactory.Perk
+    ---@param level int
+    ---@param xp float
     for _, v in pairs(characterObj:getPerkDetails()) do
         local value = ( v.perk:getName() .. "-" ..
                 tostring(v:getLevel())  .. "-" ..
@@ -231,8 +245,10 @@ function CharacterLib.decodePerkDetails(characterPerkDetails)
         return nil
     end
 
+    ---@type CharacterBaseObj
     local CharacterObj01 = CharacterBaseObj:new()
 
+    ---@type table
     local lines = {}
 
     for _, v in pairs(characterPerkDetails) do

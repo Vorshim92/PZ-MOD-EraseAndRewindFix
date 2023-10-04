@@ -3,47 +3,68 @@
 --- Created by lele.
 --- DateTime: 15/04/23 18:54
 ---
-local characterPz = require("lib/CharacterPZ")
-local modDataManager = require("lib/ModDataManager")
+
+
+---@class CharacterBoost
+
+local CharacterBoost = {}
+
 local characterLib = require("CharacterLib")
+local characterPz = require("lib/CharacterPZ")
+local pageBook = require("PageBook")
+local modDataManager = require("lib/ModDataManager")
+
 require("lib/CharacterBaseObj")
 
+---@param perk PerkFactory.Perk
+---@param boostLevel int
 local lines_ = { perk, boostLevel }
 
+---@param perk PerkFactory.Perk
+---@param int
+---@return table perk, int
+--- - PerkFactory.Perk : zombie.characters.skills.PerkFactor
 local function lines(perk, boostLevel)
     table.insert(lines_, {
+        ---@type PerkFactory.Perk
         perk = perk,
+
+        ---@type int
         boostLevel = boostLevel
     })
 end
 
 --- **Read Boost From Hd**
----@return table
+---@return table perk, int
+--- - PerkFactory.Perk : zombie.characters.skills.PerkFactory
 local function readBoostFromHd()
-    return modDataManager.read(EnumModData.CHARACTER_BOOST)
+    return modDataManager.read(pageBook.Character.BOOST)
 end
 
 --- **Delete Boost**
 ---@param character IsoGameCharacter
 --- - zombie.characters.IsoGameCharacter
 local function deleteBoost(character)
+
+    ---@type CharacterBaseObj
     local CharacterAllPerksObJ = CharacterBaseObj:new()
     CharacterAllPerksObJ = characterLib.getAllPerks(character)
 
     for _, v in pairs(CharacterAllPerksObJ:getPerkDetails()) do
         characterPz.removePerkBoost(character, v:getPerk())
     end
-
 end
 
 --- **Create Boost**
 ---@param character IsoGameCharacter
 --- - zombie.characters.IsoGameCharacter
-function createBoost(character)
-    if not modDataManager.isExists(EnumModData.CHARACTER_BOOST) then
+function CharacterBoost.readBook(character)
+    if not modDataManager.isExists(pageBook.Character.BOOST) then
         return nil
     end
 
+    ---@type table
+    ---@return PerkFactory.Perk, int ( boostLevel )
     local boost = {}
     boost = readBoostFromHd()
 
@@ -53,6 +74,7 @@ function createBoost(character)
 
     deleteBoost(character)
 
+    -- **Set Boost**
     for _, v in pairs(boost) do
         characterPz.setPerkBoost_PZ(character, v.perk, v.boostLevel)
     end
@@ -61,17 +83,23 @@ end
 --- **Write Trait To Hd**
 ---@param character IsoGameCharacter
 --- - zombie.characters.IsoGameCharacter
-function writeBoostToHd(character)
-    modDataManager.remove(EnumModData.CHARACTER_BOOST)
+--- - PerkFactory.Perk : zombie.characters.skills.PerkFactory
+function CharacterBoost.writeBook(character)
+    modDataManager.remove(pageBook.Character.BOOST)
 
+    ---@type CharacterBaseObj
     local CharacterPerksBoostObj = CharacterBaseObj:new()
     CharacterPerksBoostObj = characterLib.getPerksBoost(character)
 
     for _, v in pairs(CharacterPerksBoostObj:getPerkDetails()) do
+        ---@param perk PerkFactory.Perk
+        ---@param BoostLevel int
         lines(v:getPerk(), v:getBoostLevel())
     end
 
-    modDataManager.save(EnumModData.CHARACTER_BOOST, lines_)
+    modDataManager.save(pageBook.Character.BOOST, lines_)
 
     lines_ = {}
 end
+
+return CharacterBoost

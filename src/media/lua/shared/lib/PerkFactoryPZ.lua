@@ -41,6 +41,7 @@ function PerkFactoryPZ.convertLevelToXp(perk, level)
     local characterPz = require("lib/CharacterPZ")
 
     -- Perks.Sprinting:getXp1()
+    ---@type int
     local result
 
     if not perk or not level then

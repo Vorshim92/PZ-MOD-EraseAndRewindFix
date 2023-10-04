@@ -4,25 +4,30 @@
 --- DateTime: 15/04/23 18:54
 ---
 
-local modDataManager = require("lib/ModDataManager")
-local characterPz = require("lib/CharacterPZ")
+---@class CharacterKilledZombies
 
-require("EnumModData")
+local CharacterKilledZombies = {}
+
+local characterPz = require("lib/CharacterPZ")
+local pageBook = require("PageBook")
+local modDataManager = require("lib/ModDataManager")
 
 --- **Read Zombies Killed From Hd**
----@return table
+---@return table int
 local function readZombieKillsFromHd()
-    return modDataManager.read(EnumModData.CHARACTER_ZOMBIE_KILLS)
+    return modDataManager.read(pageBook.Character.KILLED_ZOMBIES)
 end
 
 --- **Create Zombies Kills**
 ---@param character IsoGameCharacter
 --- - zombie.characters.IsoGameCharacter
-function createZombieKills(character)
-    if not modDataManager.isExists(EnumModData.CHARACTER_ZOMBIE_KILLS) then
+function CharacterKilledZombies.readBook(character)
+    if not modDataManager.isExists(pageBook.Character.KILLED_ZOMBIES) then
         return nil
     end
 
+    ---@type table
+    ---@return int
     local zombieKills = {}
     zombieKills = readZombieKillsFromHd()
 
@@ -35,9 +40,16 @@ end
 --- **Write Zombies Kills To Hd**
 ---@param character IsoGameCharacter
 --- - zombie.characters.IsoGameCharacter
-function writeZombieKillsToHd(character)
-    modDataManager.remove(EnumModData.CHARACTER_ZOMBIE_KILLS)
+function CharacterKilledZombies.writeBook(character)
+    modDataManager.remove(pageBook.Character.KILLED_ZOMBIES)
 
-    modDataManager.save(EnumModData.CHARACTER_ZOMBIE_KILLS,
-            characterPz.getZombieKills_PZ(character) )
+    ---@type table
+    local zombiedKilled = {}
+    table.insert(zombiedKilled, characterPz.getZombieKills_PZ(character))
+
+    modDataManager.save(pageBook.Character.KILLED_ZOMBIES,
+            zombiedKilled )
+
 end
+
+return CharacterKilledZombies

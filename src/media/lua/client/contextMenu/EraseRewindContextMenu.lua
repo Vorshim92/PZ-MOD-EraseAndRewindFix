@@ -1,4 +1,5 @@
 require "ISUI/ISInventoryPaneContextMenu"
+local characterManagement = require("CharacterManagement")
 
 local eraseRewindJournal = "EraseRewindJournal"
 local contextER = {}
@@ -19,7 +20,7 @@ function contextER.addSaveContext(character, context, items)
 
         -- check per item giusto
 		if item:getType() == eraseRewindJournal then
-            context:addOption("Salva", item, contextER.onSavePlayer, character)
+            context:addOption("Trascrivi", item, contextER.onSavePlayer, character)
         end
     end
 end
@@ -30,7 +31,7 @@ end
 --- - zombie.characters.IsoGameCharacter
 function contextER.onSavePlayer(item, character)
 	-- qua il salvataggio moddata
-    writeBook(character)
+    characterManagement.writeBook(character)
     item:setName(eraseRewindJournal .. " - " .. character:getDisplayName() )
     character:Say("Libro scritto")
     character:playSound("OpenBook")

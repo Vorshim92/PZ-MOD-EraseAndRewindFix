@@ -4,36 +4,45 @@
 --- DateTime: 15/04/23 18:54
 ---
 
-local characterPz = require("lib/CharacterPZ")
-local modDataManager = require("lib/ModDataManager")
-local characterLib = require("CharacterLib")
+---@class CharacterTrait
 
-require("EnumModData")
+local CharacterTrait = {}
+
+local characterLib = require("CharacterLib")
+local characterPz = require("lib/CharacterPZ")
+local pageBook = require("PageBook")
+local modDataManager = require("lib/ModDataManager")
+
 require("lib/CharacterBaseObj")
 ---Read Trait From Hd
 ---@return table
 local function readTraitFromHd()
-    return modDataManager.read(EnumModData.CHARACTER_TRAITS)
+    return modDataManager.read(pageBook.Character.TRAITS)
 end
 
 --- **Create Trait**
 ---@param character IsoGameCharacter
 --- - zombie.characters.IsoGameCharacter
-function createTrait(character)
-    if not modDataManager.isExists(EnumModData.CHARACTER_TRAITS) then
+function CharacterTrait.readBook(character)
+    if not modDataManager.isExists(pageBook.Character.TRAITS) then
         return nil
     end
 
-    local trait = {}
-    trait = readTraitFromHd(character)
+    ---@type table
+    ---@return string
+    local traits = {}
+    traits = readTraitFromHd(character)
 
-    if not trait then
+    if not traits then
         return nil
     end
 
     characterPz.removeAllTraits_PZ(character)
 
-    for _, v in pairs(trait) do
+    for _, v in pairs(traits) do
+
+        ---@param character IsoGameCharacter
+        ---@param trait string
         characterPz.setTraitsPerk_PZ(character, v)
     end
 end
@@ -41,12 +50,15 @@ end
 --- **Write Trait To Hd**
 ---@param character IsoGameCharacter
 --- - zombie.characters.IsoGameCharacter
-function writeTraitToHd(character)
-    modDataManager.remove(EnumModData.CHARACTER_TRAITS)
+function CharacterTrait.writeBook(character)
+    modDataManager.remove(pageBook.Character.TRAITS)
 
+    ---@type CharacterBaseObj
     local trait = CharacterBaseObj:new()
     trait = characterLib.getTraitsPerk(character)
 
-    modDataManager.save(EnumModData.CHARACTER_TRAITS,
+    modDataManager.save(pageBook.Character.TRAITS,
             trait:getTraits())
 end
+
+return CharacterTrait

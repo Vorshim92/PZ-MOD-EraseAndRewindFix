@@ -4,21 +4,26 @@
 --- DateTime: 15/04/23 18:54
 ---
 
+---@class CharacterRecipe
+
+local CharacterRecipe = {}
+
 local characterLib = require("CharacterLib")
 local characterPz = require("lib/CharacterPZ")
+local pageBook = require("PageBook")
 local modDataManager = require("lib/ModDataManager")
-
-require("EnumModData")
 require("lib/CharacterBaseObj")
 
 --- **Read Recipe From Hd**
 ---@return CharacterBaseObj getRecipes table string
 local function readRecipeFromHd()
     local characterKnowRecipe =
-        modDataManager.read(EnumModData.CHARACTER_RECIPES )
+        modDataManager.read(pageBook.Character.RECIPES)
 
+    ---@type CharacterBaseObj
     local CharacterObj01 = CharacterBaseObj:new()
 
+    ---@param recipe string
     for _, v in pairs(characterKnowRecipe) do
         CharacterObj01:addRecipe(v)
     end
@@ -30,11 +35,15 @@ end
 ---@param character IsoGameCharacter
 --- - zombie.characters.IsoGameCharacter
 local function deleteRecipe(character)
-    local characterKnowRecipe = CharacterBaseObj:new()
 
+    ---@type CharacterBaseObj
+    local characterKnowRecipe = CharacterBaseObj:new()
     characterKnowRecipe = characterLib.getKnownRecipes(character)
 
     for _, v in pairs(characterKnowRecipe:getRecipes()) do
+
+        ---@param character IsoGameCharacter
+        ---@param recipe string
         characterPz.removeKnowRecipe_PZ(character, v)
     end
 end
@@ -42,34 +51,47 @@ end
 --- **Create Recipe**
 ---@param character IsoGameCharacter
 --- - zombie.characters.IsoGameCharacter
-function createRecipe(character)
-    if not modDataManager.isExists(EnumModData.CHARACTER_RECIPES) then
+function CharacterRecipe.readBook(character)
+    if not modDataManager.isExists(pageBook.Character.RECIPES) then
         return nil
     end
+
+    ---@type CharacterBaseObj
     local CharacterObj01 = CharacterBaseObj:new()
 
     CharacterObj01 = readRecipeFromHd(character)
     deleteRecipe(character)
 
     for _, v in pairs(CharacterObj01:getRecipes()) do
+
+        ---@param character IsoGameCharacter
+        ---@param recipe string
         characterPz.addKnownRecipe(character, v)
     end
 end
 
 --- **Write Recipe To Hd**
-function writeRecipeToHd(character)
-    modDataManager.remove(EnumModData.CHARACTER_RECIPES)
+---@param character IsoGameCharacter
+--- - IsoGameCharacter : zombie.characters.IsoGameCharacter
+function CharacterRecipe.writeBook(character)
+    modDataManager.remove(pageBook.Character.RECIPES)
 
+    ---@type CharacterBaseObj
     local knownRecipesObj = CharacterBaseObj:new()
     knownRecipesObj =  characterLib.getKnownRecipes(character)
 
+    ---@type table
     local lines = {}
 
     for _, v in pairs(knownRecipesObj:getRecipes()) do
+        ---@param lines table
+        ---@param v string
         table.insert(lines, v)
     end
 
-    modDataManager.save(EnumModData.CHARACTER_RECIPES, lines)
+    modDataManager.save(pageBook.Character.RECIPES, lines)
 
     lines = {}
 end
+
+return CharacterRecipe

@@ -1,5 +1,5 @@
 require "TimedActions/ISReadABook"
-
+local characterManagement = require("CharacterManagement")
 local eraseRewindJournal = "EraseRewindJournal"
 
 -- inizio azione
@@ -23,7 +23,7 @@ function ISReadABook:perform()
         EROVERWRITE_ISReadABook_perform(self)
     else
         -- qua load moddata
-        readBook(getPlayer())
+        characterManagement.readBook(getPlayer())
     end
 
     ISBaseTimedAction.perform(self)

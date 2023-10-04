@@ -4,33 +4,55 @@
 --- DateTime: 15/04/23 18:54
 ---
 
-local modDataManager = require("lib/ModDataManager")
-local characterPz = require("lib/CharacterPZ")
+---@class CharacterMultiplier
+
+local CharacterMultiplier = {}
+
 local characterLib = require("CharacterLib")
+local characterPz = require("lib/CharacterPZ")
+local pageBook = require("PageBook")
+local modDataManager = require("lib/ModDataManager")
+
 require("lib/CharacterBaseObj")
 
+---@param perk PerkFactory.Perk
+---@param multiplier float
+--- - PerkFactory.Perk : zombie.characters.skills.PerkFactor
 local lines_ = { perk, multiplier }
 
+---@param perk PerkFactory.Perk
+---@param multiplier float
+---@return table perk, double
+--- - PerkFactory.Perk : zombie.characters.skills.PerkFactory
 local function lines(perk, multiplier)
     table.insert(lines_, {
+        ---@type PerkFactory.Perk
         perk = perk,
+
+        ---@type double
         multiplier = multiplier
     })
 end
 
 --- **Read Multiplier From Hd**
----@return table
+---@return table perk, double ( multiplier )
+--- - PerkFactory.Perk : zombie.characters.skills.PerkFactory
 local function readMultiplierFromHd()
-    return modDataManager.read(EnumModData.CHARACTER_MULTIPLIER)
+    return modDataManager.read(pageBook.Character.MULTIPLIER)
 end
 
 --- **Delete Multiplier**
 ---@param character IsoGameCharacter
 --- - zombie.characters.IsoGameCharacter
 local function deleteMultiplier(character)
+
+    ---@type CharacterBaseObj
     local CharacterMultiplierObJ = CharacterBaseObj:new()
     CharacterMultiplierObJ = characterLib.getAllPerks(character)
 
+    ---@param character IsoGameCharacter
+    ---@param perk PerkFactory.Perk
+    --- - PerkFactory.Perk : zombie.characters.skills.PerkFactory
     for _, v in pairs(CharacterMultiplierObJ:getPerkDetails()) do
         characterPz.removeMultiplier(character, v:getPerk())
     end
@@ -39,11 +61,13 @@ end
 --- **Create Multiplier**
 ---@param character IsoGameCharacter
 --- - zombie.characters.IsoGameCharacter
-function createMultiplier(character)
-    if not modDataManager.isExists(EnumModData.CHARACTER_MULTIPLIER) then
+function CharacterMultiplier.readBook(character)
+    if not modDataManager.isExists(pageBook.Character.MULTIPLIER) then
         return nil
     end
 
+    ---@type table
+    ---@return table perk, double
     local multiplier = {}
     multiplier = readMultiplierFromHd()
 
@@ -53,6 +77,10 @@ function createMultiplier(character)
 
     deleteMultiplier(character)
 
+    ---@param character IsoGameCharacter
+    ---@param perk PerkFactory.Perk
+    ---@param multiplier float
+    --- - PerkFactory.Perk : zombie.characters.skills.PerkFactory
     for _, v in pairs(multiplier) do
         characterPz.addXpMultiplier_PZ(character, v.perk, v.multiplier,
             characterPz.EnumNumbers.ONE, characterPz.EnumNumbers.ONE)
@@ -62,19 +90,26 @@ end
 --- **Write Trait To Hd**
 ---@param character IsoGameCharacter
 --- - zombie.characters.IsoGameCharacter
-function writeMultiplierToHd(character)
-    modDataManager.remove(EnumModData.CHARACTER_MULTIPLIER)
+function CharacterMultiplier.writeBook(character)
+    modDataManager.remove(pageBook.Character.MULTIPLIER)
 
+    ---@type CharacterBaseObj
     local CharacterMultiplierObJ = CharacterBaseObj:new()
-     CharacterMultiplierObJ = characterLib.getMultiplier(character)
+    CharacterMultiplierObJ = characterLib.getMultiplier(character)
 
+    ---@param perk PerkFactory.Perk
+    ---@param level int
+    ---@param multiplier float
+    --- - PerkFactory.Perk : zombie.characters.skills.PerkFactory
     for _, v in pairs(CharacterMultiplierObJ:getPerkDetails()) do
-        if v:getMultiplier() > 0.0 then
+        if v:getMultiplier()  > 0.0 then
             lines(v:getPerk(), v:getMultiplier())
         end
     end
 
-    modDataManager.save(EnumModData.CHARACTER_MULTIPLIER, lines_)
+    modDataManager.save(pageBook.Character.MULTIPLIER, lines_)
 
     lines_ = {}
 end
+
+return CharacterMultiplier

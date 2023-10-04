@@ -4,23 +4,28 @@
 --- DateTime: 01/04/23 21:20
 ---
 
-local modDataManager = require("lib/ModDataManager")
+---@class CharacterLifeTime
+
+local CharacterLifeTime = {}
+
 local isoPlayerPZ = require("lib/IsoPlayerPZ")
-require("EnumModData")
+local pageBook = require("PageBook")
+local modDataManager = require("lib/ModDataManager")
 
 --- **Read Life Time From Hd**
----@return double
+---@return table double
 local function readLifeTimeFromHd()
-    return modDataManager.read(EnumModData.CHARACTER_LIFE_TIME)
+    return modDataManager.read(pageBook.Character.LIFE_TIME)
 end
 
 --- **Create Life Time**
-function createLifeTime()
-    if not modDataManager.isExists(EnumModData.CHARACTER_LIFE_TIME) then
+function CharacterLifeTime.readBook()
+    if not modDataManager.isExists(pageBook.Character.LIFE_TIME) then
         return nil
     end
 
-    ---@type double
+    ---@type table
+    ---@return double
     local lifeTime = {}
     lifeTime = readLifeTimeFromHd()
 
@@ -31,9 +36,15 @@ function createLifeTime()
 end
 
 --- **Write Life Time To Hd**
-function writeLifeTimeToHd()
-    modDataManager.remove(EnumModData.CHARACTER_LIFE_TIME)
+function CharacterLifeTime.writeBook()
+    modDataManager.remove(pageBook.Character.LIFE_TIME)
 
-    modDataManager.save(EnumModData.CHARACTER_LIFE_TIME,
-            isoPlayerPZ.getHoursSurvived_PZ())
+    ---@type table
+    local hoursSurvived = {}
+    table.insert(hoursSurvived, isoPlayerPZ.getHoursSurvived_PZ())
+
+    modDataManager.save(pageBook.Character.LIFE_TIME,
+            hoursSurvived)
 end
+
+return CharacterLifeTime

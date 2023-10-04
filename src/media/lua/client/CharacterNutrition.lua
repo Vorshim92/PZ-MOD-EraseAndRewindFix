@@ -4,35 +4,50 @@
 --- DateTime: 24/04/23 09:17
 ---
 
+---@class CharacterNutrition
+
+local CharacterNutrition = {}
+
 local isoPlayerPZ = require("lib/IsoPlayerPZ")
+local pageBook = require("PageBook")
 local modDataManager = require("lib/ModDataManager")
 
+local convertToTable = {}
+
 --- **Read Weight From Hd**
+---@return table double
 local function readWeightFromHd()
-    return modDataManager.read(EnumModData.CHARACTER_WEIGHT)
+    return modDataManager.read(pageBook.Character.WEIGHT)
 end
 
 --- **Read Calories From Hd**
+---@return table float
 local function readCaloriesFromHd()
-    return modDataManager.read(EnumModData.CHARACTER_CALORIES)
+    return modDataManager.read(pageBook.Character.CALORIES)
 end
 
 --- **Write Weight From Hd**
 local function writeWeightFromHd()
-    modDataManager.save(EnumModData.CHARACTER_WEIGHT, isoPlayerPZ.getWeight_PZ())
+    table.insert(convertToTable, isoPlayerPZ.getWeight_PZ())
+    modDataManager.save(pageBook.Character.WEIGHT,convertToTable )
+    convertToTable = {}
 end
 
 --- **Write Calories From Hd**
 local function writeCaloriesFromHd()
-    modDataManager.save(EnumModData.CHARACTER_CALORIES, isoPlayerPZ.getCalories_PZ())
+    table.insert(convertToTable, isoPlayerPZ.getCalories_PZ())
+    modDataManager.save(pageBook.Character.CALORIES, convertToTable)
+    convertToTable = {}
 end
 
 --- **Create Character Nutrition**
-function createCharacterNutrition()
-    if not modDataManager.isExists(EnumModData.CHARACTER_WEIGHT) then
+function CharacterNutrition.readBook()
+    if not modDataManager.isExists(pageBook.Character.WEIGHT) then
         return nil
     end
 
+    ---@type table
+    ---@return table double
     local weight = {}
     weight = readWeightFromHd()
 
@@ -40,10 +55,12 @@ function createCharacterNutrition()
         isoPlayerPZ.setWeight_PZ(v)
     end
 
-    if not modDataManager.isExists(EnumModData.CHARACTER_CALORIES) then
+    if not modDataManager.isExists(pageBook.Character.CALORIES) then
         return nil
     end
 
+    ---@type table
+    ---@return table float
     local calories = {}
     calories = readCaloriesFromHd()
 
@@ -53,10 +70,12 @@ function createCharacterNutrition()
 end
 
 --- **Wwrite Character Nutrition**
-function writeCharacterNutrition()
-    modDataManager.remove(EnumModData.CHARACTER_WEIGHT)
-    modDataManager.remove(EnumModData.CHARACTER_CALORIES)
+function CharacterNutrition.writeBook()
+    modDataManager.remove(pageBook.Character.WEIGHT)
+    modDataManager.remove(pageBook.Character.CALORIES)
 
     writeWeightFromHd()
     writeCaloriesFromHd()
 end
+
+return CharacterNutrition

@@ -4,9 +4,9 @@
 --- DateTime: 27/03/23 09:38
 ---
 
----@class DbgLeleLib
+---@class DebugDiagnostics
 
-local DbgLeleLib = {}
+local DebugDiagnostics = {}
 local characterPz = require("lib/CharacterPZ")
 local isoPlayerPZ = require("lib/IsoPlayerPZ")
 local characterLib = require("CharacterLib")
@@ -18,7 +18,9 @@ local results = {
     ---@type int
     passed = 0,
     ---@type int
-    notPassed = 0
+    notPassed = 0,
+    ---@type int
+    testVerified = 0
 }
 
 ---@type string
@@ -35,7 +37,7 @@ local advancedTest
 
 --- **Show more info about test**
 ---@param advancedTest_ boolean
-function DbgLeleLib.enableAdvancedTest(advancedTest_)
+function DebugDiagnostics.setVerbose(advancedTest_)
     advancedTest = advancedTest_
 end
 
@@ -56,7 +58,7 @@ end
 ---@param currentValue
 ---@param nameTest string
 ---@return boolean
-function DbgLeleLib.showAllResult(expectedValue, currentValue, nameTest)
+function DebugDiagnostics.showAllResult(expectedValue, currentValue, nameTest)
     if expectedValue == currentValue then
         printTestResult(nameTest, true)
         return true
@@ -71,32 +73,31 @@ end
 ---@param currentValue
 ---@param nameTest string
 ---@return boolean
-function DbgLeleLib.showOnlyFalseResult(expectedValue, currentValue, nameTest)
+function DebugDiagnostics.showOnlyFalseResult(expectedValue, currentValue, nameTest)
     if expectedValue ~= currentValue then
-        DbgLeleLib.showAllResult(expectedValue, currentValue, nameTest)
+        DebugDiagnostics.showAllResult(expectedValue, currentValue, nameTest)
         return false
     end
 
     return true
 end
 
--- TODO: advancedTest check doesn't work
 --- **Unit Lua, check methods**
 ---@param expectedValue
 ---@param currentValue
 ---@param nameTest string
 ---@return int result
-
-function DbgLeleLib.checkTest(expectedValue, currentValue, nameTest)
+function DebugDiagnostics.checkTest(expectedValue, currentValue, nameTest)
+    results.testVerified = results.testVerified + 1
 
     if advancedTest then
-        if DbgLeleLib.showAllResult(expectedValue, currentValue, nameTest) then
+        if DebugDiagnostics.showAllResult(expectedValue, currentValue, nameTest) then
             results.passed = results.passed + 1
         else
             results.notPassed = results.notPassed + 1
         end
     else
-        if DbgLeleLib.showOnlyFalseResult(expectedValue, currentValue, nameTest) then
+        if DebugDiagnostics.showOnlyFalseResult(expectedValue, currentValue, nameTest) then
             results.passed = results.passed + 1
         else
             results.notPassed = results.notPassed + 1
@@ -104,18 +105,22 @@ function DbgLeleLib.checkTest(expectedValue, currentValue, nameTest)
     end
 end
 
-function DbgLeleLib.displayTest()
+function DebugDiagnostics.displayTest()
+    DebugDiagnostics.printLine()
     print("------------------CHECK TEST------------------")
+    print("TEST VERIFIED: >>>>>>>> ", results.testVerified .. " of " .. (results.passed + results.notPassed))
     print("PASSED: >>>>>>>>>>>>>>> ", results.passed)
     print("NOT PASSED:  >>>>>>>>>> ", results.notPassed)
 
+    results.testVerified = 0
     results.passed = 0
     results.notPassed = 0
+    DebugDiagnostics.printLine()
 end
 
 --- **Get Profession ENUM**
 ---@return string
-DbgLeleLib.Profession = {
+DebugDiagnostics.Profession = {
     UNEMPLOYED = "",
     BURGER_FLIPPER = "burgerflipper",
     BURGLAR = "burglar",
@@ -143,7 +148,7 @@ DbgLeleLib.Profession = {
 --- **Get Perk ENUM**
 ---@return PerkFactory.Perk perk
 --- - PerkFactory.Perk : zombie.characters.skills.PerkFactory
-DbgLeleLib.Perks = {
+DebugDiagnostics.Perks = {
     AGILITY = Perks.Agility,
     AIMING = Perks.Aiming,
     AXE = Perks.Axe,
@@ -183,7 +188,7 @@ DbgLeleLib.Perks = {
 }
 
 --- **Create a line**
-function DbgLeleLib.printLine()
+function DebugDiagnostics.printLine()
     print("---------------------------------------------------------------------")
 end
 
@@ -194,7 +199,7 @@ end
 --- - IsoGameCharacter : zombie.characters.IsoGameCharacter
 --- - PerkFactory.Perk : zombie.characters.skills.PerkFactory
 --- - IsoGameCharacter.XP : zombie.characters.IsoGameCharacter.XP
-function DbgLeleLib.setPerkLevel(character, perk, level)
+function DebugDiagnostics.setPerkLevel(character, perk, level)
     characterPz.removePerkLevel(character, perk)
 
     local convertLevelToXp = 0.0
@@ -213,7 +218,7 @@ end
 ---@param perk
 ---@param level
 ---@param xp
-function DbgLeleLib.display(displayName, i, perk, level, xp)
+function DebugDiagnostics.display(displayName, i, perk, level, xp)
     local dbg1 = perk
     local dbg2 = level
     local dbg3 = xp
@@ -229,7 +234,7 @@ end
 ---@param perk
 ---@param level
 ---@param xp
-function DbgLeleLib.displayAdvanced(displayName, i, perk, level, xp)
+function DebugDiagnostics.displayAdvanced(displayName, i, perk, level, xp)
     local dbg1 = perk
     local dbg2 = level
     local dbg3 = xp
@@ -246,17 +251,16 @@ end
 ---@param displayName string
 ---@param perk_ PerkFactory.Perk
 ---@param perk PerkFactory.Perk
----@param level int
 --- - PerkFactory.Perk : zombie.characters.skills.PerkFactory
-function DbgLeleLib.checkPerk(displayName, perk, perk_ )
+function DebugDiagnostics.checkPerk(displayName, perk, perk_ )
     -- Perks.Maintenance
     local dbg1 = perk
     local dbg2 = perk_
 
     if perk == perk_ then
-        DbgLeleLib.printLine()
-        DbgLeleLib.display(displayName, nil, perk, perk_, nil)
-        DbgLeleLib.printLine()
+        DebugDiagnostics.printLine()
+        DebugDiagnostics.display(displayName, nil, perk, perk_, nil)
+        DebugDiagnostics.printLine()
         local dbg
     end
 end
@@ -264,34 +268,34 @@ end
 --- **Display CharacterObj**
 ---@param displayName string
 ---@param CharacterBaseObj CharacterBaseObj
-function DbgLeleLib.displayCharacterObj(displayName, CharacterBaseObj)
-    DbgLeleLib.printLine()
+function DebugDiagnostics.displayCharacterObj(displayName, CharacterBaseObj)
+    DebugDiagnostics.printLine()
     for i, v in pairs(CharacterBaseObj) do
-        DbgLeleLib.display(displayName, i,
+        DebugDiagnostics.display(displayName, i,
                 v:getPerk(), v:getLevel(), v:getXp())
         --DbgLeleLib.displayAdvanced(displayName, i,
         --        v:getPerk(), v:getLevel(), v:getXp())
     end
-    DbgLeleLib.printLine()
+    DebugDiagnostics.printLine()
 end
 
 --- **displayListPerks**
 ---@param displayName string
 ---@param perks_list
-function DbgLeleLib.displayListPerks(displayName, perks_list)
-    DbgLeleLib.printLine()
+function DebugDiagnostics.displayListPerks(displayName, perks_list)
+    DebugDiagnostics.printLine()
     for i, v in pairs(perks_list) do
-        DbgLeleLib.display(displayName, i, v.perk, v.level, nil)
+        DebugDiagnostics.display(displayName, i, v.perk, v.level, nil)
         -- DbgLeleLib.displayAdvanced(displayName, i, v.perk, v.level, nil)
         -- DBG_GetCheckPerk("DBG_GetCheckPerk", v.perk_, v.perk, _ )
     end
-    DbgLeleLib.printLine()
+    DebugDiagnostics.printLine()
 end
 
 --- **Times Count**
 ---@param count int
 ---@param count2 int
-function DbgLeleLib.timesCount(count, count2)
+function DebugDiagnostics.timesCount(count, count2)
     if count == count2 then
         return true
     end
@@ -300,7 +304,7 @@ function DbgLeleLib.timesCount(count, count2)
 end
 
 --- **Delete Character**
-function DbgLeleLib.deleteCharacter()
+function DebugDiagnostics.deleteCharacter()
     local character = getPlayer()
     local zero = 0.0
     local CharacterDeleteObj = CharacterBaseObj:new()
@@ -351,11 +355,11 @@ function DbgLeleLib.deleteCharacter()
 end
 
 --- **Create Character**
-function DbgLeleLib.createCharacter()
+function DebugDiagnostics.createCharacter()
     local character = getPlayer()
 
     -- set profession
-    characterPz.setProfession_PZ(character, DbgLeleLib.Profession.CARPENTER)
+    characterPz.setProfession_PZ(character, DebugDiagnostics.Profession.CARPENTER)
 
     -- set level
     characterPz.setPerkLevelFromXp(character, Perks.Fitness, 37500)
@@ -397,7 +401,15 @@ function DbgLeleLib.createCharacter()
     character = getPlayer()
 end
 
-return DbgLeleLib
+--- **Create basic Character**
+function DebugDiagnostics.createBasicCharacter()
+    local character = getPlayer()
+    characterPz.setPerkLevelFromXp(character, Perks.Fitness, 37500)
+    characterPz.setPerkLevelFromXp(character, Perks.Strength, 37500)
+    isoPlayerPZ.setWeight_PZ(85.0)
+end
+
+return DebugDiagnostics
 
 
 
