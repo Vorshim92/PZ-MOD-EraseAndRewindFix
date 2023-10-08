@@ -15,23 +15,23 @@ local modDataManager = require("lib/ModDataManager")
 
 require("lib/CharacterBaseObj")
 ---Read Trait From Hd
----@return table
+---@return table - string
 local function readTraitFromHd()
     return modDataManager.read(pageBook.Character.TRAITS)
 end
 
 --- **Create Trait**
 ---@param character IsoGameCharacter
---- - zombie.characters.IsoGameCharacter
+--- - IsoGameCharacter : zombie.characters.IsoGameCharacter
 function CharacterTrait.readBook(character)
+    --- **Check if moddata traits is exits**
     if not modDataManager.isExists(pageBook.Character.TRAITS) then
         return nil
     end
 
     ---@type table
     ---@return string
-    local traits = {}
-    traits = readTraitFromHd(character)
+    local traits = readTraitFromHd(character)
 
     if not traits then
         return nil
@@ -40,7 +40,6 @@ function CharacterTrait.readBook(character)
     characterPz.removeAllTraits_PZ(character)
 
     for _, v in pairs(traits) do
-
         ---@param character IsoGameCharacter
         ---@param trait string
         characterPz.setTraitsPerk_PZ(character, v)
@@ -49,13 +48,12 @@ end
 
 --- **Write Trait To Hd**
 ---@param character IsoGameCharacter
---- - zombie.characters.IsoGameCharacter
+--- - IsoGameCharacter : zombie.characters.IsoGameCharacter
 function CharacterTrait.writeBook(character)
     modDataManager.remove(pageBook.Character.TRAITS)
 
     ---@type CharacterBaseObj
-    local trait = CharacterBaseObj:new()
-    trait = characterLib.getTraitsPerk(character)
+    local trait = characterLib.getTraitsPerk(character)
 
     modDataManager.save(pageBook.Character.TRAITS,
             trait:getTraits())

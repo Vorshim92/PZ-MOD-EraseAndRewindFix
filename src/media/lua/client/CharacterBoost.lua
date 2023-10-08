@@ -11,6 +11,7 @@ local CharacterBoost = {}
 
 local characterLib = require("CharacterLib")
 local characterPz = require("lib/CharacterPZ")
+local dataValidator = require("lib/DataValidator")
 local pageBook = require("PageBook")
 local modDataManager = require("lib/ModDataManager")
 
@@ -18,13 +19,13 @@ require("lib/CharacterBaseObj")
 
 ---@param perk PerkFactory.Perk
 ---@param boostLevel int
-local lines_ = { perk, boostLevel }
+local lines_ = {}
 
 ---@param perk PerkFactory.Perk
 ---@param int
 ---@return table perk, int
 --- - PerkFactory.Perk : zombie.characters.skills.PerkFactor
-local function lines(perk, boostLevel)
+local function addlines(perk, boostLevel)
     table.insert(lines_, {
         ---@type PerkFactory.Perk
         perk = perk,
@@ -43,12 +44,10 @@ end
 
 --- **Delete Boost**
 ---@param character IsoGameCharacter
---- - zombie.characters.IsoGameCharacter
+--- - IsoGameCharacter : zombie.characters.IsoGameCharacter
 local function deleteBoost(character)
 
-    ---@type CharacterBaseObj
-    local CharacterAllPerksObJ = CharacterBaseObj:new()
-    CharacterAllPerksObJ = characterLib.getAllPerks(character)
+    local CharacterAllPerksObJ = characterLib.getAllPerks(character)
 
     for _, v in pairs(CharacterAllPerksObJ:getPerkDetails()) do
         characterPz.removePerkBoost(character, v:getPerk())
@@ -57,20 +56,18 @@ end
 
 --- **Create Boost**
 ---@param character IsoGameCharacter
---- - zombie.characters.IsoGameCharacter
+--- - IsoGameCharacter : zombie.characters.IsoGameCharacter
 function CharacterBoost.readBook(character)
+    --- **check if moddata boost is exits**
     if not modDataManager.isExists(pageBook.Character.BOOST) then
         return nil
     end
 
-    ---@type table
-    ---@return PerkFactory.Perk, int ( boostLevel )
-    local boost = {}
-    boost = readBoostFromHd()
+    ---@type table - PerkFactory.Perk, int (boostlevel)
+    local boost = readBoostFromHd()
 
-    if not boost then
-        return nil
-    end
+    --- check if boost is nil
+    if not boost then return nil end
 
     deleteBoost(character)
 
@@ -82,24 +79,30 @@ end
 
 --- **Write Trait To Hd**
 ---@param character IsoGameCharacter
---- - zombie.characters.IsoGameCharacter
+--- - IsoGameCharacter : zombie.characters.IsoGameCharacter
 --- - PerkFactory.Perk : zombie.characters.skills.PerkFactory
 function CharacterBoost.writeBook(character)
     modDataManager.remove(pageBook.Character.BOOST)
 
-    ---@type CharacterBaseObj
-    local CharacterPerksBoostObj = CharacterBaseObj:new()
-    CharacterPerksBoostObj = characterLib.getPerksBoost(character)
+    local CharacterPerksBoostObj = characterLib.getPerksBoost(character)
 
     for _, v in pairs(CharacterPerksBoostObj:getPerkDetails()) do
         ---@param perk PerkFactory.Perk
         ---@param BoostLevel int
-        lines(v:getPerk(), v:getBoostLevel())
+        addlines(v:getPerk(), v:getBoostLevel())
     end
 
     modDataManager.save(pageBook.Character.BOOST, lines_)
 
     lines_ = {}
+
+    -- Todo: da controllare, sembra che il ciclo non funzioni
+    -- dataValidator.destroyTable(lines_)
+
+    --
+    --for i, _ in pairs(lines_) do
+    --    table.remove(lines_, i)
+    --end
 end
 
 return CharacterBoost

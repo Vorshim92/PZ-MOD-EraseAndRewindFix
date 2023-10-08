@@ -22,11 +22,9 @@ local function readCharacterPerkDetailsFromHd()
 
     ---@type table
     ---@return table perk, level ( int ), xp ( float )
-    --- - PerkFactory.Perk : zombie.characters.skills.PerkFactory
     local characterPerkDetails =
         modDataManager.read(pageBook.Character.PERK_DETAILS)
 
-    ---@type CharacterBaseObj
     local CharacterObj01 = CharacterBaseObj:new()
 
     ---@type table
@@ -41,7 +39,6 @@ local function readCharacterPerkDetailsFromHd()
         ---@param perk PerkFactory.Perk
         ---@param level int
         ---@param xp float
-        --- - PerkFactory.Perk : zombie.characters.skills.PerkFactory
         CharacterObj01:addPerkDetails(perkFactoryPZ.getPerkByName_PZ(lines_[1]),
                 tonumber(lines_[2]),
                 tonumber(lines_[3]) + 0.0)
@@ -57,10 +54,7 @@ end
 --- - IsoGameCharacter : zombie.characters.IsoGameCharacter
 local function deleteCharacter(character)
 
-    ---@type CharacterBaseObj
-    local characterAllSkills = CharacterBaseObj:new()
-
-    characterAllSkills = characterLib.getAllPerks(character)
+    local characterAllSkills = characterLib.getAllPerks(character)
 
     ---@param character IsoGameCharacter
     ---@param perk PerkFactory.Perk
@@ -76,30 +70,27 @@ end
 ---@param character IsoGameCharacter
 --- - IsoGameCharacter : zombie.characters.IsoGameCharacter
 function CharacterPerkDetails.readBook(character)
+    --- **check if moddata perkDetails and profession are exits**
     if not modDataManager.isExists(pageBook.Character.PROFESSION) or not
             modDataManager.isExists(pageBook.Character.PERK_DETAILS) then
         return nil
     end
 
-    ---@type CharacterBaseObj
-    local characterSkills = CharacterBaseObj:new()
-    characterSkills = readCharacterPerkDetailsFromHd()
+    ---@return CharacterBaseObj PerkFactory.Perk perk, int level, float xp, boolean flag
+    local characterSkills = readCharacterPerkDetailsFromHd()
 
     deleteCharacter(character)
 
     ---@param character IsoGameCharacter
     ---@param perk PerkFactory.Perk
     ---@param xp float
-    --- - zombie.characters.IsoGameCharacter
-    --- - IsoGameCharacter : zombie.characters.IsoGameCharacter
     for _, v in pairs(characterSkills:getPerkDetails()) do
         characterPz.setPerkLevelFromXp(character, v:getPerk(), v:getXp())
     end
 
     ---@type table
-    ---@return table string
-    local profession = {}
-    profession = modDataManager.read(pageBook.Character.PROFESSION)
+    ---@return table string ( profession )
+    local profession = modDataManager.read(pageBook.Character.PROFESSION)
 
     characterPz.setProfession_PZ(character,
             profession[1])
@@ -115,9 +106,7 @@ function CharacterPerkDetails.writeBook(character)
     ---@type table
     local lines = {}
 
-    ---@type CharacterBaseObj
-    local characterAllSkills = CharacterBaseObj:new()
-    characterAllSkills = characterLib.getAllPerks(character)
+    local characterAllSkills = characterLib.getAllPerks(character)
 
     -- Format value1-value2-value3
     ---@param perk PerkFactory.Perk

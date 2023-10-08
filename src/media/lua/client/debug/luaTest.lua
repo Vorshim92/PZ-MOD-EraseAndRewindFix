@@ -4,21 +4,10 @@
 --- DateTime: 30/09/23 17:07
 ---
 
---- https://zomboid-javadoc.com/41.78/
-
---local zombieKills = {}
---zombieKills = "1056"
---
---print(zombieKills)
-
--- project zomboid, get inventory items
---local player = getPlayer()
---local inventory = player:getInventory()
---local items = inventory:getItems()
---print(items)
-
--- project zomboid, get mods activeMods
---local activeMods = require("ActiveMods")
---print("isModActive = " .. activeMods.getMods() .. "\n")
+---@type table - double
+local scheduledBookRead = { 1,2,3,4,5 }
 
 
+---@type table - double
+local dateInSecond = scheduledBookRead[1] -- ????
+print(dateInSecond)

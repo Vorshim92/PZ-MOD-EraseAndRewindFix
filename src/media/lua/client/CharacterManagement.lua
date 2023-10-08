@@ -22,13 +22,8 @@ local pageBook = require("PageBook")
 local modDataManager = require("lib/ModDataManager")
 local patchSurvivalRewards = require("PatchSurvivalRewards")
 
---- **Is Mod Active**
----@param nameMod string
-local function isModActive(nameMod)
-    return false
-end
-
 --- **Remove Mod Data**
+---@return void
 function CharacterManagement.removeMoData()
     modDataManager.remove(pageBook.Character.BOOST)
     modDataManager.remove(pageBook.Character.BOOK_READABLE)
@@ -46,7 +41,7 @@ function CharacterManagement.removeMoData()
     --- survivalRewards 2797671069
     --- https://steamcommunity.com/sharedfiles/filedetails/?id=2797671069&searchtext=2797671069
 
-    if isModActive("survivalRewards") then
+    if patchSurvivalRewards.isModActive() then
         patchSurvivalRewards.removeMil_kill_Reached()
     end
     --------------------------
@@ -54,6 +49,7 @@ end
 
 --- **Read Book**
 ---@param character IsoGameCharacter
+---@return void
 --- - IsoGameCharacter : zombie.characters.IsoGameCharacter
 function CharacterManagement.readBook(character)
     characterPerkDetails.readBook(character)
@@ -62,15 +58,14 @@ function CharacterManagement.readBook(character)
     characterNutrition.readBook()
     characterTrait.readBook(character)
     characterRecipe.readBook(character)
-
     characterBoost.readBook(character)
     characterMultiplier.readBook(character)
 
     ------- PATCH ------------
     --- survivalRewards 2797671069
     --- https://steamcommunity.com/sharedfiles/filedetails/?id=2797671069&searchtext=2797671069
----
-    if isModActive("survivalRewards") then
+
+    if patchSurvivalRewards.isModActive() then
         patchSurvivalRewards.createMil_kill_Reached(character)
     end
     --------------------------
@@ -80,6 +75,7 @@ end
 
 --- **Write Book**
 ---@param character IsoGameCharacter
+---@return void
 --- - IsoGameCharacter : zombie.characters.IsoGameCharacter
 function CharacterManagement.writeBook(character)
     characterPerkDetails.writeBook(character)
@@ -94,8 +90,8 @@ function CharacterManagement.writeBook(character)
     ------- PATCH ------------
     --- survivalRewards 2797671069
     --- https://steamcommunity.com/sharedfiles/filedetails/?id=2797671069&searchtext=2797671069
----
-    if isModActive("survivalRewards") then
+
+    if patchSurvivalRewards.isModActive() then
         patchSurvivalRewards.writeMil_kill_ReachedToHd(character)
     end
     --------------------------

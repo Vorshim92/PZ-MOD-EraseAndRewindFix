@@ -15,11 +15,11 @@ local perkFactoryPZ = require("lib/PerkFactoryPZ")
 -- -----------------------------------------------------------
 
 local results = {
-    ---@type int
+    ---@field int
     passed = 0,
-    ---@type int
+    ---@field int
     notPassed = 0,
-    ---@type int
+    ---@field int
     testVerified = 0
 }
 
@@ -37,6 +37,7 @@ local advancedTest
 
 --- **Show more info about test**
 ---@param advancedTest_ boolean
+---
 function DebugDiagnostics.setVerbose(advancedTest_)
     advancedTest = advancedTest_
 end
@@ -44,6 +45,7 @@ end
 --- **PrintTestResult** if **true** test passed, if **false** not passed
 ---@param nameTest string
 ---@param flag boolean
+---@return void
 local function printTestResult(nameTest, flag)
     if (flag) then
         print(test_ .. nameTest .. ok_)
@@ -86,7 +88,7 @@ end
 ---@param expectedValue
 ---@param currentValue
 ---@param nameTest string
----@return int result
+---@return void
 function DebugDiagnostics.checkTest(expectedValue, currentValue, nameTest)
     results.testVerified = results.testVerified + 1
 
@@ -105,6 +107,8 @@ function DebugDiagnostics.checkTest(expectedValue, currentValue, nameTest)
     end
 end
 
+--- **Show all metothod tested**
+---@return void
 function DebugDiagnostics.displayTest()
     DebugDiagnostics.printLine()
     print("------------------CHECK TEST------------------")
@@ -147,7 +151,7 @@ DebugDiagnostics.Profession = {
 
 --- **Get Perk ENUM**
 ---@return PerkFactory.Perk perk
---- - PerkFactory.Perk : zombie.characters.skills.PerkFactory
+--- - PerkFactory.Perk : zombie.characters.skills.PerkFactory.Perk
 DebugDiagnostics.Perks = {
     AGILITY = Perks.Agility,
     AIMING = Perks.Aiming,
@@ -188,6 +192,7 @@ DebugDiagnostics.Perks = {
 }
 
 --- **Create a line**
+---@return void
 function DebugDiagnostics.printLine()
     print("---------------------------------------------------------------------")
 end
@@ -196,8 +201,9 @@ end
 ---@param character IsoGameCharacter
 ---@param perk PerkFactory.Perk
 ---@param level int
+---@return void
 --- - IsoGameCharacter : zombie.characters.IsoGameCharacter
---- - PerkFactory.Perk : zombie.characters.skills.PerkFactory
+--- - PerkFactory.Perk : zombie.characters.skills.PerkFactory.Perk
 --- - IsoGameCharacter.XP : zombie.characters.IsoGameCharacter.XP
 function DebugDiagnostics.setPerkLevel(character, perk, level)
     characterPz.removePerkLevel(character, perk)
@@ -218,6 +224,7 @@ end
 ---@param perk
 ---@param level
 ---@param xp
+---@return void
 function DebugDiagnostics.display(displayName, i, perk, level, xp)
     local dbg1 = perk
     local dbg2 = level
@@ -234,6 +241,7 @@ end
 ---@param perk
 ---@param level
 ---@param xp
+---@return void
 function DebugDiagnostics.displayAdvanced(displayName, i, perk, level, xp)
     local dbg1 = perk
     local dbg2 = level
@@ -251,7 +259,8 @@ end
 ---@param displayName string
 ---@param perk_ PerkFactory.Perk
 ---@param perk PerkFactory.Perk
---- - PerkFactory.Perk : zombie.characters.skills.PerkFactory
+---@return void
+--- - PerkFactory.Perk : zombie.characters.skills.PerkFactory.Perk
 function DebugDiagnostics.checkPerk(displayName, perk, perk_ )
     -- Perks.Maintenance
     local dbg1 = perk
@@ -268,6 +277,7 @@ end
 --- **Display CharacterObj**
 ---@param displayName string
 ---@param CharacterBaseObj CharacterBaseObj
+---@return void
 function DebugDiagnostics.displayCharacterObj(displayName, CharacterBaseObj)
     DebugDiagnostics.printLine()
     for i, v in pairs(CharacterBaseObj) do
@@ -282,6 +292,7 @@ end
 --- **displayListPerks**
 ---@param displayName string
 ---@param perks_list
+---@return void
 function DebugDiagnostics.displayListPerks(displayName, perks_list)
     DebugDiagnostics.printLine()
     for i, v in pairs(perks_list) do
@@ -295,6 +306,7 @@ end
 --- **Times Count**
 ---@param count int
 ---@param count2 int
+---@return boolean
 function DebugDiagnostics.timesCount(count, count2)
     if count == count2 then
         return true
@@ -304,6 +316,7 @@ function DebugDiagnostics.timesCount(count, count2)
 end
 
 --- **Delete Character**
+---@return void
 function DebugDiagnostics.deleteCharacter()
     local character = getPlayer()
     local zero = 0.0
@@ -355,6 +368,10 @@ function DebugDiagnostics.deleteCharacter()
 end
 
 --- **Create Character**
+---@return void
+--- - IsoGameCharacter : zombie.characters.IsoGameCharacter
+--- - PerkFactory.Perk : zombie.characters.skills.PerkFactory.Perk
+--- - IsoGameCharacter.XP : zombie.characters.IsoGameCharacter.XP
 function DebugDiagnostics.createCharacter()
     local character = getPlayer()
 
@@ -402,6 +419,9 @@ function DebugDiagnostics.createCharacter()
 end
 
 --- **Create basic Character**
+---@return void
+--- - IsoGameCharacter : zombie.characters.IsoGameCharacter
+--- - PerkFactory.Perk : zombie.characters.skills.PerkFactory.Perk
 function DebugDiagnostics.createBasicCharacter()
     local character = getPlayer()
     characterPz.setPerkLevelFromXp(character, Perks.Fitness, 37500)

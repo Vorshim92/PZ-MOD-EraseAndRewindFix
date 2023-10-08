@@ -37,20 +37,27 @@ local function key34(character, key)
     if key == 34 then -- <<<< g
         print("Key = g > CharacterBoost \n")
 
-        local actmods = getActivatedMods();
-        local value = {}
-        value = dataValidator.transformArrayListToTable(actmods)
+        local activeMods = getActivatedMods();
 
-        for i, v in pairs(value) do
-            print("mod is active > " .. v .. "\n")
+        for i = 0, activeMods:size() - 1 do
+            print("Mod Active: " .. activeMods:get(i) .. "\n")
         end
+        --
+        --for i = 0, activeMods:size(), 1 do
+        --    if activeMods:get(i) == activeMod then
+        --        print("Mod Active: " .. activeMod .. "\n")
+        --        return true
+        --    end
+        --end
+
+
     end
 end
 
 ---@param character IsoGameCharacter
 local function key35(character, key)
     if key == 35 then -- <<< h
-        print("Key = h >  \n")
+        print("Key = h > checkTest  \n")
 
     end
 end

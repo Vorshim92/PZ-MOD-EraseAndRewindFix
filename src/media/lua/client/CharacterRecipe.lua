@@ -20,7 +20,6 @@ local function readRecipeFromHd()
     local characterKnowRecipe =
         modDataManager.read(pageBook.Character.RECIPES)
 
-    ---@type CharacterBaseObj
     local CharacterObj01 = CharacterBaseObj:new()
 
     ---@param recipe string
@@ -33,12 +32,10 @@ end
 
 --- **Delete Recipe**
 ---@param character IsoGameCharacter
---- - zombie.characters.IsoGameCharacter
+--- - IsoGameCharacter : zombie.characters.IsoGameCharacter
 local function deleteRecipe(character)
 
-    ---@type CharacterBaseObj
-    local characterKnowRecipe = CharacterBaseObj:new()
-    characterKnowRecipe = characterLib.getKnownRecipes(character)
+    local characterKnowRecipe = characterLib.getKnownRecipes(character)
 
     for _, v in pairs(characterKnowRecipe:getRecipes()) do
 
@@ -50,20 +47,20 @@ end
 
 --- **Create Recipe**
 ---@param character IsoGameCharacter
---- - zombie.characters.IsoGameCharacter
+--- - IsoGameCharacter : zombie.characters.IsoGameCharacter
 function CharacterRecipe.readBook(character)
+    --- **Check if moddata recipes is exits**
     if not modDataManager.isExists(pageBook.Character.RECIPES) then
         return nil
     end
 
-    ---@type CharacterBaseObj
-    local CharacterObj01 = CharacterBaseObj:new()
+    ---@type table
+    ---@return CharacterBaseObj getRecipes table string
+    local recipesObj = readRecipeFromHd(character)
 
-    CharacterObj01 = readRecipeFromHd(character)
     deleteRecipe(character)
 
-    for _, v in pairs(CharacterObj01:getRecipes()) do
-
+    for _, v in pairs(recipesObj:getRecipes()) do
         ---@param character IsoGameCharacter
         ---@param recipe string
         characterPz.addKnownRecipe(character, v)
@@ -76,9 +73,7 @@ end
 function CharacterRecipe.writeBook(character)
     modDataManager.remove(pageBook.Character.RECIPES)
 
-    ---@type CharacterBaseObj
-    local knownRecipesObj = CharacterBaseObj:new()
-    knownRecipesObj =  characterLib.getKnownRecipes(character)
+    local knownRecipesObj =  characterLib.getKnownRecipes(character)
 
     ---@type table
     local lines = {}

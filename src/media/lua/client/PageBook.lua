@@ -12,16 +12,17 @@ local ModData = {}
 ---@return table string
 ModData.Character = {
     BOOST = "characterBoost",
-    BOOK_READABLE = "characterBookReadable",
     CALORIES = "characterCalories",
     LIFE_TIME = "characterLifeTime",
     MULTIPLIER = "characterMultiplier",
+    ONE_TIME_BOOK_READ = "oneTimeBookRead",
     PERK_DETAILS = "characterPerkDetails",
     PROFESSION = "characterProfession",
     RECIPES = "characterRecipes",
     TRAITS = "characterTraits",
+    SCHEDULED_BOOK_READ = "scheduledBookRead",
     WEIGHT = "characterWeight",
-    KILLED_ZOMBIES = "characterZombieKills",
+    KILLED_ZOMBIES = "characterKilledZombies",
 }
 
 return ModData

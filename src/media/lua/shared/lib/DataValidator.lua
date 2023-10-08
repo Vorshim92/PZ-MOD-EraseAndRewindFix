@@ -72,6 +72,19 @@ function DataValidator.isTable(value)
     return true
 end
 
+--- **Destroy Table**
+---@param value table
+---@return void
+function DataValidator.destroyTable(value)
+    if not DataValidator.isTable(value) then
+        return nil
+    end
+
+    for k in pairs(value) do
+        table.remove(value, k)
+    end
+end
+
 --- **UNTESTED**
 --- **Transform Array List To Table**
 ---@param arrayList ArrayList

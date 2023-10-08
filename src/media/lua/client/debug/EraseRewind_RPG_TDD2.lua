@@ -37,7 +37,7 @@ local function character_TDD(character)
     local CharacterTraitObj = CharacterBaseObj:new()
     CharacterTraitObj = characterLib.getTraitsPerk(character)
 
-
+    
     -------------------------------
 
 
@@ -228,4 +228,4 @@ local function onCustomUIKeyPressed(key)
     --key37(character, key) -- k
 end
 
-Events.OnCustomUIKeyPressed.Add(onCustomUIKeyPressed)
+--Events.OnCustomUIKeyPressed.Add(onCustomUIKeyPressed)

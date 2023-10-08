@@ -13,23 +13,23 @@ local pageBook = require("PageBook")
 local modDataManager = require("lib/ModDataManager")
 
 --- **Read Life Time From Hd**
----@return table double
+---@return table double ( timeLife )
 local function readLifeTimeFromHd()
     return modDataManager.read(pageBook.Character.LIFE_TIME)
 end
 
 --- **Create Life Time**
 function CharacterLifeTime.readBook()
+
     if not modDataManager.isExists(pageBook.Character.LIFE_TIME) then
         return nil
     end
 
     ---@type table
-    ---@return double
-    local lifeTime = {}
-    lifeTime = readLifeTimeFromHd()
+    ---@return table - double ( timeLife )
+    local lifeTime = readLifeTimeFromHd()
 
-    for i, v in pairs(lifeTime) do
+    for _, v in pairs(lifeTime) do
         isoPlayerPZ.setHoursSurvived_PZ(v)
     end
 
@@ -39,7 +39,7 @@ end
 function CharacterLifeTime.writeBook()
     modDataManager.remove(pageBook.Character.LIFE_TIME)
 
-    ---@type table
+    ---@type table - double (
     local hoursSurvived = {}
     table.insert(hoursSurvived, isoPlayerPZ.getHoursSurvived_PZ())
 

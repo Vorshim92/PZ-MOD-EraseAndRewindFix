@@ -18,13 +18,13 @@ require("lib/CharacterBaseObj")
 ---@param perk PerkFactory.Perk
 ---@param multiplier float
 --- - PerkFactory.Perk : zombie.characters.skills.PerkFactor
-local lines_ = { perk, multiplier }
+local lines_ = {}
 
 ---@param perk PerkFactory.Perk
 ---@param multiplier float
----@return table perk, double
+---@return table perk, double ( multiplier )
 --- - PerkFactory.Perk : zombie.characters.skills.PerkFactory
-local function lines(perk, multiplier)
+local function addline(perk, multiplier)
     table.insert(lines_, {
         ---@type PerkFactory.Perk
         perk = perk,
@@ -43,16 +43,13 @@ end
 
 --- **Delete Multiplier**
 ---@param character IsoGameCharacter
---- - zombie.characters.IsoGameCharacter
+--- - IsoGameCharacter : zombie.characters.IsoGameCharacter
 local function deleteMultiplier(character)
 
-    ---@type CharacterBaseObj
-    local CharacterMultiplierObJ = CharacterBaseObj:new()
-    CharacterMultiplierObJ = characterLib.getAllPerks(character)
+    local CharacterMultiplierObJ = characterLib.getAllPerks(character)
 
     ---@param character IsoGameCharacter
     ---@param perk PerkFactory.Perk
-    --- - PerkFactory.Perk : zombie.characters.skills.PerkFactory
     for _, v in pairs(CharacterMultiplierObJ:getPerkDetails()) do
         characterPz.removeMultiplier(character, v:getPerk())
     end
@@ -60,16 +57,16 @@ end
 
 --- **Create Multiplier**
 ---@param character IsoGameCharacter
---- - zombie.characters.IsoGameCharacter
+--- - IsoGameCharacter : zombie.characters.IsoGameCharacter
 function CharacterMultiplier.readBook(character)
+
     if not modDataManager.isExists(pageBook.Character.MULTIPLIER) then
         return nil
     end
 
     ---@type table
-    ---@return table perk, double
-    local multiplier = {}
-    multiplier = readMultiplierFromHd()
+    ---@return table perk, double ( multiplier )
+    local multiplier = readMultiplierFromHd()
 
     if not multiplier then
         return nil
@@ -80,7 +77,6 @@ function CharacterMultiplier.readBook(character)
     ---@param character IsoGameCharacter
     ---@param perk PerkFactory.Perk
     ---@param multiplier float
-    --- - PerkFactory.Perk : zombie.characters.skills.PerkFactory
     for _, v in pairs(multiplier) do
         characterPz.addXpMultiplier_PZ(character, v.perk, v.multiplier,
             characterPz.EnumNumbers.ONE, characterPz.EnumNumbers.ONE)
@@ -89,21 +85,18 @@ end
 
 --- **Write Trait To Hd**
 ---@param character IsoGameCharacter
---- - zombie.characters.IsoGameCharacter
+--- - IsoGameCharacter : zombie.characters.IsoGameCharacter
 function CharacterMultiplier.writeBook(character)
     modDataManager.remove(pageBook.Character.MULTIPLIER)
 
-    ---@type CharacterBaseObj
-    local CharacterMultiplierObJ = CharacterBaseObj:new()
-    CharacterMultiplierObJ = characterLib.getMultiplier(character)
+    local CharacterMultiplierObJ = characterLib.getMultiplier(character)
 
     ---@param perk PerkFactory.Perk
     ---@param level int
     ---@param multiplier float
-    --- - PerkFactory.Perk : zombie.characters.skills.PerkFactory
     for _, v in pairs(CharacterMultiplierObJ:getPerkDetails()) do
         if v:getMultiplier()  > 0.0 then
-            lines(v:getPerk(), v:getMultiplier())
+            addline(v:getPerk(), v:getMultiplier())
         end
     end
 

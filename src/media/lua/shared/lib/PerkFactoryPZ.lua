@@ -11,7 +11,7 @@ local PerkFactoryPZ = {}
 --- **Get Perk**
 ---@param perk PerkFactory
 ---@return PerkFactory.Perk perk
---- - PerkFactory.Perk : zombie.characters.skills.PerkFactory
+--- - PerkFactory.Perk : zombie.characters.skills.PerkFactory.Perk
 function PerkFactoryPZ.getPerk_PZ(perk)
     if not perk then
         return nil
@@ -23,7 +23,7 @@ end
 --- **Get Perk from name**
 ---@param perk String
 ---@return PerkFactory.Perk perk
---- - PerkFactory.Perk : zombie.characters.skills.PerkFactory
+--- - PerkFactory.Perk : zombie.characters.skills.PerkFactory.Perk
 function PerkFactoryPZ.getPerkByName_PZ(perk)
     if not perk then
         return nil
@@ -36,7 +36,7 @@ end
 ---@param level int
 ---@param perk PerkFactory.Perk
 ---@return float Xp
---- - PerkFactory.Perk : zombie.characters.skills.PerkFactory
+--- - PerkFactory.Perk : zombie.characters.skills.PerkFactory.Perk
 function PerkFactoryPZ.convertLevelToXp(perk, level)
     local characterPz = require("lib/CharacterPZ")
 
@@ -77,7 +77,7 @@ end
 --- **Get Parent_PZ**
 ---@param perk PerkFactory.Perk
 ---@return String
---- - PerkFactory.Perk : zombie.characters.skills.PerkFactory
+--- - PerkFactory.Perk : zombie.characters.skills.PerkFactory.Perk
 function PerkFactoryPZ.getParent_PZ(perk)
     if not perk then
         return nil

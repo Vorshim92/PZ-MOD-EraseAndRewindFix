@@ -4,8 +4,12 @@ local characterManagement = require("CharacterManagement")
 local eraseRewindJournal = "EraseRewindJournal"
 local contextER = {}
 
-
 --- **Add Save Context**
+---@param character IsoGameCharacter
+---@param context ISInventoryPaneContextMenu
+---@param items InventoryItem
+---@return void
+--- - IsoGameCharacter : zombie.characters.IsoGameCharacter
 function contextER.addSaveContext(character, context, items)
 
     for _, v in ipairs(items) do
@@ -28,13 +32,18 @@ end
 --- **Save player**
 ---@param item InventoryItem
 ---@param character IsoGameCharacter
---- - zombie.characters.IsoGameCharacter
+---@return void
+--- - IsoGameCharacter : zombie.characters.IsoGameCharacter
+--- - InventoryItem : zombie.inventory.InventoryItem
 function contextER.onSavePlayer(item, character)
-	-- qua il salvataggio moddata
+    character:playSound("OpenBook")
+    -- qua il salvataggio moddata
     characterManagement.writeBook(character)
+
     item:setName(eraseRewindJournal .. " - " .. character:getDisplayName() )
     character:Say("Libro scritto")
-    character:playSound("OpenBook")
+
+    character:playSound("CloseBook")
 end
 
 Events.OnPreFillInventoryObjectContextMenu.Add(contextER.addSaveContext)

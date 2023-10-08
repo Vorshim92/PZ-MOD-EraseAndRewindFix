@@ -10,6 +10,8 @@ local IsoPlayerPZ = {}
 
 --- **Set Username**
 ---@param username string
+---@return void
+--- - IsoPlayer : zombie.characters.IsoPlayer
 function IsoPlayerPZ.setUserName(username)
     if not username then
         return nil
@@ -20,12 +22,14 @@ end
 
 --- **Get Username**
 ---@return string username
+--- - IsoPlayer : zombie.characters.IsoPlayer
 function IsoPlayerPZ.getUserName()
     return IsoPlayer.getInstance():getUsername()
 end
 
 --- **Set Life Time in hours**
 ---@param lifeTime double
+---
 --- - IsoPlayer : zombie.characters.IsoPlayer
 function IsoPlayerPZ.setHoursSurvived_PZ(lifeTime)
     if not lifeTime then
@@ -62,6 +66,7 @@ end
 
 --- **Set Calories**
 ---@param value float
+---@return void
 --- - IsoPlayer : zombie.characters.BodyDamage.Nutrition
 function IsoPlayerPZ.setCalories_PZ(value)
     if not value then

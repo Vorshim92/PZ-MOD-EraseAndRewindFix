@@ -4,6 +4,7 @@
 --- DateTime: 12/05/23 15:30
 ---
 
+
 local debugDiagnostics = require("lib/DebugDiagnostics")
 local characterPz = require("lib/CharacterPZ")
 local isoPlayerPZ = require("lib/IsoPlayerPZ")
@@ -23,30 +24,30 @@ local function character_TDD()
 
     -- check Profession
     debugDiagnostics.checkTest(characterPz.getProfession_PZ(character),
-            debugDiagnostics.Profession.CARPENTER, "Profession" )
+            debugDiagnostics.Profession.CARPENTER, "Profession")
 
     -- check Perk Level
-    debugDiagnostics.checkTest( characterPz.getXp(character, Perks.Fitness),
+    debugDiagnostics.checkTest(characterPz.getXp(character, Perks.Fitness),
             37500, "PerkLevel Fitness")
-    debugDiagnostics.checkTest( characterPz.getXp(character, Perks.Strength),
+    debugDiagnostics.checkTest(characterPz.getXp(character, Perks.Strength),
             37500, "PerkLevel Strength")
-    debugDiagnostics.checkTest( characterPz.getXp(character, Perks.Woodwork),
+    debugDiagnostics.checkTest(characterPz.getXp(character, Perks.Woodwork),
             1275, "PerkLevel Woodwork")
-    debugDiagnostics.checkTest( characterPz.getXp(character, Perks.Maintenance),
+    debugDiagnostics.checkTest(characterPz.getXp(character, Perks.Maintenance),
             75, "PerkLevel Maintenance")
-    debugDiagnostics.checkTest( characterPz.getXp(character, Perks.SmallBlunt),
+    debugDiagnostics.checkTest(characterPz.getXp(character, Perks.SmallBlunt),
             75, "PerkLevel SmallBlunt")
 
     -- check Perk Boost
-    debugDiagnostics.checkTest( characterPz.getPerkBoost_PZ(character, Perks.Fitness),
+    debugDiagnostics.checkTest(characterPz.getPerkBoost_PZ(character, Perks.Fitness),
             3, "PerkBoost Fitness")
-    debugDiagnostics.checkTest( characterPz.getPerkBoost_PZ(character, Perks.Strength),
+    debugDiagnostics.checkTest(characterPz.getPerkBoost_PZ(character, Perks.Strength),
             3, "PerkBoost Strength")
-    debugDiagnostics.checkTest( characterPz.getPerkBoost_PZ(character, Perks.Woodwork),
+    debugDiagnostics.checkTest(characterPz.getPerkBoost_PZ(character, Perks.Woodwork),
             3, "PerkBoost Woodwork")
 
     -- check Zombie Kills
-    debugDiagnostics.checkTest( characterPz.getZombieKills_PZ(character),
+    debugDiagnostics.checkTest(characterPz.getZombieKills_PZ(character),
             15, "Zombie")
 
     -- check recipe
@@ -63,8 +64,7 @@ local function character_TDD()
     end
 
     -- check multipier
-    local multipier1 =
-        characterPz.getMultiplier_PZ(character, Perks.Cooking)
+    local multipier1 = characterPz.getMultiplier_PZ(character, Perks.Cooking)
 
     multipier1 = dataValidator.trunkFloatTo2Decimal(multipier1)
 
@@ -85,7 +85,8 @@ end
 
 ---@param character IsoGameCharacter
 local function key34(character, key)
-    if key == 34 then -- <<<< g
+    if key == 34 then
+        -- <<<< g
         print("Key = g > EraseRewind_RPG TDD \n")
         debugDiagnostics.setVerbose(false)
         debugDiagnostics.deleteCharacter()
@@ -103,7 +104,8 @@ end
 
 ---@param character IsoGameCharacter
 local function key35(character, key)
-    if key == 35 then -- <<< h
+    if key == 35 then
+        -- <<< h
         print("Key = h > deleteCharacter \n")
 
     end
@@ -111,7 +113,8 @@ end
 
 ---@param character IsoGameCharacter
 local function key36(character, key)
-    if key == 36 then -- <<<< j
+    if key == 36 then
+        -- <<<< j
         print("Key = j > character_TDD2() \n")
 
     end
@@ -119,7 +122,8 @@ end
 
 ---@param character IsoGameCharacter
 local function key37(character, key)
-    if key == 37 then -- <<<< k
+    if key == 37 then
+        -- <<<< k
         print("Key = k > delete \n")
         character:die()
     end
@@ -127,7 +131,8 @@ end
 
 ---@param character IsoGameCharacter
 local function key16(character, key)
-    if key == 16 then -- <<<< q
+    if key == 16 then
+        -- <<<< q
         print("Key = q >  \n")
 
     end
@@ -135,7 +140,8 @@ end
 
 ---@param character IsoGameCharacter
 local function key17(character, key)
-    if key == 17 then -- <<<< w
+    if key == 17 then
+        -- <<<< w
         print("Key = w >  \n")
 
     end
@@ -143,7 +149,8 @@ end
 
 ---@param character IsoGameCharacter
 local function key18(character, key)
-    if key == 18 then -- <<<< e
+    if key == 18 then
+        -- <<<< e
         print("Key = e >  \n")
 
     end
@@ -162,4 +169,4 @@ local function onCustomUIKeyPressed(key)
     key37(character, key) -- <<<< k - Kill
 end
 
---Events.OnCustomUIKeyPressed.Add(onCustomUIKeyPressed)
+Events.OnCustomUIKeyPressed.Add(onCustomUIKeyPressed)

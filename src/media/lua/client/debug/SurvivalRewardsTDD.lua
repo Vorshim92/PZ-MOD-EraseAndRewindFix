@@ -14,13 +14,16 @@ local reset = 0
 local kilMilReached = "kilMilReachedX"
 local milReached = "milReachedX"
 
+-- TODO : Riverdere completamente SurvivalRewardsTDD
 ---@param character IsoGameCharacter
---- - zombie.characters.IsoGameCharacter
+--- - IsoGameCharacter : zombie.characters.IsoGameCharacter
 local function survivalRewards_TDD()
     local character = getPlayer()
 
     character:getModData().kilMilReached = kilMilReachedValue
     character:getModData().milReached = milReachedValue
+
+    -- TODO aggiungere un test per verificare che SurvivalRewards sia attivo
 
     modDataManager.save(kilMilReached,
             character:getModData().kilMilReached )
@@ -45,15 +48,23 @@ local function survivalRewards_TDD()
         readMilReached = v
     end
 
+    --- kilMilReachedValue
     debugDiagnostics.checkTest(kilMilReachedValue, readKilMilReached, "Read KilMilReached" )
+
+    --- milReachedValue
     debugDiagnostics.checkTest(milReachedValue, readMilReached, "Read MilReached" )
 
+    --- Remove KilMilReached
     modDataManager.remove(kilMilReached)
+
+    --- Remove MilReached
     modDataManager.remove(milReached)
 
+    --- Check Remove KilMilReached
     debugDiagnostics.checkTest(modDataManager.isExists(kilMilReached),
             false, "Remove KilMilReached" )
 
+    --- Check Remove MilReached
     debugDiagnostics.checkTest(modDataManager.isExists(milReached),
             false, "Remove MilReached" )
 

@@ -85,7 +85,7 @@ end
 ---@param perk PerkFactory.Perk
 ---@return PerkDetailsObj getPerkDetailsObj()
 --- - IsoGameCharacter : zombie.characters.IsoGameCharacter
---- - PerkFactory.Perk : zombie.characters.skills.PerkFactory
+--- - PerkFactory.Perk : zombie.characters.skills.PerkFactory.Perk
 function CharacterLib.getCurrentSkill(character, perk)
     -- Perks.Maintenance
     -- Perks.Woodwork
@@ -268,7 +268,7 @@ function CharacterLib.decodePerkDetails(characterPerkDetails)
 end
 
 --- **Update all the characteristics of the character**
-function CharacterLib.charaterUpdate()
+function CharacterLib.characterUpdate()
     return getPlayer()
 end
 

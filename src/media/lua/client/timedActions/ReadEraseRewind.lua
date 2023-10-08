@@ -37,7 +37,7 @@ function ISReadABook:new(character, item, time)
     if eraseRewind and character and
             item:getType() == eraseRewindJournal then
 
-        character:playSound("CloseBook")
+        -- character:playSound("CloseBook")
 
         eraseRewind.loopedAction = false
         eraseRewind.useProgressBar = false

@@ -42,29 +42,29 @@ end
 
 --- **Create Character Nutrition**
 function CharacterNutrition.readBook()
+    --- **Check if moddata weight is exits**
     if not modDataManager.isExists(pageBook.Character.WEIGHT) then
         return nil
     end
 
     ---@type table
-    ---@return table double
-    local weight = {}
-    weight = readWeightFromHd()
+    ---@return table double ( weight )
+    local weight = readWeightFromHd()
 
-    for i, v in pairs(weight) do
+    for _, v in pairs(weight) do
         isoPlayerPZ.setWeight_PZ(v)
     end
 
+    --- **Check if moddata calories is exits**
     if not modDataManager.isExists(pageBook.Character.CALORIES) then
         return nil
     end
 
     ---@type table
-    ---@return table float
-    local calories = {}
-    calories = readCaloriesFromHd()
+    ---@return table float ( calories )
+    local calories = readCaloriesFromHd()
 
-    for i, v in pairs(calories) do
+    for _, v in pairs(calories) do
         isoPlayerPZ.setCalories_PZ(v)
     end
 end
