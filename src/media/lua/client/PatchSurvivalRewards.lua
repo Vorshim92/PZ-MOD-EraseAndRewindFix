@@ -8,6 +8,7 @@
 
 local PatchSurvivalRewards = {}
 
+local errHandler = require("lib/ErrHandler")
 local modDataManager = require("lib/ModDataManager")
 
 local kilMilReached = "kilMilReachedX"
@@ -27,21 +28,48 @@ end
 ---@param character IsoGameCharacter
 --- - IsoGameCharacter : zombie.characters.IsoGameCharacter
 local function writeKilMilReachedtoFromHd(character)
-    modDataManager.save(kilMilReached, character:getModData().milReached )
+    if not character then
+        errHandler.errMsg("PatchSurvivalRewards.writeKilMilReachedtoFromHd(character)",
+                " character is nil")
+        return nil
+    end
+
+    ---@type table
+    local lines = {}
+    table.insert(lines, character:getModData().milReached)
+    modDataManager.save(kilMilReached, lines)
 end
 
 --- **Write milReached From Hd**
 ---@param character IsoGameCharacter
 --- - IsoGameCharacter : zombie.characters.IsoGameCharacter
 local function writeMilReachedFromHd(character)
-    modDataManager.save(milReached, character:getModData().kilMilReached )
+    --- **Check if character is null**
+    if not character then
+        errHandler.errMsg("PatchSurvivalRewards.writeMilReachedFromHd(character)",
+                " character is nil")
+        return nil
+    end
+
+    ---@type table
+    local lines = {}
+    table.insert(lines, character:getModData().kilMilReached)
+    modDataManager.save(milReached, lines )
 end
 
 --- **Create Mil_kill_Reached**
 ---@param character IsoGameCharacter
 --- - IsoGameCharacter : zombie.characters.IsoGameCharacter
 function PatchSurvivalRewards.createMil_kill_Reached(character)
-    if not modDataManager.isExists(kilMilReached) then
+    --- **Check if character is null**
+    if not character then
+        errHandler.errMsg("PatchSurvivalRewards.createMil_kill_Reached(character)",
+                errHandler.err.IS_NULL_CHARACTERS)
+        return nil
+        --- **is Exit kilMilReached**
+    elseif not modDataManager.isExists(kilMilReached) then
+        errHandler.errMsg("PatchSurvivalRewards.createMil_kill_Reached(character)",
+                " moddata " .. kilMilReached .. " not exists")
         return nil
     end
 
@@ -49,10 +77,13 @@ function PatchSurvivalRewards.createMil_kill_Reached(character)
     local kilMilReaches = readKilMilReachedFromHd()
 
     for _, v in pairs(kilMilReaches) do
-         character:getModData().milReached = toInt(v)
+        character:getModData().milReached = toInt(v)
     end
 
+    --- **is Exit milReached**
     if not modDataManager.isExists(milReached) then
+        errHandler.errMsg("PatchSurvivalRewards.createMil_kill_Reached(character)",
+                " moddata " .. milReached .. " not exists")
         return nil
     end
 
@@ -68,8 +99,17 @@ end
 ---@param character IsoGameCharacter
 --- - IsoGameCharacter : zombie.characters.IsoGameCharacter
 function PatchSurvivalRewards.writeMil_kill_ReachedToHd(character)
+    --- **Check if character is null**
+    if not character then
+        errHandler.errMsg("PatchSurvivalRewards.writeMil_kill_ReachedToHd(character)",
+                " character is nil")
+        return nil
+    end
+
+    --- **Remove Mil_kill_Reached**
     PatchSurvivalRewards.removeMil_kill_Reached()
 
+    --- **Save Mil_kill_/Mil Reached to moddata**
     writeKilMilReachedtoFromHd(character)
     writeMilReachedFromHd(character)
 end
@@ -84,18 +124,17 @@ end
 ---@param nameMod string
 ---@return boolean
 function PatchSurvivalRewards.isModActive()
-    -- TODO Il metodo isModActive funziona ma qualcosa nei nella scrittura dei dati non va
-    -----@type string
-    --local activeMod = "SurvivalRewards"
-    --
-    -----@type List - string
-    --local activeMods = getActivatedMods();
-    --
-    --for i = 0, activeMods:size() - 1 do
-    --    if activeMods:get(i) == activeMod then
-    --        return true
-    --    end
-    --end
+    ---@type string
+    local activeMod = "SurvivalRewards"
+
+    ---@type List - string
+    local activeMods = getActivatedMods();
+
+    for i = 0, activeMods:size() - 1 do
+        if activeMods:get(i) == activeMod then
+            return true
+        end
+    end
 
     return false
 end

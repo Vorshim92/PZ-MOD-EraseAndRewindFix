@@ -9,6 +9,7 @@
 local CharacterKilledZombies = {}
 
 local characterPz = require("lib/CharacterPZ")
+local errHandler = require("lib/ErrHandler")
 local pageBook = require("PageBook")
 local modDataManager = require("lib/ModDataManager")
 
@@ -24,6 +25,8 @@ end
 function CharacterKilledZombies.readBook(character)
     --- **Check if moddata killedZombies is exits**
     if not modDataManager.isExists(pageBook.Character.KILLED_ZOMBIES) then
+        errHandler.errMsg("CharacterKilledZombies.readBook(character)",
+                " moddata " .. pageBook.Character.KILLED_ZOMBIES .. " not exists")
         return nil
     end
 
@@ -31,9 +34,7 @@ function CharacterKilledZombies.readBook(character)
     ---@return int ( killed zombies )
     local killedZombies = readKilledZombiesFromHd()
 
-    for i, v in pairs(killedZombies) do
-        characterPz.setZombieKills_PZ(character, v)
-    end
+     characterPz.setZombieKills_PZ(character, killedZombies[1])
 
 end
 
@@ -41,6 +42,13 @@ end
 ---@param character IsoGameCharacter
 --- - IsoGameCharacter : zombie.characters.IsoGameCharacter
 function CharacterKilledZombies.writeBook(character)
+    --- **Check if character is null**
+    if not character then
+        errHandler.errMsg("CharacterKilledZombies.writeBook(character)",
+                errHandler.err.IS_NULL_CHARACTERS)
+        return nil
+    end
+
     --- **Remove Killed Zombies form moddata**
     modDataManager.remove(pageBook.Character.KILLED_ZOMBIES)
 
@@ -48,6 +56,7 @@ function CharacterKilledZombies.writeBook(character)
     local killedZombies = {}
     table.insert(killedZombies, characterPz.getZombieKills_PZ(character))
 
+    --- **Save Killed Zombies to moddata**
     modDataManager.save(pageBook.Character.KILLED_ZOMBIES,
             killedZombies)
 

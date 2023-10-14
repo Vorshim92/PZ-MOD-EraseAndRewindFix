@@ -8,12 +8,15 @@
 
 local PerkFactoryPZ = {}
 
+local errHandler = require("lib/ErrHandler")
+
 --- **Get Perk**
 ---@param perk PerkFactory
 ---@return PerkFactory.Perk perk
 --- - PerkFactory.Perk : zombie.characters.skills.PerkFactory.Perk
 function PerkFactoryPZ.getPerk_PZ(perk)
     if not perk then
+        errHandler.errMsg("PerkFactoryPZ.getPerk_PZ(perk)", errHandler.err.IS_NULL_PERK)
         return nil
     end
 
@@ -26,6 +29,7 @@ end
 --- - PerkFactory.Perk : zombie.characters.skills.PerkFactory.Perk
 function PerkFactoryPZ.getPerkByName_PZ(perk)
     if not perk then
+        errHandler.errMsg("PerkFactoryPZ.getPerkByName_PZ(perk)", errHandler.err.IS_NULL_PERK)
         return nil
     end
 
@@ -45,6 +49,8 @@ function PerkFactoryPZ.convertLevelToXp(perk, level)
     local result
 
     if not perk or not level then
+        errHandler.errMsg("PerkFactoryPZ.convertLevelToXp(perk, level)",
+                errHandler.err.IS_NULL_PERK .. " or " .. "level " .. errHandler.err.IS_NULL)
         return nil
     end
 
@@ -80,6 +86,7 @@ end
 --- - PerkFactory.Perk : zombie.characters.skills.PerkFactory.Perk
 function PerkFactoryPZ.getParent_PZ(perk)
     if not perk then
+        errHandler.errMsg("PerkFactoryPZ.getParent_PZ(perk)", errHandler.err.IS_NULL_PERK)
         return nil
     end
 

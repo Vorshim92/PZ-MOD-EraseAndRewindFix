@@ -8,6 +8,7 @@
 
 local CharacterNutrition = {}
 
+local errHandler = require("lib/ErrHandler")
 local isoPlayerPZ = require("lib/IsoPlayerPZ")
 local pageBook = require("PageBook")
 local modDataManager = require("lib/ModDataManager")
@@ -29,13 +30,17 @@ end
 --- **Write Weight From Hd**
 local function writeWeightFromHd()
     table.insert(convertToTable, isoPlayerPZ.getWeight_PZ())
+
+    --- **Save Weight in moddata**
     modDataManager.save(pageBook.Character.WEIGHT,convertToTable )
     convertToTable = {}
 end
 
---- **Write Calories From Hd**
+    --- **Write Calories From Hd**
 local function writeCaloriesFromHd()
     table.insert(convertToTable, isoPlayerPZ.getCalories_PZ())
+
+    --- **Save Calories to moddata**
     modDataManager.save(pageBook.Character.CALORIES, convertToTable)
     convertToTable = {}
 end
@@ -44,6 +49,8 @@ end
 function CharacterNutrition.readBook()
     --- **Check if moddata weight is exits**
     if not modDataManager.isExists(pageBook.Character.WEIGHT) then
+        errHandler.errMsg("CharacterNutrition.readBook()",
+                " moddata " .. pageBook.Character.WEIGHT .. " not exists")
         return nil
     end
 
@@ -51,12 +58,12 @@ function CharacterNutrition.readBook()
     ---@return table double ( weight )
     local weight = readWeightFromHd()
 
-    for _, v in pairs(weight) do
-        isoPlayerPZ.setWeight_PZ(v)
-    end
+    isoPlayerPZ.setWeight_PZ(weight[1])
 
     --- **Check if moddata calories is exits**
     if not modDataManager.isExists(pageBook.Character.CALORIES) then
+        errHandler.errMsg("CharacterNutrition.readBook()",
+                " moddata " .. pageBook.Character.CALORIES .. " not exists")
         return nil
     end
 
@@ -64,13 +71,12 @@ function CharacterNutrition.readBook()
     ---@return table float ( calories )
     local calories = readCaloriesFromHd()
 
-    for _, v in pairs(calories) do
-        isoPlayerPZ.setCalories_PZ(v)
-    end
+    isoPlayerPZ.setCalories_PZ(calories[1])
 end
 
 --- **Wwrite Character Nutrition**
 function CharacterNutrition.writeBook()
+    --- **Remove Weight and Calories form moddata**
     modDataManager.remove(pageBook.Character.WEIGHT)
     modDataManager.remove(pageBook.Character.CALORIES)
 

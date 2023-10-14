@@ -12,6 +12,7 @@ local CharacterBoost = {}
 local characterLib = require("CharacterLib")
 local characterPz = require("lib/CharacterPZ")
 local dataValidator = require("lib/DataValidator")
+local errHandler = require("lib/ErrHandler")
 local pageBook = require("PageBook")
 local modDataManager = require("lib/ModDataManager")
 
@@ -46,7 +47,7 @@ end
 ---@param character IsoGameCharacter
 --- - IsoGameCharacter : zombie.characters.IsoGameCharacter
 local function deleteBoost(character)
-
+    -- @type CharacterBaseObj
     local CharacterAllPerksObJ = characterLib.getAllPerks(character)
 
     for _, v in pairs(CharacterAllPerksObJ:getPerkDetails()) do
@@ -58,8 +59,17 @@ end
 ---@param character IsoGameCharacter
 --- - IsoGameCharacter : zombie.characters.IsoGameCharacter
 function CharacterBoost.readBook(character)
+    --- **Check if character is null**
+    if not character then
+        errHandler.errMsg("CharacterBoost.readBook(character)",
+                errHandler.err.IS_NULL_CHARACTERS)
+        return nil
+    end
+
     --- **check if moddata boost is exits**
     if not modDataManager.isExists(pageBook.Character.BOOST) then
+        errHandler.errMsg("CharacterBoost.readBook(character)",
+                " moddata " .. pageBook.Character.BOOST .. " " .. errHandler.err.IS_NULL)
         return nil
     end
 
@@ -82,8 +92,16 @@ end
 --- - IsoGameCharacter : zombie.characters.IsoGameCharacter
 --- - PerkFactory.Perk : zombie.characters.skills.PerkFactory
 function CharacterBoost.writeBook(character)
+    --- **Check if character is null**
+    if not character then
+        errHandler.errMsg("CharacterBoost.writeBook(character)",
+                errHandler.err.IS_NULL_CHARACTERS)
+        return nil
+    end
+
     modDataManager.remove(pageBook.Character.BOOST)
 
+    -- @type CharacterBaseObj
     local CharacterPerksBoostObj = characterLib.getPerksBoost(character)
 
     for _, v in pairs(CharacterPerksBoostObj:getPerkDetails()) do
@@ -92,6 +110,7 @@ function CharacterBoost.writeBook(character)
         addlines(v:getPerk(), v:getBoostLevel())
     end
 
+    --- **Save Boost to moddata**
     modDataManager.save(pageBook.Character.BOOST, lines_)
 
     lines_ = {}

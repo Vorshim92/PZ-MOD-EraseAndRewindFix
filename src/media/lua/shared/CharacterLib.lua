@@ -267,9 +267,4 @@ function CharacterLib.decodePerkDetails(characterPerkDetails)
     return CharacterObj01
 end
 
---- **Update all the characteristics of the character**
-function CharacterLib.characterUpdate()
-    return getPlayer()
-end
-
 return CharacterLib

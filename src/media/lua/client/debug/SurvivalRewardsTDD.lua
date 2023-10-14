@@ -6,6 +6,7 @@
 
 local debugDiagnostics = require("lib/DebugDiagnostics")
 local modDataManager = require("lib/ModDataManager")
+local patchSurvivalRewards = require("PatchSurvivalRewards")
 
 local kilMilReachedValue = 15
 local milReachedValue = 10
@@ -14,7 +15,6 @@ local reset = 0
 local kilMilReached = "kilMilReachedX"
 local milReached = "milReachedX"
 
--- TODO : Riverdere completamente SurvivalRewardsTDD
 ---@param character IsoGameCharacter
 --- - IsoGameCharacter : zombie.characters.IsoGameCharacter
 local function survivalRewards_TDD()
@@ -23,48 +23,56 @@ local function survivalRewards_TDD()
     character:getModData().kilMilReached = kilMilReachedValue
     character:getModData().milReached = milReachedValue
 
-    -- TODO aggiungere un test per verificare che SurvivalRewards sia attivo
+    ---@type boolean
+    local modIsActive = patchSurvivalRewards.isModActive()
+    debugDiagnostics.checkTest(modIsActive, true, "Mod is Active")
 
+    ---@type table
+    local lines = {}
+    table.insert(lines, character:getModData().kilMilReached)
     modDataManager.save(kilMilReached,
-            character:getModData().kilMilReached )
+            lines )
 
+    lines = {}
+    table.insert(lines, character:getModData().milReached)
     modDataManager.save(milReached,
-            character:getModData().milReached )
+            lines )
 
+    ---@type table
     local readKilMilReacheds = {}
     readKilMilReacheds = modDataManager.read(kilMilReached)
 
+    ---@type table
     local readMilReacheds = {}
     readMilReacheds =modDataManager.read(milReached)
 
+    ---@type int
     local readKilMilReached = 0
+
+    ---@type int
     local readMilReached = 0
 
-    for i, v in pairs(readKilMilReacheds) do
-        readKilMilReached = v
-    end
+    readKilMilReached = readKilMilReacheds[1]
 
-    for i, v in pairs(readMilReacheds) do
-        readMilReached = v
-    end
+    readMilReached = readMilReacheds[1]
 
-    --- kilMilReachedValue
+    --- **Check KilMilReached**
     debugDiagnostics.checkTest(kilMilReachedValue, readKilMilReached, "Read KilMilReached" )
 
-    --- milReachedValue
+    --- **Check MilReached**
     debugDiagnostics.checkTest(milReachedValue, readMilReached, "Read MilReached" )
 
-    --- Remove KilMilReached
+    --- **Remove KilMilReached**
     modDataManager.remove(kilMilReached)
 
-    --- Remove MilReached
+    --- **Remove MilReached**
     modDataManager.remove(milReached)
 
-    --- Check Remove KilMilReached
+    --- **Check Remove KilMilReached**
     debugDiagnostics.checkTest(modDataManager.isExists(kilMilReached),
             false, "Remove KilMilReached" )
 
-    --- Check Remove MilReached
+    --- **Check Remove MilReached**
     debugDiagnostics.checkTest(modDataManager.isExists(milReached),
             false, "Remove MilReached" )
 
@@ -74,14 +82,12 @@ local function survivalRewards_TDD()
     debugDiagnostics.displayTest()
 end
 
--- Perks.Maintenance
--- Perks.Woodwork
--- Perks.Sprinting
--- self.character:playSound("CloseBook")
 ---@param character IsoGameCharacter
 local function key34(character, key)
     if key == 34 then -- <<<< g
         print("Key = g >  \n")
+        debugDiagnostics.setVerbose(false)
+        survivalRewards_TDD()
     end
 end
 
@@ -96,24 +102,15 @@ end
 ---@param character IsoGameCharacter
 local function key36(character, key)
     if key == 36 then -- <<<< j
-        print("Key = j > survivalRewards TDD \n")
-        debugDiagnostics.setVerbose(false)
-        survivalRewards_TDD()
+        print("Key = j >  \n")
+
     end
 end
 
 ---@param character IsoGameCharacter
 local function key37(character, key)
     if key == 37 then -- <<<< k
-        print("Key = k > delete \n")
-        character:die()
-    end
-end
-
----@param character IsoGameCharacter
-local function key16(character, key)
-    if key == 16 then -- <<<< q
-        print("Key = q >  \n")
+        print("Key = k >  \n")
 
     end
 end
@@ -121,7 +118,7 @@ end
 ---@param character IsoGameCharacter
 local function key17(character, key)
     if key == 17 then -- <<<< w
-        print("Key = w >  \n")
+        print("Key = w >   \n")
 
     end
 end
@@ -134,23 +131,24 @@ local function key18(character, key)
     end
 end
 
+---@param character IsoGameCharacter
+local function key16(character, key)
+    if key == 16 then -- <<<< q
+        print("Key = q > kill Character \n")
+        character:die()
+    end
+end
+
 local function onCustomUIKeyPressed(key)
     local character = getPlayer()
 
-    key16(character, key) -- <<<< q
-    key17(character, key) -- <<<< w
-    key18(character, key) -- <<<< e
-    key34(character, key) -- <<<< g
-    key35(character, key) -- <<<< h
-    key36(character, key) -- <<<< j
-    key37(character, key) -- <<<< k - Kill
-end
-
--- ------------------------------------------------------------
--- ------------------------------------------------------------
-
-local function OnGameStart()
-
+    key16(character, key) -- q kill character
+    key17(character, key) -- w
+    key18(character, key) -- e
+    key34(character, key) -- g
+    key35(character, key) -- h
+    key36(character, key) -- j
+    key37(character, key) -- k
 end
 
 --Events.OnCustomUIKeyPressed.Add(onCustomUIKeyPressed)

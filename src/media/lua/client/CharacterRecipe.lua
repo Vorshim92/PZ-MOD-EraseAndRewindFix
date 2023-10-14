@@ -10,6 +10,7 @@ local CharacterRecipe = {}
 
 local characterLib = require("CharacterLib")
 local characterPz = require("lib/CharacterPZ")
+local errHandler = require("lib/ErrHandler")
 local pageBook = require("PageBook")
 local modDataManager = require("lib/ModDataManager")
 require("lib/CharacterBaseObj")
@@ -49,8 +50,16 @@ end
 ---@param character IsoGameCharacter
 --- - IsoGameCharacter : zombie.characters.IsoGameCharacter
 function CharacterRecipe.readBook(character)
+    if not character then
+        errHandler.errMsg("CharacterRecipe.readBook(character)",
+                errHandler.err.IS_NULL_CHARACTERS)
+        return nil
+    end
+
     --- **Check if moddata recipes is exits**
     if not modDataManager.isExists(pageBook.Character.RECIPES) then
+        errHandler.errMsg("CharacterRecipe.readBook(character)",
+                " moddata " .. pageBook.Character.RECIPES .. " not exists")
         return nil
     end
 
@@ -71,8 +80,17 @@ end
 ---@param character IsoGameCharacter
 --- - IsoGameCharacter : zombie.characters.IsoGameCharacter
 function CharacterRecipe.writeBook(character)
+    --- **Check if character is null**
+    if not character then
+        errHandler.errMsg("CharacterRecipe.writeBook(character)",
+                errHandler.err.IS_NULL_CHARACTERS)
+        return nil
+    end
+
+    --- **Remove Recipes form moddata**
     modDataManager.remove(pageBook.Character.RECIPES)
 
+    -- @type CharacterBaseObj
     local knownRecipesObj =  characterLib.getKnownRecipes(character)
 
     ---@type table
@@ -84,6 +102,7 @@ function CharacterRecipe.writeBook(character)
         table.insert(lines, v)
     end
 
+    --- **Save Recipes to moddata**
     modDataManager.save(pageBook.Character.RECIPES, lines)
 
     lines = {}

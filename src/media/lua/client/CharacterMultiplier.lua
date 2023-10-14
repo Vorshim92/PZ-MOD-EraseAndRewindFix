@@ -10,6 +10,7 @@ local CharacterMultiplier = {}
 
 local characterLib = require("CharacterLib")
 local characterPz = require("lib/CharacterPZ")
+local errHandler = require("lib/ErrHandler")
 local pageBook = require("PageBook")
 local modDataManager = require("lib/ModDataManager")
 
@@ -45,7 +46,7 @@ end
 ---@param character IsoGameCharacter
 --- - IsoGameCharacter : zombie.characters.IsoGameCharacter
 local function deleteMultiplier(character)
-
+    -- @type CharacterBaseObj
     local CharacterMultiplierObJ = characterLib.getAllPerks(character)
 
     ---@param character IsoGameCharacter
@@ -59,8 +60,15 @@ end
 ---@param character IsoGameCharacter
 --- - IsoGameCharacter : zombie.characters.IsoGameCharacter
 function CharacterMultiplier.readBook(character)
-
-    if not modDataManager.isExists(pageBook.Character.MULTIPLIER) then
+    --- **Check if character is null**
+    if not character then
+        errHandler.errMsg("CharacterMultiplier.readBook(character)",
+                errHandler.err.IS_NULL_CHARACTERS)
+        return nil
+        --- **Check if moddata multiplier is exits**
+    elseif not modDataManager.isExists(pageBook.Character.MULTIPLIER) then
+        errHandler.errMsg("CharacterMultiplier.readBook(character)",
+                " moddata " .. pageBook.Character.MULTIPLIER .. " not exists")
         return nil
     end
 
@@ -87,8 +95,17 @@ end
 ---@param character IsoGameCharacter
 --- - IsoGameCharacter : zombie.characters.IsoGameCharacter
 function CharacterMultiplier.writeBook(character)
+    --- **Check if character is null**
+    if not character then
+        errHandler.errMsg("CharacterMultiplier.writeBook(character)",
+                errHandler.err.IS_NULL_CHARACTERS)
+        return nil
+    end
+
+    --- **Remove Multiplier form moddata**
     modDataManager.remove(pageBook.Character.MULTIPLIER)
 
+    -- @type CharacterBaseObj
     local CharacterMultiplierObJ = characterLib.getMultiplier(character)
 
     ---@param perk PerkFactory.Perk
@@ -100,6 +117,7 @@ function CharacterMultiplier.writeBook(character)
         end
     end
 
+    --- **Save Multiplier to moddata**
     modDataManager.save(pageBook.Character.MULTIPLIER, lines_)
 
     lines_ = {}

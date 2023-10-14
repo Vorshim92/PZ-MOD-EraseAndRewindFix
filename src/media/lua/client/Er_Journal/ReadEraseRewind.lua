@@ -1,6 +1,7 @@
 require "TimedActions/ISReadABook"
 local characterManagement = require("CharacterManagement")
 local eraseRewindJournal = "EraseRewindJournal"
+--local eraseRewindJournal = "ReadOnceBookJournal"
 
 -- inizio azione
 local EROVERWRITE_ISReadABook_start = ISReadABook.start
@@ -37,7 +38,9 @@ function ISReadABook:new(character, item, time)
     if eraseRewind and character and
             item:getType() == eraseRewindJournal then
 
-        -- character:playSound("CloseBook")
+
+        character:playSound("OpenBook")
+        character:playSound("CloseBook")
 
         eraseRewind.loopedAction = false
         eraseRewind.useProgressBar = false

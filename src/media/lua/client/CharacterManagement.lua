@@ -18,6 +18,7 @@ local characterNutrition = require("CharacterNutrition")
 local characterPerkDetails = require("CharacterPerkDetails")
 local characterRecipe = require("CharacterRecipe")
 local characterTrait = require("CharacterTrait")
+local errHandler = require("lib/ErrHandler")
 local pageBook = require("PageBook")
 local modDataManager = require("lib/ModDataManager")
 local patchSurvivalRewards = require("PatchSurvivalRewards")
@@ -26,7 +27,6 @@ local patchSurvivalRewards = require("PatchSurvivalRewards")
 ---@return void
 function CharacterManagement.removeMoData()
     modDataManager.remove(pageBook.Character.BOOST)
-    modDataManager.remove(pageBook.Character.BOOK_READABLE)
     modDataManager.remove(pageBook.Character.CALORIES)
     modDataManager.remove(pageBook.Character.LIFE_TIME)
     modDataManager.remove(pageBook.Character.MULTIPLIER)
@@ -34,6 +34,7 @@ function CharacterManagement.removeMoData()
     modDataManager.remove(pageBook.Character.PERK_DETAILS)
     modDataManager.remove(pageBook.Character.PROFESSION)
     modDataManager.remove(pageBook.Character.TRAITS)
+    modDataManager.remove(pageBook.Character.SCHEDULED_BOOK_READ)
     modDataManager.remove(pageBook.Character.WEIGHT)
     modDataManager.remove(pageBook.Character.KILLED_ZOMBIES)
 
@@ -52,6 +53,13 @@ end
 ---@return void
 --- - IsoGameCharacter : zombie.characters.IsoGameCharacter
 function CharacterManagement.readBook(character)
+    --- **Check if character is null**
+    if not character then
+        errHandler.errMsg("CharacterManagement.readBook(character)",
+                errHandler.err.IS_NULL_CHARACTERS)
+        return nil
+    end
+
     characterPerkDetails.readBook(character)
     characterKilledZombies.readBook(character)
     characterLifeTime.readBook()
@@ -70,7 +78,7 @@ function CharacterManagement.readBook(character)
     end
     --------------------------
 
-    CharacterManagement.removeMoData()
+    --CharacterManagement.removeMoData()
 end
 
 --- **Write Book**
@@ -78,6 +86,13 @@ end
 ---@return void
 --- - IsoGameCharacter : zombie.characters.IsoGameCharacter
 function CharacterManagement.writeBook(character)
+    --- **Check if character is null**
+    if not character then
+        errHandler.errMsg("CharacterManagement.writeBook(character)",
+                errHandler.err.IS_NULL_CHARACTERS)
+        return nil
+    end
+
     characterPerkDetails.writeBook(character)
     characterKilledZombies.writeBook(character)
     characterLifeTime.writeBook()

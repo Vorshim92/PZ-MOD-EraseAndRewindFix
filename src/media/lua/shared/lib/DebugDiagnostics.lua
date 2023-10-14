@@ -318,7 +318,7 @@ end
 --- **Delete Character**
 ---@return void
 function DebugDiagnostics.deleteCharacter()
-    local character = getPlayer()
+    local character = DebugDiagnostics.characterUpdate()
     local zero = 0.0
     local CharacterDeleteObj = CharacterBaseObj:new()
 
@@ -364,7 +364,7 @@ function DebugDiagnostics.deleteCharacter()
     -- remove All Traits
     characterPz.removeAllTraits_PZ(character)
 
-    character = getPlayer()
+    character = DebugDiagnostics.characterUpdate()
 end
 
 --- **Create Character**
@@ -373,7 +373,7 @@ end
 --- - PerkFactory.Perk : zombie.characters.skills.PerkFactory.Perk
 --- - IsoGameCharacter.XP : zombie.characters.IsoGameCharacter.XP
 function DebugDiagnostics.createCharacter()
-    local character = getPlayer()
+    local character = DebugDiagnostics.characterUpdate()
 
     -- set profession
     characterPz.setProfession_PZ(character, DebugDiagnostics.Profession.CARPENTER)
@@ -415,7 +415,7 @@ function DebugDiagnostics.createCharacter()
     -- set Weight
     isoPlayerPZ.setWeight_PZ(92)
 
-    character = getPlayer()
+    character = DebugDiagnostics.characterUpdate()
 end
 
 --- **Create basic Character**
@@ -423,10 +423,15 @@ end
 --- - IsoGameCharacter : zombie.characters.IsoGameCharacter
 --- - PerkFactory.Perk : zombie.characters.skills.PerkFactory.Perk
 function DebugDiagnostics.createBasicCharacter()
-    local character = getPlayer()
+    local character = DebugDiagnostics.characterUpdate()
     characterPz.setPerkLevelFromXp(character, Perks.Fitness, 37500)
     characterPz.setPerkLevelFromXp(character, Perks.Strength, 37500)
     isoPlayerPZ.setWeight_PZ(85.0)
+end
+
+--- **Update all the characteristics of the character**
+function DebugDiagnostics.characterUpdate()
+    return getPlayer()
 end
 
 return DebugDiagnostics

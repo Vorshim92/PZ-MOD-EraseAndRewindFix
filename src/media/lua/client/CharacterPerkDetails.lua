@@ -10,6 +10,7 @@ local CharacterPerkDetails = {}
 
 local characterLib = require("CharacterLib")
 local characterPz = require("lib/CharacterPZ")
+local errHandler = require("lib/ErrHandler")
 local pageBook = require("PageBook")
 local modDataManager = require("lib/ModDataManager")
 local perkFactoryPZ = require("lib/PerkFactoryPZ")
@@ -25,6 +26,7 @@ local function readCharacterPerkDetailsFromHd()
     local characterPerkDetails =
         modDataManager.read(pageBook.Character.PERK_DETAILS)
 
+    -- @type CharacterBaseObj
     local CharacterObj01 = CharacterBaseObj:new()
 
     ---@type table
@@ -54,6 +56,7 @@ end
 --- - IsoGameCharacter : zombie.characters.IsoGameCharacter
 local function deleteCharacter(character)
 
+    -- @type CharacterBaseObj
     local characterAllSkills = characterLib.getAllPerks(character)
 
     ---@param character IsoGameCharacter
@@ -71,11 +74,23 @@ end
 --- - IsoGameCharacter : zombie.characters.IsoGameCharacter
 function CharacterPerkDetails.readBook(character)
     --- **check if moddata perkDetails and profession are exits**
-    if not modDataManager.isExists(pageBook.Character.PROFESSION) or not
-            modDataManager.isExists(pageBook.Character.PERK_DETAILS) then
+    if not character then
+        errHandler.errMsg("CharacterPerkDetails.readBook(character)",
+                " character " .. errHandler.err.IS_NULL_CHARACTERS)
+        return nil
+        --- **check if moddata profession are exits**
+    elseif not modDataManager.isExists(pageBook.Character.PROFESSION) then
+        errHandler.errMsg("CharacterPerkDetails.readBook(character)",
+                " moddata " .. pageBook.Character.PROFESSION .. " not exists")
+        return nil
+        --- **check if moddata perkDetails are exits**
+    elseif not modDataManager.isExists(pageBook.Character.PERK_DETAILS) then
+        errHandler.errMsg("CharacterPerkDetails.readBook(character)",
+                " moddata " .. pageBook.Character.PERK_DETAILS .. " not exists")
         return nil
     end
 
+    -- @type CharacterBaseObj
     ---@return CharacterBaseObj PerkFactory.Perk perk, int level, float xp, boolean flag
     local characterSkills = readCharacterPerkDetailsFromHd()
 
@@ -100,12 +115,14 @@ end
 ---@param character IsoGameCharacter
 --- - IsoGameCharacter : zombie.characters.IsoGameCharacter
 function CharacterPerkDetails.writeBook(character)
+    --- **Remove perkDetails and profession from moddata**
     modDataManager.remove(pageBook.Character.PERK_DETAILS)
     modDataManager.remove(pageBook.Character.PROFESSION)
 
     ---@type table
     local lines = {}
 
+    -- @type CharacterBaseObj
     local characterAllSkills = characterLib.getAllPerks(character)
 
     -- Format value1-value2-value3
@@ -120,11 +137,13 @@ function CharacterPerkDetails.writeBook(character)
         table.insert(lines, value)
     end
 
+    --- **Save Character Perk Details to moddata**
     modDataManager.save(pageBook.Character.PERK_DETAILS, lines)
 
     lines = {}
-
     table.insert(lines, characterAllSkills:getProfession())
+
+    --- **Save Character Profession to moddata**
     modDataManager.save(pageBook.Character.PROFESSION,
             lines )
 

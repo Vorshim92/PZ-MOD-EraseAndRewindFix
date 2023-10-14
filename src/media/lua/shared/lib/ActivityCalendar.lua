@@ -6,8 +6,6 @@
 
 ---@class ActivityCalendar
 
-
---
 local ActivityCalendar = {}
 
 local dataValidator = require("lib/DataValidator")
@@ -27,13 +25,15 @@ local expectedDateInSecond
 ---@param date string
 ---@return int
 local function extractDate(date)
-    ---@type table
-    local dateParts = {}
-
+    --- **Check if date is string**
     if not dataValidator.isString(date) then
         return
     end
 
+    ---@type table
+    local dateParts = {}
+
+    --- **Extract date**
     for datePart in date:gmatch("%S+") do
         table.insert(dateParts, datePart)
     end
@@ -75,16 +75,13 @@ end
 --- - Format date: Fri Jul 09 09:43:41 CEST 1993
 ---@return double seconds
 local function getStarTime()
+    -- The date retrieved is 12 hours behind the digital clock in game, I added 12 hours
     ---@type string
-    --local date = tostring( getGameTime():getCalender():getTime() )
-    --return extractDate(date)
+    local date = tostring( getGameTime():getCalender():getTime() )
 
-    -----------------------TEST MOD----------------------
-    ----local dateFromLua = 1694078266 -- oggi
-    local dateFromFakePZ = "Fri Jul 09 09:43:41 CEST 1993"
-    local date = dateFromFakePZ
-    return extractDate(date)
-    -----------------------------------------------------
+    ---@type int
+    local dataAdjustment =  extractDate(date) + (SECOND_IN_DAY/2)
+    return dataAdjustment
 end
 
 --- **Set Waiting Days**
@@ -107,22 +104,15 @@ function ActivityCalendar.getExpectedDateInSecond()
     return expectedDateInSecond
 end
 
------ **Set Minimun Days Before Write Book**
------@param days int
------@return void
------ - default 1 day
---function ActivityCalendar.setMinimunDaysBeforeWriteBook(days)
---    setWaitingOfDays(days)
---end
-
 --- **Is Expected Date**
 ---@return boolean
 function ActivityCalendar.isExpectedDate()
+    --- **Check if expectedDateInSecond is nil then setWaitingOfDays**
     if not expectedDateInSecond then
-        --ActivityCalendar.setMinimunDaysBeforeWriteBook(1)
         ActivityCalendar.setWaitingOfDays(1)
     end
 
+    --- **Check if the date is correct**
     if  getStarTime() >= ActivityCalendar.getExpectedDateInSecond() then
         return true
     end

@@ -9,12 +9,20 @@
 local OneTimeBookRead = {}
 
 local characterManagement = require("CharacterManagement")
+local errHandler = require("lib/ErrHandler")
 
 --- **Read Book**
 ---@param character IsoGameCharacter
 ---@return void
 --- - IsoGameCharacter : zombie.characters.IsoGameCharacter
 function OneTimeBookRead.readBook(character)
+    --- **Check if character is null**
+    if not character then
+        errHandler.errMsg("OneTimeBookRead.readBook(character)",
+                errHandler.err.IS_NULL_CHARACTERS)
+        return nil
+    end
+
     characterManagement.readBook(character)
 end
 
@@ -23,6 +31,13 @@ end
 ---@return void
 --- - IsoGameCharacter : zombie.characters.IsoGameCharacter
 function OneTimeBookRead.writeBook(character)
+    --- **Check if character is null**
+    if not character then
+        errHandler.errMsg("OneTimeBookRead.writeBook(character)",
+                errHandler.err.IS_NULL_CHARACTERS)
+        return nil
+    end
+
     characterManagement.writeBook(character)
 end
 

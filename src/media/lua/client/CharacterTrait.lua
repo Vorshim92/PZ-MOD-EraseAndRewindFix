@@ -10,6 +10,7 @@ local CharacterTrait = {}
 
 local characterLib = require("CharacterLib")
 local characterPz = require("lib/CharacterPZ")
+local errHandler = require("lib/ErrHandler")
 local pageBook = require("PageBook")
 local modDataManager = require("lib/ModDataManager")
 
@@ -24,12 +25,19 @@ end
 ---@param character IsoGameCharacter
 --- - IsoGameCharacter : zombie.characters.IsoGameCharacter
 function CharacterTrait.readBook(character)
-    --- **Check if moddata traits is exits**
-    if not modDataManager.isExists(pageBook.Character.TRAITS) then
+    --- **Check if character is null**
+    if not character then
+        errHandler.errMsg("CharacterTrait.readBook(character)",
+                errHandler.err.IS_NULL_CHARACTERS)
+        return nil
+        --- **Check if moddata traits is exits**
+    elseif not modDataManager.isExists(pageBook.Character.TRAITS) then
+        errHandler.errMsg("CharacterTrait.readBook(character)",
+                " moddata " .. pageBook.Character.TRAITS .. " not exists")
         return nil
     end
 
-    ---@type table
+    ---@type table - string
     ---@return string
     local traits = readTraitFromHd(character)
 
@@ -37,6 +45,7 @@ function CharacterTrait.readBook(character)
         return nil
     end
 
+    --- **Delete Traits**
     characterPz.removeAllTraits_PZ(character)
 
     for _, v in pairs(traits) do
@@ -50,11 +59,20 @@ end
 ---@param character IsoGameCharacter
 --- - IsoGameCharacter : zombie.characters.IsoGameCharacter
 function CharacterTrait.writeBook(character)
+    --- **Check if character is null**
+    if not character then
+        errHandler.errMsg("CharacterTrait.writeBook(character)",
+                errHandler.err.IS_NULL_CHARACTERS)
+        return nil
+    end
+
+    --- **Remove Traits form moddata**
     modDataManager.remove(pageBook.Character.TRAITS)
 
     ---@type CharacterBaseObj
     local trait = characterLib.getTraitsPerk(character)
 
+    --- **Save Traits to moddata**
     modDataManager.save(pageBook.Character.TRAITS,
             trait:getTraits())
 end

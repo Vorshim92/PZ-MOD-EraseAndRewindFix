@@ -9,10 +9,14 @@
 local ScheduledBookRead = {}
 
 -- TODO : da spostare il percorso al interno della libreria
-local activityCalendar = require("debug/ActivityCalendar")
+local activityCalendar = require("lib/ActivityCalendar")
 local characterManagement = require("CharacterManagement")
+local errHandler = require("lib/ErrHandler")
 local pageBook = require("PageBook")
 local modDataManager = require("lib/ModDataManager")
+
+-- TODO : collegare alla sandbox
+local minimunDaysBeforeWriteBook = 5
 
 --- **Scheduled Book Read From Hd**
 ---@return table double ( dateInSecond )
@@ -43,15 +47,19 @@ end
 ---@param minimunDaysBeforeWriteBook int
 ---@return void
 --- - IsoGameCharacter : zombie.characters.IsoGameCharacter
-function ScheduledBookRead.writeBook(character, minimunDaysBeforeWriteBook)
-    -- TODO : DBG - delete it!!
-    minimunDaysBeforeWriteBook = 1
+function ScheduledBookRead.writeBook(character)
+    --- **Check if character is nil**
+    if not character then
+        errHandler.errMsg("ScheduledBookRead.writeBook(character)",
+                errHandler.err.IS_NULL_CHARACTER)
+        return nil
+    end
 
     ---@type boolean
     local flag = false
 
-    ---@type table - double
-    local dateInSecond
+    ---@type boolean
+    local dateInSecond = 0
 
     --- **Check if scheduledBookRead is exits**
     if not modDataManager.isExists(
@@ -62,7 +70,6 @@ function ScheduledBookRead.writeBook(character, minimunDaysBeforeWriteBook)
 
         --- **Get Expected Date In Seconds**
         dateInSecond = activityCalendar.getExpectedDateInSecond()
-
         flag = true
     else
         --- **Retrieve the date when it is possible to write a book**
@@ -86,55 +93,17 @@ function ScheduledBookRead.writeBook(character, minimunDaysBeforeWriteBook)
 
     --- **Check if I can write the book**
     if flag then
-        --- **Save mod data scheduled BookRead date**
-        modDataManager.save(pageBook.Character.SCHEDULED_BOOK_READ, dateInSecond)
+        local lines = {}
+        table.insert(lines, dateInSecond)
+
+        --- **Save scheduled BookRead date to mod data**
+        modDataManager.save(pageBook.Character.SCHEDULED_BOOK_READ, lines)
 
         --- **Write Book**
         characterManagement.writeBook(character)
     end
 
-    flag = false
+    return flag
 end
 
 return ScheduledBookRead
-
---local function funcName()
---    ---@type table - double
---    local dateInSecond
---
---    --- **Check if scheduledBookRead is exits**
---    if not modDataManager.isExists(
---            pageBook.Character.SCHEDULED_BOOK_READ) then
---
---        --- **Set Waiting Days**
---        activityCalendar.setWaitingOfDays(1)
---
---        --- **Save mod data scheduled BookRead date**
---        modDataManager.save(pageBook.Character.SCHEDULED_BOOK_READ, dateInSecond)
---
---        --- **Write Book**
---        characterManagement.writeBook(character)
---        return
---    else
---        --- **Retrieve the date when it is possible to write a book**
---        ---@type table - double
---        local scheduledBookRead = scheduledBookReadFromHd()
---
---        --- check if scheduledBookRead is nil
---        if not scheduledBookRead then return nil end
---
---        deleteCharacter()
---
---        dateInSecond = scheduledBookRead[1]
---
---        -- **Set scheduled BookRead**
---        activityCalendar.setExpectedDateInSecond(dateInSecond)
---    end
---    -- Todo : Aggiungere il controllo della data prima di poter riscrivere il libro
---
---    --- **Save mod data scheduled BookRead date**
---    modDataManager.save(pageBook.Character.SCHEDULED_BOOK_READ, dateInSecond)
---
---    --- **Write Book**
---    characterManagement.writeBook(character)
---end

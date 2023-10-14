@@ -4,6 +4,8 @@
 --- DateTime: 27/06/23 11:33
 ---
 
+local pageBook = require("PageBook")
+local scheduledBookRead = require("ScheduledBookRead")
 local characterLifeTime = require("CharacterLifeTime")
 local characterBoost = require("CharacterBoost")
 local debugDiagnostics = require("lib/DebugDiagnostics")
@@ -14,58 +16,55 @@ local isoPlayerPZ = require("lib/IsoPlayerPZ")
 local characterLib = require("CharacterLib")
 local dataValidator = require("lib/DataValidator")
 
+local function displayModDatas()
+    ---@type List
+    local tableNames = ModData.getTableNames()
 
--- project zomboid, get mods activeMods
+    ---@type table
+    local moddatas =
+        dataValidator.transformArrayListToTable(tableNames)
 
---- **Is Mod Active**
----@param nameMod string
-local function isModActive(nameMod)
-    --
-    local actmods = getActivatedMods();
+    print("------------------------displayModDatas-----------------------")
+    debugDiagnostics.printLine()
+    for _, v in pairs(moddatas) do
+        print("Name table - " .. v)
 
-    for i=0, actmods:size(), 1 do
-        if actmods:get(i) == "nameMod" then
-            return true
+        ---@type List
+        local reads = modDataManager.read(v)
+
+        for _, v in pairs(reads) do
+            print("Value of Moddata - " .. tostring(v))
         end
-    end
 
-    return false
+        debugDiagnostics.printLine()
+    end
+    debugDiagnostics.printLine()
 end
+
+
 
 ---@param character IsoGameCharacter
 local function key34(character, key)
     if key == 34 then -- <<<< g
         print("Key = g > CharacterBoost \n")
-
-        local activeMods = getActivatedMods();
-
-        for i = 0, activeMods:size() - 1 do
-            print("Mod Active: " .. activeMods:get(i) .. "\n")
-        end
-        --
-        --for i = 0, activeMods:size(), 1 do
-        --    if activeMods:get(i) == activeMod then
-        --        print("Mod Active: " .. activeMod .. "\n")
-        --        return true
-        --    end
-        --end
-
-
+        local resul = scheduledBookRead.writeBook (character)
+        print("resul = " .. tostring(resul) )
+        displayModDatas()
     end
 end
 
 ---@param character IsoGameCharacter
 local function key35(character, key)
     if key == 35 then -- <<< h
-        print("Key = h > checkTest  \n")
-
+        print("Key = h > PzLib_TDD  \n")
+        scheduledBookRead.readBook(character)
     end
 end
 
 ---@param character IsoGameCharacter
 local function key36(character, key)
     if key == 36 then -- <<<< j
-        print("Key = j >  \n")
+        print("Key = ER_TDD >  \n")
 
     end
 end
@@ -73,16 +72,15 @@ end
 ---@param character IsoGameCharacter
 local function key37(character, key)
     if key == 37 then -- <<<< k
-        print("Key = k >  \n")
-
+        print("Key = k > remove pageBook \n")
+        modDataManager.remove(pageBook.Character.SCHEDULED_BOOK_READ)
     end
 end
 
 ---@param character IsoGameCharacter
 local function key16(character, key)
     if key == 16 then -- <<<< q
-        print("Key = q > kill Character \n")
-        character:die()
+
     end
 end
 
@@ -98,7 +96,8 @@ end
 local function key18(character, key)
     if key == 18 then -- <<<< e
         print("Key = e >  \n")
-
+        print("Key = e > kill character \n")
+        character:die()
     end
 end
 

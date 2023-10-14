@@ -8,12 +8,16 @@
 
 local IsoPlayerPZ = {}
 
+local errHandler = require("lib/ErrHandler")
+
 --- **Set Username**
 ---@param username string
 ---@return void
 --- - IsoPlayer : zombie.characters.IsoPlayer
 function IsoPlayerPZ.setUserName(username)
     if not username then
+        errHandler.errMsg("IsoPlayerPZ.setUserName(username)",
+                errHandler.err.IS_NULL)
         return nil
     end
 
@@ -33,6 +37,8 @@ end
 --- - IsoPlayer : zombie.characters.IsoPlayer
 function IsoPlayerPZ.setHoursSurvived_PZ(lifeTime)
     if not lifeTime then
+        errHandler.errMsg("IsoPlayerPZ.setHoursSurvived_PZ(lifeTime)",
+                errHandler.err.IS_NULL)
         return nil
     end
 
@@ -51,6 +57,8 @@ end
 --- - IsoPlayer : zombie.characters.BodyDamage.Nutrition
 function IsoPlayerPZ.setWeight_PZ(value)
     if not value then
+        errHandler.errMsg("IsoPlayerPZ.setWeight_PZ(value)",
+                errHandler.err.IS_NULL)
         return nil
     end
 
@@ -70,6 +78,8 @@ end
 --- - IsoPlayer : zombie.characters.BodyDamage.Nutrition
 function IsoPlayerPZ.setCalories_PZ(value)
     if not value then
+        errHandler.errMsg("IsoPlayerPZ.setCalories_PZ(value)",
+                errHandler.err.IS_NULL)
         return nil
     end
 

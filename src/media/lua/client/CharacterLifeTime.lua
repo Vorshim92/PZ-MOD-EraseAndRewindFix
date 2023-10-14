@@ -8,6 +8,7 @@
 
 local CharacterLifeTime = {}
 
+local errHandler = require("lib/ErrHandler")
 local isoPlayerPZ = require("lib/IsoPlayerPZ")
 local pageBook = require("PageBook")
 local modDataManager = require("lib/ModDataManager")
@@ -20,8 +21,9 @@ end
 
 --- **Create Life Time**
 function CharacterLifeTime.readBook()
-
     if not modDataManager.isExists(pageBook.Character.LIFE_TIME) then
+        errHandler.errMsg("CharacterLifeTime.readBook()",
+                " moddata " .. pageBook.Character.LIFE_TIME .. " not exists")
         return nil
     end
 
@@ -29,20 +31,18 @@ function CharacterLifeTime.readBook()
     ---@return table - double ( timeLife )
     local lifeTime = readLifeTimeFromHd()
 
-    for _, v in pairs(lifeTime) do
-        isoPlayerPZ.setHoursSurvived_PZ(v)
-    end
-
+     isoPlayerPZ.setHoursSurvived_PZ(lifeTime[1])
 end
 
 --- **Write Life Time To Hd**
 function CharacterLifeTime.writeBook()
     modDataManager.remove(pageBook.Character.LIFE_TIME)
 
-    ---@type table - double (
+    ---@type table - double ( timeLife )
     local hoursSurvived = {}
     table.insert(hoursSurvived, isoPlayerPZ.getHoursSurvived_PZ())
 
+    --- **Save Life Time to moddata**
     modDataManager.save(pageBook.Character.LIFE_TIME,
             hoursSurvived)
 end

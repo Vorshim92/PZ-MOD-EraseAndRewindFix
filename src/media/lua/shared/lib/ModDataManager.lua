@@ -6,6 +6,10 @@
 
 ---@class ModDataManager
 
+local dataValidator = require("lib/DataValidator")
+local debugDiagnostics = require("lib/DebugDiagnostics")
+local errHandler = require("lib/ErrHandler")
+
 local ModDataManager = {}
 
 --- **Save ModData to Harddisk**
@@ -15,6 +19,8 @@ local ModDataManager = {}
 --- - ModData : zombie.world.moddata.ModData
 function ModDataManager.save(nameFile, values)
     if not nameFile or not values then
+        errHandler.errMsg("ModDataManager.save(nameFile, values)",
+                errHandler.err.IS_NULL .. " or values " .. errHandler.err.IS_NULL)
         return nil
     end
 
@@ -28,12 +34,15 @@ end
 --- - ModData : zombie.world.moddata.ModData
 function ModDataManager.read(nameFile)
     if not nameFile then
+        errHandler.errMsg("ModDataManager.read(nameFile)",
+                " nameFile " .. errHandler.err.IS_NULL)
         return nil
     end
 
     local lines = {}
     lines = ModData.get(nameFile)
 
+    ---@type table
     local conversionTotable = {}
 
     for _, v in pairs(lines) do
@@ -49,6 +58,8 @@ end
 --- - ModData : zombie.world.moddata.ModData
 function ModDataManager.isExists(nameFile)
     if not nameFile then
+        errHandler.errMsg("ModDataManager.isExists(nameFile)",
+                " nameFile " .. errHandler.err.IS_NULL)
         return nil
     end
 
@@ -61,10 +72,38 @@ end
 --- - ModData : zombie.world.moddata.ModData
 function ModDataManager.remove(nameFile)
     if not nameFile then
+        errHandler.errMsg("ModDataManager.remove(nameFile)",
+                " nameFile " .. errHandler.err.IS_NULL)
         return nil
     end
 
     ModData.remove(nameFile)
+end
+
+--- **Display all modData**
+---@return void
+function ModDataManager.displayAllTable()
+    ---@type List
+    local tableNames = ModData.getTableNames()
+
+    ---@type table
+    local moddatas =
+    dataValidator.transformArrayListToTable(tableNames)
+
+    print("------------------------displayModDatas-----------------------")
+    debugDiagnostics.printLine()
+    for _, v in pairs(moddatas) do
+        print("Name table - " .. v)
+
+        ---@type table
+        local reads = ModDataManager.read(v)
+        for _, v in pairs(reads) do
+            print("Value of Moddata - " .. v)
+        end
+
+        debugDiagnostics.printLine()
+    end
+    debugDiagnostics.printLine()
 end
 
 return ModDataManager
