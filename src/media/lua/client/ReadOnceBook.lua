@@ -4,9 +4,9 @@
 --- DateTime: 07/10/23 12:25
 ---
 
----@class OneTimeBookRead
+---@class ReadOnceBook
 
-local OneTimeBookRead = {}
+local ReadOnceBook = {}
 
 local characterManagement = require("CharacterManagement")
 local errHandler = require("lib/ErrHandler")
@@ -15,7 +15,7 @@ local errHandler = require("lib/ErrHandler")
 ---@param character IsoGameCharacter
 ---@return void
 --- - IsoGameCharacter : zombie.characters.IsoGameCharacter
-function OneTimeBookRead.readBook(character)
+function ReadOnceBook.readBook(character)
     --- **Check if character is null**
     if not character then
         errHandler.errMsg("OneTimeBookRead.readBook(character)",
@@ -30,7 +30,7 @@ end
 ---@param character IsoGameCharacter
 ---@return void
 --- - IsoGameCharacter : zombie.characters.IsoGameCharacter
-function OneTimeBookRead.writeBook(character)
+function ReadOnceBook.writeBook(character)
     --- **Check if character is null**
     if not character then
         errHandler.errMsg("OneTimeBookRead.writeBook(character)",
@@ -41,4 +41,4 @@ function OneTimeBookRead.writeBook(character)
     characterManagement.writeBook(character)
 end
 
-return OneTimeBookRead
+return ReadOnceBook

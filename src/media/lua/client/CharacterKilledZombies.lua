@@ -23,10 +23,10 @@ end
 ---@param character IsoGameCharacter
 --- - IsoGameCharacter : zombie.characters.IsoGameCharacter
 function CharacterKilledZombies.readBook(character)
-    --- **Check if moddata killedZombies is exits**
+    --- **Check if mod-data killedZombies is exits**
     if not modDataManager.isExists(pageBook.Character.KILLED_ZOMBIES) then
         errHandler.errMsg("CharacterKilledZombies.readBook(character)",
-                " moddata " .. pageBook.Character.KILLED_ZOMBIES .. " not exists")
+                " mod-data " .. pageBook.Character.KILLED_ZOMBIES .. " not exists")
         return nil
     end
 
@@ -49,14 +49,14 @@ function CharacterKilledZombies.writeBook(character)
         return nil
     end
 
-    --- **Remove Killed Zombies form moddata**
+    --- **Remove Killed Zombies form mod-data**
     modDataManager.remove(pageBook.Character.KILLED_ZOMBIES)
 
     ---@type table int ( killed zombies )
     local killedZombies = {}
     table.insert(killedZombies, characterPz.getZombieKills_PZ(character))
 
-    --- **Save Killed Zombies to moddata**
+    --- **Save Killed Zombies to mod-data**
     modDataManager.save(pageBook.Character.KILLED_ZOMBIES,
             killedZombies)
 

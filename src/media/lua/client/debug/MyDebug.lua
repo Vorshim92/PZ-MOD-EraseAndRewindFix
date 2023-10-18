@@ -4,10 +4,12 @@
 --- DateTime: 27/06/23 11:33
 ---
 
+local activityCalendar = require("lib/ActivityCalendar")
 local pageBook = require("PageBook")
-local scheduledBookRead = require("ScheduledBookRead")
+local scheduledBookRead = require("TimedBook")
 local characterLifeTime = require("CharacterLifeTime")
 local characterBoost = require("CharacterBoost")
+local characterManagement = require("CharacterManagement")
 local debugDiagnostics = require("lib/DebugDiagnostics")
 local modDataManager = require("lib/ModDataManager")
 local characterPz = require("lib/CharacterPZ")
@@ -16,55 +18,26 @@ local isoPlayerPZ = require("lib/IsoPlayerPZ")
 local characterLib = require("CharacterLib")
 local dataValidator = require("lib/DataValidator")
 
-local function displayModDatas()
-    ---@type List
-    local tableNames = ModData.getTableNames()
-
-    ---@type table
-    local moddatas =
-        dataValidator.transformArrayListToTable(tableNames)
-
-    print("------------------------displayModDatas-----------------------")
-    debugDiagnostics.printLine()
-    for _, v in pairs(moddatas) do
-        print("Name table - " .. v)
-
-        ---@type List
-        local reads = modDataManager.read(v)
-
-        for _, v in pairs(reads) do
-            print("Value of Moddata - " .. tostring(v))
-        end
-
-        debugDiagnostics.printLine()
-    end
-    debugDiagnostics.printLine()
-end
-
-
-
 ---@param character IsoGameCharacter
 local function key34(character, key)
     if key == 34 then -- <<<< g
-        print("Key = g > CharacterBoost \n")
-        local resul = scheduledBookRead.writeBook (character)
-        print("resul = " .. tostring(resul) )
-        displayModDatas()
+        print("Key = g > isExpectedDate \n")
+        local flag = activityCalendar.isExpectedDate()
+        print("flag = " .. tostring(flag) .. "\n")
     end
 end
 
 ---@param character IsoGameCharacter
 local function key35(character, key)
     if key == 35 then -- <<< h
-        print("Key = h > PzLib_TDD  \n")
-        scheduledBookRead.readBook(character)
+        print("Key = h > \n")
+
     end
 end
 
 ---@param character IsoGameCharacter
 local function key36(character, key)
     if key == 36 then -- <<<< j
-        print("Key = ER_TDD >  \n")
 
     end
 end
@@ -73,7 +46,7 @@ end
 local function key37(character, key)
     if key == 37 then -- <<<< k
         print("Key = k > remove pageBook \n")
-        modDataManager.remove(pageBook.Character.SCHEDULED_BOOK_READ)
+
     end
 end
 
@@ -87,17 +60,16 @@ end
 ---@param character IsoGameCharacter
 local function key17(character, key)
     if key == 17 then -- <<<< w
-        print("Key = w >   \n")
-
+        print("Key = w > kill character \n")
+        character:die()
     end
 end
 
 ---@param character IsoGameCharacter
 local function key18(character, key)
     if key == 18 then -- <<<< e
-        print("Key = e >  \n")
-        print("Key = e > kill character \n")
-        character:die()
+        print("Key = e > \n")
+
     end
 end
 
@@ -113,4 +85,4 @@ local function onCustomUIKeyPressed(key)
     key37(character, key) -- k
 end
 
---Events.OnCustomUIKeyPressed.Add(onCustomUIKeyPressed)
+Events.OnCustomUIKeyPressed.Add(onCustomUIKeyPressed)

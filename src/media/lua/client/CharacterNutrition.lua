@@ -31,7 +31,7 @@ end
 local function writeWeightFromHd()
     table.insert(convertToTable, isoPlayerPZ.getWeight_PZ())
 
-    --- **Save Weight in moddata**
+    --- **Save Weight in mod-data**
     modDataManager.save(pageBook.Character.WEIGHT,convertToTable )
     convertToTable = {}
 end
@@ -40,17 +40,17 @@ end
 local function writeCaloriesFromHd()
     table.insert(convertToTable, isoPlayerPZ.getCalories_PZ())
 
-    --- **Save Calories to moddata**
+    --- **Save Calories to mod-data**
     modDataManager.save(pageBook.Character.CALORIES, convertToTable)
     convertToTable = {}
 end
 
 --- **Create Character Nutrition**
 function CharacterNutrition.readBook()
-    --- **Check if moddata weight is exits**
+    --- **Check if mod-data weight is exits**
     if not modDataManager.isExists(pageBook.Character.WEIGHT) then
         errHandler.errMsg("CharacterNutrition.readBook()",
-                " moddata " .. pageBook.Character.WEIGHT .. " not exists")
+                " mod-data " .. pageBook.Character.WEIGHT .. " not exists")
         return nil
     end
 
@@ -60,10 +60,10 @@ function CharacterNutrition.readBook()
 
     isoPlayerPZ.setWeight_PZ(weight[1])
 
-    --- **Check if moddata calories is exits**
+    --- **Check if mod-data calories is exits**
     if not modDataManager.isExists(pageBook.Character.CALORIES) then
         errHandler.errMsg("CharacterNutrition.readBook()",
-                " moddata " .. pageBook.Character.CALORIES .. " not exists")
+                " mod-data " .. pageBook.Character.CALORIES .. " not exists")
         return nil
     end
 
@@ -74,9 +74,9 @@ function CharacterNutrition.readBook()
     isoPlayerPZ.setCalories_PZ(calories[1])
 end
 
---- **Wwrite Character Nutrition**
+--- **Write Character Nutrition**
 function CharacterNutrition.writeBook()
-    --- **Remove Weight and Calories form moddata**
+    --- **Remove Weight and Calories form mod-data**
     modDataManager.remove(pageBook.Character.WEIGHT)
     modDataManager.remove(pageBook.Character.CALORIES)
 

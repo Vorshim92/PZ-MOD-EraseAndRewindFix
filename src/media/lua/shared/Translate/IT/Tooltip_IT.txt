@@ -1,0 +1,4 @@
+Tooltip_IT = {
+    Tooltip_ReadOnceBook = "Dopo aver letto il libro, DEVI uscire dal gioco e riavviarlo per salvare il libro",
+    Tooltip_TimedBook = "Dopo aver letto il libro, DEVI uscire dal gioco e riavviarlo per salvare il libro",
+}

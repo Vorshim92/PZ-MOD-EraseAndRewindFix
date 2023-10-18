@@ -27,9 +27,9 @@ end
 --- **Write kilMilReached From Hd**
 ---@param character IsoGameCharacter
 --- - IsoGameCharacter : zombie.characters.IsoGameCharacter
-local function writeKilMilReachedtoFromHd(character)
+local function writeKilMilReachedToFromHd(character)
     if not character then
-        errHandler.errMsg("PatchSurvivalRewards.writeKilMilReachedtoFromHd(character)",
+        errHandler.errMsg("PatchSurvivalRewards.writeKilMilReachedToFromHd(character)",
                 " character is nil")
         return nil
     end
@@ -69,7 +69,7 @@ function PatchSurvivalRewards.createMil_kill_Reached(character)
         --- **is Exit kilMilReached**
     elseif not modDataManager.isExists(kilMilReached) then
         errHandler.errMsg("PatchSurvivalRewards.createMil_kill_Reached(character)",
-                " moddata " .. kilMilReached .. " not exists")
+                " mod-data " .. kilMilReached .. " not exists")
         return nil
     end
 
@@ -83,7 +83,7 @@ function PatchSurvivalRewards.createMil_kill_Reached(character)
     --- **is Exit milReached**
     if not modDataManager.isExists(milReached) then
         errHandler.errMsg("PatchSurvivalRewards.createMil_kill_Reached(character)",
-                " moddata " .. milReached .. " not exists")
+                " mod-data " .. milReached .. " not exists")
         return nil
     end
 
@@ -109,8 +109,8 @@ function PatchSurvivalRewards.writeMil_kill_ReachedToHd(character)
     --- **Remove Mil_kill_Reached**
     PatchSurvivalRewards.removeMil_kill_Reached()
 
-    --- **Save Mil_kill_/Mil Reached to moddata**
-    writeKilMilReachedtoFromHd(character)
+    --- **Save Mil_kill_/Mil Reached to mod-data**
+    writeKilMilReachedToFromHd(character)
     writeMilReachedFromHd(character)
 end
 
@@ -121,7 +121,6 @@ function PatchSurvivalRewards.removeMil_kill_Reached()
 end
 
 --- **Is Mod Active**
----@param nameMod string
 ---@return boolean
 function PatchSurvivalRewards.isModActive()
     ---@type string

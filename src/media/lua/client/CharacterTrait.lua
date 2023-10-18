@@ -30,10 +30,10 @@ function CharacterTrait.readBook(character)
         errHandler.errMsg("CharacterTrait.readBook(character)",
                 errHandler.err.IS_NULL_CHARACTERS)
         return nil
-        --- **Check if moddata traits is exits**
+        --- **Check if mod-data traits is exits**
     elseif not modDataManager.isExists(pageBook.Character.TRAITS) then
         errHandler.errMsg("CharacterTrait.readBook(character)",
-                " moddata " .. pageBook.Character.TRAITS .. " not exists")
+                " mod-data " .. pageBook.Character.TRAITS .. " not exists")
         return nil
     end
 
@@ -49,8 +49,8 @@ function CharacterTrait.readBook(character)
     characterPz.removeAllTraits_PZ(character)
 
     for _, v in pairs(traits) do
-        ---@param character IsoGameCharacter
-        ---@param trait string
+        -- @param character IsoGameCharacter
+        -- @param trait string
         characterPz.setTraitsPerk_PZ(character, v)
     end
 end
@@ -66,13 +66,13 @@ function CharacterTrait.writeBook(character)
         return nil
     end
 
-    --- **Remove Traits form moddata**
+    --- **Remove Traits form mod-data**
     modDataManager.remove(pageBook.Character.TRAITS)
 
     ---@type CharacterBaseObj
     local trait = characterLib.getTraitsPerk(character)
 
-    --- **Save Traits to moddata**
+    --- **Save Traits to mod-data**
     modDataManager.save(pageBook.Character.TRAITS,
             trait:getTraits())
 end

@@ -4,7 +4,6 @@
 --- DateTime: 15/04/23 18:54
 ---
 
-
 ---@class CharacterBoost
 
 local CharacterBoost = {}
@@ -18,20 +17,20 @@ local modDataManager = require("lib/ModDataManager")
 
 require("lib/CharacterBaseObj")
 
----@param perk PerkFactory.Perk
----@param boostLevel int
+-- @param perk PerkFactory.Perk
+-- @param boostLevel int
 local lines_ = {}
 
 ---@param perk PerkFactory.Perk
----@param int
----@return table perk, int
+---@param boostLevel int
+---@return table <PerkFactory.Perk, int>
 --- - PerkFactory.Perk : zombie.characters.skills.PerkFactor
-local function addlines(perk, boostLevel)
+local function addLines(perk, boostLevel)
     table.insert(lines_, {
-        ---@type PerkFactory.Perk
+        ---@field PerkFactory.Perk
         perk = perk,
 
-        ---@type int
+        ---@field int
         boostLevel = boostLevel
     })
 end
@@ -66,14 +65,14 @@ function CharacterBoost.readBook(character)
         return nil
     end
 
-    --- **check if moddata boost is exits**
+    --- **check if mod-data boost is exits**
     if not modDataManager.isExists(pageBook.Character.BOOST) then
         errHandler.errMsg("CharacterBoost.readBook(character)",
-                " moddata " .. pageBook.Character.BOOST .. " " .. errHandler.err.IS_NULL)
+                " mod-data " .. pageBook.Character.BOOST .. " " .. errHandler.err.IS_NULL)
         return nil
     end
 
-    ---@type table - PerkFactory.Perk, int (boostlevel)
+    ---@type table - PerkFactory.Perk, int boostLevel
     local boost = readBoostFromHd()
 
     --- check if boost is nil
@@ -105,12 +104,12 @@ function CharacterBoost.writeBook(character)
     local CharacterPerksBoostObj = characterLib.getPerksBoost(character)
 
     for _, v in pairs(CharacterPerksBoostObj:getPerkDetails()) do
-        ---@param perk PerkFactory.Perk
-        ---@param BoostLevel int
-        addlines(v:getPerk(), v:getBoostLevel())
+        -- @param PerkFactory.Perk
+        -- @param BoostLevel int
+        addLines(v:getPerk(), v:getBoostLevel())
     end
 
-    --- **Save Boost to moddata**
+    --- **Save Boost to mod-data**
     modDataManager.save(pageBook.Character.BOOST, lines_)
 
     lines_ = {}

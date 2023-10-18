@@ -38,9 +38,9 @@ local function readCharacterPerkDetailsFromHd()
             table.insert(lines_, s)
         end
 
-        ---@param perk PerkFactory.Perk
-        ---@param level int
-        ---@param xp float
+        -- @param perk PerkFactory.Perk
+        -- @param level int
+        -- @param xp float
         CharacterObj01:addPerkDetails(perkFactoryPZ.getPerkByName_PZ(lines_[1]),
                 tonumber(lines_[2]),
                 tonumber(lines_[3]) + 0.0)
@@ -59,8 +59,8 @@ local function deleteCharacter(character)
     -- @type CharacterBaseObj
     local characterAllSkills = characterLib.getAllPerks(character)
 
-    ---@param character IsoGameCharacter
-    ---@param perk PerkFactory.Perk
+    -- @param character IsoGameCharacter
+    -- @param perk PerkFactory.Perk
     --- - PerkFactory.Perk : zombie.characters.skills.PerkFactory
     for _, v in pairs(characterAllSkills:getPerkDetails()) do
         characterPz.removePerkLevel(character, v:getPerk())
@@ -73,20 +73,20 @@ end
 ---@param character IsoGameCharacter
 --- - IsoGameCharacter : zombie.characters.IsoGameCharacter
 function CharacterPerkDetails.readBook(character)
-    --- **check if moddata perkDetails and profession are exits**
+    --- **check if mod-data perkDetails and profession are exits**
     if not character then
         errHandler.errMsg("CharacterPerkDetails.readBook(character)",
-                " character " .. errHandler.err.IS_NULL_CHARACTERS)
+                errHandler.err.IS_NULL_CHARACTERS)
         return nil
-        --- **check if moddata profession are exits**
+        --- **check if mod-data profession are exits**
     elseif not modDataManager.isExists(pageBook.Character.PROFESSION) then
         errHandler.errMsg("CharacterPerkDetails.readBook(character)",
-                " moddata " .. pageBook.Character.PROFESSION .. " not exists")
+                " mod-data " .. pageBook.Character.PROFESSION .. " not exists")
         return nil
-        --- **check if moddata perkDetails are exits**
+        --- **check if mod-data perkDetails are exits**
     elseif not modDataManager.isExists(pageBook.Character.PERK_DETAILS) then
         errHandler.errMsg("CharacterPerkDetails.readBook(character)",
-                " moddata " .. pageBook.Character.PERK_DETAILS .. " not exists")
+                " mod-data " .. pageBook.Character.PERK_DETAILS .. " not exists")
         return nil
     end
 
@@ -96,9 +96,9 @@ function CharacterPerkDetails.readBook(character)
 
     deleteCharacter(character)
 
-    ---@param character IsoGameCharacter
-    ---@param perk PerkFactory.Perk
-    ---@param xp float
+    -- @param character IsoGameCharacter
+    -- @param perk PerkFactory.Perk
+    -- @param xp float
     for _, v in pairs(characterSkills:getPerkDetails()) do
         characterPz.setPerkLevelFromXp(character, v:getPerk(), v:getXp())
     end
@@ -115,7 +115,7 @@ end
 ---@param character IsoGameCharacter
 --- - IsoGameCharacter : zombie.characters.IsoGameCharacter
 function CharacterPerkDetails.writeBook(character)
-    --- **Remove perkDetails and profession from moddata**
+    --- **Remove perkDetails and profession from mod-data**
     modDataManager.remove(pageBook.Character.PERK_DETAILS)
     modDataManager.remove(pageBook.Character.PROFESSION)
 
@@ -126,9 +126,9 @@ function CharacterPerkDetails.writeBook(character)
     local characterAllSkills = characterLib.getAllPerks(character)
 
     -- Format value1-value2-value3
-    ---@param perk PerkFactory.Perk
-    ---@param level int
-    ---@param xp float
+    -- @param perk PerkFactory.Perk
+    -- @param level int
+    -- @param xp float
     for _, v in pairs(characterAllSkills:getPerkDetails()) do
         local value = ( v.perk:getName() .. "-" ..
                 tostring(v:getLevel())  .. "-" ..
@@ -137,13 +137,13 @@ function CharacterPerkDetails.writeBook(character)
         table.insert(lines, value)
     end
 
-    --- **Save Character Perk Details to moddata**
+    --- **Save Character Perk Details to mod-data**
     modDataManager.save(pageBook.Character.PERK_DETAILS, lines)
 
     lines = {}
     table.insert(lines, characterAllSkills:getProfession())
 
-    --- **Save Character Profession to moddata**
+    --- **Save Character Profession to mod-data**
     modDataManager.save(pageBook.Character.PROFESSION,
             lines )
 

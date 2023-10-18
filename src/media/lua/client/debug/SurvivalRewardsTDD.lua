@@ -145,10 +145,10 @@ local function onCustomUIKeyPressed(key)
     key16(character, key) -- q kill character
     key17(character, key) -- w
     key18(character, key) -- e
-    key34(character, key) -- g
+    --key34(character, key) -- g
     key35(character, key) -- h
     key36(character, key) -- j
     key37(character, key) -- k
 end
 
---Events.OnCustomUIKeyPressed.Add(onCustomUIKeyPressed)
+Events.OnCustomUIKeyPressed.Add(onCustomUIKeyPressed)

@@ -23,7 +23,7 @@ end
 function CharacterLifeTime.readBook()
     if not modDataManager.isExists(pageBook.Character.LIFE_TIME) then
         errHandler.errMsg("CharacterLifeTime.readBook()",
-                " moddata " .. pageBook.Character.LIFE_TIME .. " not exists")
+                " mod-data " .. pageBook.Character.LIFE_TIME .. " not exists")
         return nil
     end
 
@@ -42,7 +42,7 @@ function CharacterLifeTime.writeBook()
     local hoursSurvived = {}
     table.insert(hoursSurvived, isoPlayerPZ.getHoursSurvived_PZ())
 
-    --- **Save Life Time to moddata**
+    --- **Save Life Time to mod-data**
     modDataManager.save(pageBook.Character.LIFE_TIME,
             hoursSurvived)
 end

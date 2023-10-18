@@ -16,8 +16,8 @@ local modDataManager = require("lib/ModDataManager")
 
 require("lib/CharacterBaseObj")
 
----@param perk PerkFactory.Perk
----@param multiplier float
+-- @param perk PerkFactory.Perk
+-- @param multiplier float
 --- - PerkFactory.Perk : zombie.characters.skills.PerkFactor
 local lines_ = {}
 
@@ -25,7 +25,7 @@ local lines_ = {}
 ---@param multiplier float
 ---@return table perk, double ( multiplier )
 --- - PerkFactory.Perk : zombie.characters.skills.PerkFactory
-local function addline(perk, multiplier)
+local function addLine(perk, multiplier)
     table.insert(lines_, {
         ---@type PerkFactory.Perk
         perk = perk,
@@ -49,8 +49,8 @@ local function deleteMultiplier(character)
     -- @type CharacterBaseObj
     local CharacterMultiplierObJ = characterLib.getAllPerks(character)
 
-    ---@param character IsoGameCharacter
-    ---@param perk PerkFactory.Perk
+    -- @param character IsoGameCharacter
+    -- @param perk PerkFactory.Perk
     for _, v in pairs(CharacterMultiplierObJ:getPerkDetails()) do
         characterPz.removeMultiplier(character, v:getPerk())
     end
@@ -65,10 +65,10 @@ function CharacterMultiplier.readBook(character)
         errHandler.errMsg("CharacterMultiplier.readBook(character)",
                 errHandler.err.IS_NULL_CHARACTERS)
         return nil
-        --- **Check if moddata multiplier is exits**
+        --- **Check if mod-data multiplier is exits**
     elseif not modDataManager.isExists(pageBook.Character.MULTIPLIER) then
         errHandler.errMsg("CharacterMultiplier.readBook(character)",
-                " moddata " .. pageBook.Character.MULTIPLIER .. " not exists")
+                " mod-data " .. pageBook.Character.MULTIPLIER .. " not exists")
         return nil
     end
 
@@ -82,9 +82,9 @@ function CharacterMultiplier.readBook(character)
 
     deleteMultiplier(character)
 
-    ---@param character IsoGameCharacter
-    ---@param perk PerkFactory.Perk
-    ---@param multiplier float
+    -- @param character IsoGameCharacter
+    -- @param perk PerkFactory.Perk
+    -- @param multiplier float
     for _, v in pairs(multiplier) do
         characterPz.addXpMultiplier_PZ(character, v.perk, v.multiplier,
             characterPz.EnumNumbers.ONE, characterPz.EnumNumbers.ONE)
@@ -102,22 +102,22 @@ function CharacterMultiplier.writeBook(character)
         return nil
     end
 
-    --- **Remove Multiplier form moddata**
+    --- **Remove Multiplier form mod-data**
     modDataManager.remove(pageBook.Character.MULTIPLIER)
 
     -- @type CharacterBaseObj
     local CharacterMultiplierObJ = characterLib.getMultiplier(character)
 
-    ---@param perk PerkFactory.Perk
-    ---@param level int
-    ---@param multiplier float
+    -- @param perk PerkFactory.Perk
+    -- @param level int
+    -- @param multiplier float
     for _, v in pairs(CharacterMultiplierObJ:getPerkDetails()) do
         if v:getMultiplier()  > 0.0 then
-            addline(v:getPerk(), v:getMultiplier())
+            addLine(v:getPerk(), v:getMultiplier())
         end
     end
 
-    --- **Save Multiplier to moddata**
+    --- **Save Multiplier to mod-data**
     modDataManager.save(pageBook.Character.MULTIPLIER, lines_)
 
     lines_ = {}

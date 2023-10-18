@@ -23,7 +23,7 @@ local function readRecipeFromHd()
 
     local CharacterObj01 = CharacterBaseObj:new()
 
-    ---@param recipe string
+    -- @param recipe string
     for _, v in pairs(characterKnowRecipe) do
         CharacterObj01:addRecipe(v)
     end
@@ -40,8 +40,8 @@ local function deleteRecipe(character)
 
     for _, v in pairs(characterKnowRecipe:getRecipes()) do
 
-        ---@param character IsoGameCharacter
-        ---@param recipe string
+        -- @param character IsoGameCharacter
+        -- @param recipe string
         characterPz.removeKnowRecipe_PZ(character, v)
     end
 end
@@ -56,10 +56,10 @@ function CharacterRecipe.readBook(character)
         return nil
     end
 
-    --- **Check if moddata recipes is exits**
+    --- **Check if mod-data recipes is exits**
     if not modDataManager.isExists(pageBook.Character.RECIPES) then
         errHandler.errMsg("CharacterRecipe.readBook(character)",
-                " moddata " .. pageBook.Character.RECIPES .. " not exists")
+                " mod-data " .. pageBook.Character.RECIPES .. " not exists")
         return nil
     end
 
@@ -70,8 +70,8 @@ function CharacterRecipe.readBook(character)
     deleteRecipe(character)
 
     for _, v in pairs(recipesObj:getRecipes()) do
-        ---@param character IsoGameCharacter
-        ---@param recipe string
+        -- @param character IsoGameCharacter
+        -- @param recipe string
         characterPz.addKnownRecipe(character, v)
     end
 end
@@ -87,7 +87,7 @@ function CharacterRecipe.writeBook(character)
         return nil
     end
 
-    --- **Remove Recipes form moddata**
+    --- **Remove Recipes form mod-data**
     modDataManager.remove(pageBook.Character.RECIPES)
 
     -- @type CharacterBaseObj
@@ -97,12 +97,12 @@ function CharacterRecipe.writeBook(character)
     local lines = {}
 
     for _, v in pairs(knownRecipesObj:getRecipes()) do
-        ---@param lines table
-        ---@param v string
+        -- @param lines table
+        -- @param v string
         table.insert(lines, v)
     end
 
-    --- **Save Recipes to moddata**
+    --- **Save Recipes to mod-data**
     modDataManager.save(pageBook.Character.RECIPES, lines)
 
     lines = {}

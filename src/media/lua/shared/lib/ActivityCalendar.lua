@@ -21,9 +21,28 @@ local SECOND_IN_DAY = 86400
 ---@type double
 local expectedDateInSecond
 
+--- **From seconds to date**
+---@param timestamp double
+---@return string
+--- - "Fri Jul 09 09:43:41 CEST 1993"
+function ActivityCalendar.fromSecondToDate(timestamp)
+    local formattedDate = os.date("%a %b %d %H:%M:%S %Z %Y", timestamp)
+    return formattedDate
+end
+
+---  **From millis to date**
+---@param timestamp double
+---@return string
+--- - "Fri Jul 09 09:43:41 CEST 1993"
+function ActivityCalendar.fromMillisToDate(timestamp)
+    local millisToSeconds = timestamp * 1000
+    return ActivityCalendar.fromSecondToDate(millisToSeconds)
+end
+
 --- **Extract Date**
 ---@param date string
 ---@return int
+--- - "Fri Jul 09 09:43:41 CEST 1993"
 local function extractDate(date)
     --- **Check if date is string**
     if not dataValidator.isString(date) then
@@ -38,23 +57,53 @@ local function extractDate(date)
         table.insert(dateParts, datePart)
     end
 
+    --- **Extract time**
+    for hour, minute, second in date:gmatch("(%d+):(%d+):(%d+)") do
+        dateParts[7] = hour
+        dateParts[8] = minute
+        dateParts[9] = second
+    end
+
     --@type table
+    --- - "Fri Jul 09 09:43:41 CEST 1993"
     local datePartsConverted = {
-        ---@field number
+        ---@type string
+        day = dateParts[1],
+        ---@type number
+        dayOfWeek = tonumber(dateParts[3]),
+        ---@type string
+        month = dateParts[2],
+        ---@type number
+        monthOfYear = month[dateParts[2]],
+        ---@type string
+        cest = dateParts[5],
+        ---@type number
         year = tonumber(dateParts[6]),
-        ---@field number
-        month = month[dateParts[2]],
-        ---@field number
-        day = tonumber(dateParts[3]),
-        ---@field number
-        hour = 0,
-        ---@field number
-        min = 0,
-        ---@field number
-        sec = 0
+        ---@type number
+        hour = tonumber(dateParts[7]),
+        ---@type number
+        min = tonumber(dateParts[8]),
+        ---@type number
+        sec = tonumber(dateParts[9]),
     }
 
-    return os.time(datePartsConverted)
+    --@type table
+    local dateConverted = {
+        ---@type number
+        year = datePartsConverted.year,
+        ---@type number
+        month = datePartsConverted.monthOfYear,
+        ---@type number
+        day = datePartsConverted.dayOfWeek,
+        ---@type number
+        hour = datePartsConverted.hour,
+        ---@type number
+        min = datePartsConverted.min,
+        ---@type number
+        sec = datePartsConverted.sec,
+    }
+
+    return os.time(dateConverted)
 end
 
 --- **Get Seconds From Days**
@@ -75,12 +124,10 @@ end
 --- - Format date: Fri Jul 09 09:43:41 CEST 1993
 ---@return double seconds
 local function getStarTime()
-    -- The date retrieved is 12 hours behind the digital clock in game, I added 12 hours
     ---@type string
     local date = tostring( getGameTime():getCalender():getTime() )
-
     ---@type int
-    local dataAdjustment =  extractDate(date) + (SECOND_IN_DAY/2)
+    local dataAdjustment =  extractDate(date) + (SECOND_IN_DAY)
     return dataAdjustment
 end
 

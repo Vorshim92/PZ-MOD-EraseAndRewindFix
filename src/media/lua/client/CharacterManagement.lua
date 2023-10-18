@@ -23,9 +23,9 @@ local pageBook = require("PageBook")
 local modDataManager = require("lib/ModDataManager")
 local patchSurvivalRewards = require("PatchSurvivalRewards")
 
---- **Remove Mod Data**
+--- **Remove all Mod Data**
 ---@return void
-function CharacterManagement.removeMoData()
+function CharacterManagement.removeAllModData()
     modDataManager.remove(pageBook.Character.BOOST)
     modDataManager.remove(pageBook.Character.CALORIES)
     modDataManager.remove(pageBook.Character.LIFE_TIME)
@@ -33,8 +33,9 @@ function CharacterManagement.removeMoData()
     modDataManager.remove(pageBook.Character.RECIPES)
     modDataManager.remove(pageBook.Character.PERK_DETAILS)
     modDataManager.remove(pageBook.Character.PROFESSION)
+    modDataManager.remove(pageBook.Character.READ_ONCE_BOOK)
     modDataManager.remove(pageBook.Character.TRAITS)
-    modDataManager.remove(pageBook.Character.SCHEDULED_BOOK_READ)
+    modDataManager.remove(pageBook.Character.TIMED_BOOK)
     modDataManager.remove(pageBook.Character.WEIGHT)
     modDataManager.remove(pageBook.Character.KILLED_ZOMBIES)
 
