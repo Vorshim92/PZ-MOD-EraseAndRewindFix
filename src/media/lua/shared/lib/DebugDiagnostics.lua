@@ -107,7 +107,7 @@ function DebugDiagnostics.checkTest(expectedValue, currentValue, nameTest)
     end
 end
 
---- **Show all metothod tested**
+--- **Show all method tested**
 ---@return void
 function DebugDiagnostics.displayTest()
     DebugDiagnostics.printLine()
@@ -153,41 +153,77 @@ DebugDiagnostics.Profession = {
 ---@return PerkFactory.Perk perk
 --- - PerkFactory.Perk : zombie.characters.skills.PerkFactory.Perk
 DebugDiagnostics.Perks = {
+    ---@type PerkFactory.Perk
     AGILITY = Perks.Agility,
+    ---@type PerkFactory.Perk
     AIMING = Perks.Aiming,
+    ---@type PerkFactory.Perk
     AXE = Perks.Axe,
+    ---@type PerkFactory.Perk
     BLACKSMITH = Perks.Blacksmith,
+    ---@type PerkFactory.Perk
     COMBAT = Perks.Combat,
+    ---@type PerkFactory.Perk
     COOKING = Perks.Cooking,
+    ---@type PerkFactory.Perk
     CRAFTING = Perks.Crafting,
+    ---@type PerkFactory.Perk
     DOCTOR = Perks.Doctor,
+    ---@type PerkFactory.Perk
     ELECTRICITY = Perks.Electricity,
+    ---@type PerkFactory.Perk
     FARMING = Perks.Farming,
+    ---@type PerkFactory.Perk
     FIREARM = Perks.Firearm,
+    ---@type PerkFactory.Perk
     FISHING = Perks.Fishing,
+    ---@type PerkFactory.Perk
     FITNESS = Perks.Fitness,
+    ---@type PerkFactory.Perk
     LIGHTFOOT = Perks.Lightfoot,
+    ---@type PerkFactory.Perk
     LONGBLADE = Perks.LongBlade,
+    ---@type PerkFactory.Perk
     LONGBLUNT = Perks.Blunt,
+    ---@type PerkFactory.Perk
     MAINTENANCE = Perks.Maintenance,
+    ---@type PerkFactory.Perk
     MECHANICS = Perks.Mechanics,
+    ---@type PerkFactory.Perk
     MELEE = Perks.Melee,
+    ---@type PerkFactory.Perk
     MELTING = Perks.Melting,
+    ---@type PerkFactory.Perk
     METALWELDING = Perks.MetalWelding,
+    ---@type PerkFactory.Perk
     NIMBLE = Perks.Nimble,
+    ---@type PerkFactory.Perk
     NONE = Perks.None,
+    ---@type PerkFactory.Perk
     PASSIV = Perks.Passiv,
+    ---@type PerkFactory.Perk
     PLANTSCAVENGING = Perks.PlantScavenging,
+    ---@type PerkFactory.Perk
     RELOADING = Perks.Reloading,
+    ---@type PerkFactory.Perk
     SMALLBLADE = Perks.SmallBlade,
+    ---@type PerkFactory.Perk
     SMALLBLUNT = Perks.SmallBlunt,
+    ---@type PerkFactory.Perk
     SNEAK = Perks.Sneak,
+    ---@type PerkFactory.Perk
     SPEAR = Perks.Spear,
+    ---@type PerkFactory.Perk
     SPRINTING = Perks.Sprinting,
+    ---@type PerkFactory.Perk
     STRENGTH = Perks.Strength,
+    ---@type PerkFactory.Perk
     SURVIVALIST = Perks.Survivalist,
+    ---@type PerkFactory.Perk
     TAILORING = Perks.Tailoring,
+    ---@type PerkFactory.Perk
     TRAPPING = Perks.Trapping,
+    ---@type PerkFactory.Perk
     WOODWORK = Perks.Woodwork,
 }
 

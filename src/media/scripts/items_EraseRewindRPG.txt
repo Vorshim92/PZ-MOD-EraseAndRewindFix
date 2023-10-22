@@ -5,16 +5,6 @@ module EraseRewindRPG
         Base
     }
 
-    item EraseRewindJournal 
-    {
-        Weight = 0.42,
-        Type = Literature,
-        DisplayName = Erase Rewind Journal,
-        Icon = Book,
-        StaticModel = Book,
-        Tooltip = Tooltip_EraseRewindJournal,
-    }
-
     item ReadOnceBook
     {
         Weight = 0.42,

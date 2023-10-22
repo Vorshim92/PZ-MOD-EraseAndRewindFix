@@ -97,8 +97,9 @@ function ModDataManager.displayAllTable()
 
         ---@type table
         local reads = ModDataManager.read(v)
-        for _, v in pairs(reads) do
-            print("Value of Moddata - " .. v)
+        for _, v2 in pairs(reads) do
+            -- TODO : CharacterBoost mostra solo tabelle e non i valori
+            print("Value of Moddata - " .. tostring(v2))
         end
 
         debugDiagnostics.printLine()

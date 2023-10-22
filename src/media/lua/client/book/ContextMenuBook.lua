@@ -5,28 +5,13 @@
 ---
 
 require "ISUI/ISInventoryPaneContextMenu"
-local characterManagement = require("CharacterManagement")
 local debugDiagnostics = require("lib/DebugDiagnostics")
-local readOnceBook = require("ReadOnceBook")
-local timedBook = require("TimedBook")
+local readOnceBook = require("book/ReadOnceBook")
+local timedBook = require("book/TimedBook")
+local chooseBook = require("ChooseBook")
 
 ---@type string
 local translation
-
----@type table
-local readBook = {
-    ReadOnceBook = "ReadOnceBook",
-    TimedBook = "TimedBook",
-}
-
---- **Get read book**
----@param item InventoryItem
----@return boolean
---- - InventoryItem : zombie.inventory.InventoryItem
-local function getReadBook(item)
-    --- **Selected book**
-    return item:getType()
-end
 
 --- **Save player**
 ---@param item InventoryItem
@@ -48,22 +33,18 @@ local function onSavePlayer(item, character)
     --- **Play sound**
     character:playSound(openBook)
 
+    ---@type boolean
     local flag01 = false
 
-    local dbg1 = item:getType()
-    local dbg
+    if chooseBook.isCorrectBook(item, "ReadOnceBook") then
 
-    if item:getType() == readBook["ReadOnceBook"] then
-        local dbg1 = item:getType()
-        local dbg
         --- **Write mod-data - Write book**
         readOnceBook.writeBook(character, item)
         flag01 = true
-    elseif item:getType() == readBook["TimedBook"] then
-        local dbg2 = item:getType()
-        local dbg
+    elseif chooseBook.isCorrectBook(item, "TimedBook") then
+
         --- **Write mod-data - Write book**
-        if timedBook.writeBook(character, item) then
+        if timedBook.writeBook(character) then
             flag01 = true
         else
             --- **You can't transcribe this book yet**
@@ -72,8 +53,8 @@ local function onSavePlayer(item, character)
         end
     end
 
+    --- **If true add player name to read Once Book journal**
     if flag01 then
-        --- **Add player name to read Once Book journal**
         item:setName(item:getName() .. " - " .. character:getFullName() )
     end
 
@@ -85,6 +66,7 @@ local function onSavePlayer(item, character)
 end
 
 --- **Write book**
+---@param character IsoGameCharacter
 ---@param context ISInventoryPaneContextMenu
 ---@param items InventoryItem
 ---@return void
@@ -95,22 +77,16 @@ local function addSaveContext(character, context, items)
     --- **Translate to selected language**
     translation = getText("ContextMenu_TranscribeBook")
 
+    --- **Update all the characteristics of the character**
+    character = debugDiagnostics.characterUpdate()
+
     ---@type InventoryItem
-    local item
+    --- **Retrive the selected item from the GUI inventory**
+    local item = items[1].items[1]
 
-    ---@type IsoGameCharacter
-    local character = debugDiagnostics.characterUpdate()
-
-    for _, v in ipairs(items) do
-        if not instanceof(v, "InventoryItem") then
-            item = v.items[1]
-        end
-
-        if getReadBook(item) then
-            -- **Add option ( text ) to context menu**
-            context:addOption(translation, item, onSavePlayer, character)
-        end
-
+    --- **If a book create a context menu**
+    if chooseBook.isBook(item)  then
+        context:addOption(translation, item, onSavePlayer, character)
     end
 end
 

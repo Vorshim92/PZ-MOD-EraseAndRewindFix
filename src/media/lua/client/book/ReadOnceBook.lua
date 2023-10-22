@@ -8,7 +8,7 @@
 
 local ReadOnceBook = {}
 
-local characterManagement = require("CharacterManagement")
+local characterManagement = require("character/CharacterManagement")
 local errHandler = require("lib/ErrHandler")
 
 --- **Read Book**

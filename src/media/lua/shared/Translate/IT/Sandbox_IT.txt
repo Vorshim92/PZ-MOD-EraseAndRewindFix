@@ -1,0 +1,10 @@
+Sandbox_IT = {
+	Sandbox_EraseRewindRPG = "Erase Rewind RPG",
+
+	Sandbox_EraseRewindRPG_SetDays = "Giorni necessari poter scrivere il libro",
+	Sandbox_EraseRewindRPG_SetDays_tooltip = "Specifica il numero minimo di giorni che devono passare prima di poter scrivere un libro",
+
+	Sandbox_EraseRewindRPG_SetTimeOfReadBook = "Tempo di lettura libro",
+	Sandbox_EraseRewindRPG_SetTimeOfReadBook_tooltip = "Specifica quanto secondi ci vuole per leggere un libro",
+
+}

@@ -30,7 +30,7 @@ end
 ---@param dataValidatorFn function
 ---@param errMsg string
 function ErrHandler.validateParam(value, dataValidatorFn, errMsg)
-    local success, err = pcall(function()
+    local success, _ = pcall(function()
         dataValidatorFn(value)
     end)
 

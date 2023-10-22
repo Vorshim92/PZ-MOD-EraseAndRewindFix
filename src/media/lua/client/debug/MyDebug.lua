@@ -3,13 +3,13 @@
 --- Created by lele.
 --- DateTime: 27/06/23 11:33
 ---
-
+local timedBook = require("media.lua.client.book.TimedBook")
 local activityCalendar = require("lib/ActivityCalendar")
-local pageBook = require("PageBook")
-local scheduledBookRead = require("TimedBook")
-local characterLifeTime = require("CharacterLifeTime")
-local characterBoost = require("CharacterBoost")
-local characterManagement = require("CharacterManagement")
+local pageBook = require("media.lua.client.book.PageBook")
+local scheduledBookRead = require("media.lua.client.book.TimedBook")
+local characterLifeTime = require("media.lua.client.character.CharacterLifeTime")
+local characterBoost = require("media.lua.client.character.CharacterBoost")
+local characterManagement = require("media.lua.client.character.CharacterManagement")
 local debugDiagnostics = require("lib/DebugDiagnostics")
 local modDataManager = require("lib/ModDataManager")
 local characterPz = require("lib/CharacterPZ")
@@ -21,24 +21,26 @@ local dataValidator = require("lib/DataValidator")
 ---@param character IsoGameCharacter
 local function key34(character, key)
     if key == 34 then -- <<<< g
-        print("Key = g > isExpectedDate \n")
-        local flag = activityCalendar.isExpectedDate()
-        print("flag = " .. tostring(flag) .. "\n")
+        print("Key = g > createCharacter \n")
+        debugDiagnostics.deleteCharacter()
+        debugDiagnostics.createCharacter()
     end
 end
 
 ---@param character IsoGameCharacter
 local function key35(character, key)
     if key == 35 then -- <<< h
-        print("Key = h > \n")
-
+        print("Key = h > remove all moddata\n")
+        characterManagement.removeAllModData()
     end
 end
 
 ---@param character IsoGameCharacter
 local function key36(character, key)
     if key == 36 then -- <<<< j
-
+        print("Key = j > Sandbox \n")
+        print( "SetDate = " .. tostring(SandboxVars.EraseRewindRPG.SetDays) )
+        print( "SetTimeOfReadBook = " .. tostring(SandboxVars.EraseRewindRPG.SetTimeOfReadBook) )
     end
 end
 
@@ -79,7 +81,7 @@ local function onCustomUIKeyPressed(key)
     key16(character, key) -- q kill character
     key17(character, key) -- w
     key18(character, key) -- e
-    key34(character, key) -- g
+    --key34(character, key) -- g
     key35(character, key) -- h
     key36(character, key) -- j
     key37(character, key) -- k

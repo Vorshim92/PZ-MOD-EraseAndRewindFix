@@ -10,7 +10,7 @@ local CharacterLifeTime = {}
 
 local errHandler = require("lib/ErrHandler")
 local isoPlayerPZ = require("lib/IsoPlayerPZ")
-local pageBook = require("PageBook")
+local pageBook = require("book/PageBook")
 local modDataManager = require("lib/ModDataManager")
 
 --- **Read Life Time From Hd**

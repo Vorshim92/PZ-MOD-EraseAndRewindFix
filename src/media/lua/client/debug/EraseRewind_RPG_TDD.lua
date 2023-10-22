@@ -4,14 +4,14 @@
 --- DateTime: 30/09/23 17:21
 ---
 
-local characterKilledZombies = require("CharacterKilledZombies")
-local characterLifeTime = require("CharacterLifeTime")
-local characterBoost = require("CharacterBoost")
-local characterMultiplier = require("CharacterMultiplier")
-local characterNutrition = require("CharacterNutrition")
-local characterPerkDetails = require("CharacterPerkDetails")
-local characterTrait = require("CharacterTrait")
-local characterRecipe = require("CharacterRecipe")
+local characterKilledZombies = require("character/CharacterKilledZombies")
+local characterLifeTime = require("character/CharacterLifeTime")
+local characterBoost = require("character/CharacterBoost")
+local characterMultiplier = require("character/CharacterMultiplier")
+local characterNutrition = require("character/CharacterNutrition")
+local characterPerkDetails = require("character/CharacterPerkDetails")
+local characterTrait = require("character/CharacterTrait")
+local characterRecipe = require("character/CharacterRecipe")
 local debugDiagnostics = require("lib/DebugDiagnostics")
 local dataValidator = require("lib/DataValidator")
 local errHandler = require("lib/ErrHandler")
@@ -20,7 +20,7 @@ local characterPz = require("lib/CharacterPZ")
 -- local perkFactoryPZ = require("lib/PerkFactoryPZ")
 local isoPlayerPZ = require("lib/IsoPlayerPZ")
 local characterLib = require("CharacterLib")
-local characterManagement = require("CharacterManagement")
+local characterManagement = require("character/CharacterManagement")
 require("lib/CharacterBaseObj")
 
 ---@param character IsoGameCharacter
@@ -151,6 +151,8 @@ local function character_TDD(character)
             3, "PerkBoost Woodwork")
 
     debugDiagnostics.displayTest()
+    -- TODO - add more tests, manca il controllo del tempo. Non riesco a mandara avanti il tempo con le API
+    print("Manca il controllo del tempo. Non riesco a mandara avanti il tempo con le API")
 end
 
 ---@param character IsoGameCharacter

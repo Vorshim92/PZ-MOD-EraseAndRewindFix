@@ -12,7 +12,7 @@ local characterLib = require("CharacterLib")
 local characterPz = require("lib/CharacterPZ")
 local dataValidator = require("lib/DataValidator")
 local errHandler = require("lib/ErrHandler")
-local pageBook = require("PageBook")
+local pageBook = require("book/PageBook")
 local modDataManager = require("lib/ModDataManager")
 
 require("lib/CharacterBaseObj")
@@ -114,13 +114,6 @@ function CharacterBoost.writeBook(character)
 
     lines_ = {}
 
-    -- Todo: da controllare, sembra che il ciclo non funzioni
-    -- dataValidator.destroyTable(lines_)
-
-    --
-    --for i, _ in pairs(lines_) do
-    --    table.remove(lines_, i)
-    --end
 end
 
 return CharacterBoost

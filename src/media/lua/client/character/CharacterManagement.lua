@@ -10,18 +10,18 @@
 ---
 local CharacterManagement = {}
 
-local characterBoost = require("CharacterBoost")
-local characterKilledZombies = require("CharacterKilledZombies")
-local characterLifeTime = require("CharacterLifeTime")
-local characterMultiplier = require("CharacterMultiplier")
-local characterNutrition = require("CharacterNutrition")
-local characterPerkDetails = require("CharacterPerkDetails")
-local characterRecipe = require("CharacterRecipe")
-local characterTrait = require("CharacterTrait")
+local characterBoost = require("character/CharacterBoost")
+local characterKilledZombies = require("character/CharacterKilledZombies")
+local characterLifeTime = require("character/CharacterLifeTime")
+local characterMultiplier = require("character/CharacterMultiplier")
+local characterNutrition = require("character/CharacterNutrition")
+local characterPerkDetails = require("character/CharacterPerkDetails")
+local characterRecipe = require("character/CharacterRecipe")
+local characterTrait = require("character/CharacterTrait")
 local errHandler = require("lib/ErrHandler")
-local pageBook = require("PageBook")
+local pageBook = require("book/PageBook")
 local modDataManager = require("lib/ModDataManager")
-local patchSurvivalRewards = require("PatchSurvivalRewards")
+local patchSurvivalRewards = require("patchSurvivalRewards/PatchSurvivalRewards")
 
 --- **Remove all Mod Data**
 ---@return void
@@ -79,7 +79,7 @@ function CharacterManagement.readBook(character)
     end
     --------------------------
 
-    --CharacterManagement.removeMoData()
+    CharacterManagement.removeAllModData()
 end
 
 --- **Write Book**

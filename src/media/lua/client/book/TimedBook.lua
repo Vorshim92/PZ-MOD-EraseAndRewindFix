@@ -9,18 +9,30 @@
 local TimedBook = {}
 
 local activityCalendar = require("lib/ActivityCalendar")
-local characterManagement = require("CharacterManagement")
+local characterManagement = require("character/CharacterManagement")
 local errHandler = require("lib/ErrHandler")
-local pageBook = require("PageBook")
+local pageBook = require("book/PageBook")
 local modDataManager = require("lib/ModDataManager")
 
--- TODO : collegare alla sandbox
-local minimumDaysBeforeWriteBook = 1
+--- **Minimum Days Before Write Book**
+---@type int
+local minimumDaysBeforeWriteBook = SandboxVars.EraseRewindRPG.SetDays
 
 --- **Scheduled Book Read From Hd**
 ---@return table double ( dateInSecond )
 local function scheduledBookReadFromHd()
     return modDataManager.read(pageBook.Character.TIMED_BOOK)
+end
+
+--- **Get Book Write Date** - Get the date in seconds when it is possible to write a book
+---@return double seconds
+local function getBookWriteDate()
+    --- **Set Waiting Days**
+    activityCalendar.setWaitingOfDays(minimumDaysBeforeWriteBook)
+    print("Waiting Days = " .. minimumDaysBeforeWriteBook   .. " days")
+
+    --- **Get Expected Date In Seconds**
+    return activityCalendar.getExpectedDateInSecond()
 end
 
 --- **Read Book**
@@ -37,7 +49,7 @@ end
 
 --- **Write Book To Hd**
 ---@param character IsoGameCharacter
----@return void
+---@return boolean
 --- - IsoGameCharacter : zombie.characters.IsoGameCharacter
 function TimedBook.writeBook(character)
     --- **Check if character is nil**
@@ -50,18 +62,15 @@ function TimedBook.writeBook(character)
     ---@type boolean
     local flag = false
 
+    --- **Book Write Date In Seconds**
     ---@type int
-    local dateInSecond = 0
+    local bookWriteDateInSeconds = 0
 
     --- **Check if scheduledBookRead is exits**
     if not modDataManager.isExists(
             pageBook.Character.TIMED_BOOK) then
 
-        --- **Set Waiting Days**
-        activityCalendar.setWaitingOfDays(minimumDaysBeforeWriteBook)
-
-        --- **Get Expected Date In Seconds**
-        dateInSecond = activityCalendar.getExpectedDateInSecond()
+        bookWriteDateInSeconds = getBookWriteDate()
         flag = true
     else
         --- **Retrieve the date when it is possible to write a book**
@@ -71,23 +80,27 @@ function TimedBook.writeBook(character)
         --- check if scheduledBookRead is nil
         if not scheduledBookRead then return nil end
 
-        dateInSecond = scheduledBookRead[1]
+        bookWriteDateInSeconds = scheduledBookRead[1]
 
-        -- **Set scheduled BookRead**
-        activityCalendar.setExpectedDateInSecond(dateInSecond)
+        -- **Set scheduled writeBook**
+        activityCalendar.setExpectedDateInSecond(bookWriteDateInSeconds)
 
         --- **Check if date is expected**
         if activityCalendar.isExpectedDate() then
             --- **Remove all mod data**
             characterManagement.removeAllModData()
+
+            --- **Book Write Date In Seconds**
+            bookWriteDateInSeconds = getBookWriteDate()
             flag = true
         end
+
     end
 
     --- **Check if I can write the book**
     if flag then
         local lines = {}
-        table.insert(lines, dateInSecond)
+        table.insert(lines, bookWriteDateInSeconds)
         --- **Remove scheduled BookRead date to mod data**
         modDataManager.remove(pageBook.Character.TIMED_BOOK)
 

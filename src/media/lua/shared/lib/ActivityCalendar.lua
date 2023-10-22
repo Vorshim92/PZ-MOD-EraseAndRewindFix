@@ -21,6 +21,31 @@ local SECOND_IN_DAY = 86400
 ---@type double
 local expectedDateInSecond
 
+--- **Get Time In Millis**
+---@return double
+--- - PZCalendar : zombie.util.PZCalendar
+local function getTimeInMillis()
+    return getGameTime():getCalender():getTimeInMillis()
+end
+
+--- **???? DEPRECATED - Work ????**
+--- **Set Time In Millis**
+---@param millisSeconds double
+---@return void
+--- - PZCalendar : zombie.util.PZCalendar
+---@deprecated
+local function setTimeInMillis(millisSeconds)
+    getGameTime():getCalender():setTimeInMillis(millisSeconds)
+end
+
+--- **Get Time**
+---@return string
+--- - The date retrieved from API is 24 hours behind the digital clock in game
+--- - Format date: Fri Jul 09 09:43:41 CEST 1993
+function ActivityCalendar.getTime()
+    return tostring( getGameTime():getCalender():getTime() )
+end
+
 --- **From seconds to date**
 ---@param timestamp double
 ---@return string
@@ -43,7 +68,7 @@ end
 ---@param date string
 ---@return int
 --- - "Fri Jul 09 09:43:41 CEST 1993"
-local function extractDate(date)
+function ActivityCalendar.extractDate(date)
     --- **Check if date is string**
     if not dataValidator.isString(date) then
         return
@@ -121,13 +146,16 @@ local function getDaysFromSeconds(seconds)
 end
 
 --- **Get Star Time**
+--- - The date retrieved from API is 24 hours behind the digital clock in game, I added 24 hours
 --- - Format date: Fri Jul 09 09:43:41 CEST 1993
 ---@return double seconds
 local function getStarTime()
     ---@type string
-    local date = tostring( getGameTime():getCalender():getTime() )
+    local date = ActivityCalendar.getTime()
+
     ---@type int
-    local dataAdjustment =  extractDate(date) + (SECOND_IN_DAY)
+    --- **I added 24 hours**
+    local dataAdjustment = ActivityCalendar.extractDate(date) + (SECOND_IN_DAY)
     return dataAdjustment
 end
 
