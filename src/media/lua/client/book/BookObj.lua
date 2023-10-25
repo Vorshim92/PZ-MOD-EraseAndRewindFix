@@ -6,7 +6,7 @@
 
 require "TimedActions/ISReadABook"
 local debugDiagnostics = require("lib/DebugDiagnostics")
-local chooseBook = require("ChooseBook")
+local chooseBook = require("book/ChooseBook")
 local errHandler = require("lib/ErrHandler")
 local inventoryItemPZ = require("lib/InventoryItemPZ")
 local readOnceBook = require("book/ReadOnceBook")

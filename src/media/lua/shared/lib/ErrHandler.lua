@@ -22,6 +22,8 @@ function ErrHandler.errMsg(sourceError, errorMessage)
     ---@type string
     local messageError = "\nERROR: >>>>>>>>>>>>> " .. srcErr .. " : "
             .. errMsg .. " <<<<<<<<<<<<<<\n"
+
+    print(messageError)
     return messageError
 end
 

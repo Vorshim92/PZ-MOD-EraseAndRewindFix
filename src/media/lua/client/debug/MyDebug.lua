@@ -3,13 +3,13 @@
 --- Created by lele.
 --- DateTime: 27/06/23 11:33
 ---
-local timedBook = require("media.lua.client.book.TimedBook")
+local timedBook = require("book/TimedBook")
 local activityCalendar = require("lib/ActivityCalendar")
-local pageBook = require("media.lua.client.book.PageBook")
-local scheduledBookRead = require("media.lua.client.book.TimedBook")
-local characterLifeTime = require("media.lua.client.character.CharacterLifeTime")
-local characterBoost = require("media.lua.client.character.CharacterBoost")
-local characterManagement = require("media.lua.client.character.CharacterManagement")
+local pageBook = require("book/PageBook")
+local scheduledBookRead = require("book/TimedBook")
+local characterLifeTime = require("character/CharacterLifeTime")
+local characterBoost = require("character/CharacterBoost")
+local characterManagement = require("character/CharacterManagement")
 local debugDiagnostics = require("lib/DebugDiagnostics")
 local modDataManager = require("lib/ModDataManager")
 local characterPz = require("lib/CharacterPZ")
@@ -39,31 +39,39 @@ end
 local function key36(character, key)
     if key == 36 then -- <<<< j
         print("Key = j > Sandbox \n")
-        print( "SetDate = " .. tostring(SandboxVars.EraseRewindRPG.SetDays) )
-        print( "SetTimeOfReadBook = " .. tostring(SandboxVars.EraseRewindRPG.SetTimeOfReadBook) )
+        --print( "SetDate = " .. tostring(SandboxVars.EraseRewindRPG.SetDays) )
+        --print( "SetTimeOfReadBook = " .. tostring(SandboxVars.EraseRewindRPG.SetTimeOfReadBook) )
+        local scheduledBookRead =
+            modDataManager.read(pageBook.Character.TIMED_BOOK)
+
+        print("------------------------")
+        print(activityCalendar.fromSecondToDate(scheduledBookRead[1]))
+        print("------------------------")
+
     end
 end
 
 ---@param character IsoGameCharacter
 local function key37(character, key)
     if key == 37 then -- <<<< k
-        print("Key = k > remove pageBook \n")
-
+        print("Key = k > remove TIMED_BOOK \n")
+        modDataManager.remove(pageBook.Character.TIMED_BOOK)
     end
 end
 
 ---@param character IsoGameCharacter
 local function key16(character, key)
     if key == 16 then -- <<<< q
-
+        print("Key = q > kill character \n")
+        character:die()
     end
 end
 
 ---@param character IsoGameCharacter
 local function key17(character, key)
     if key == 17 then -- <<<< w
-        print("Key = w > kill character \n")
-        character:die()
+        print("Key = w > \n")
+
     end
 end
 
@@ -81,7 +89,7 @@ local function onCustomUIKeyPressed(key)
     key16(character, key) -- q kill character
     key17(character, key) -- w
     key18(character, key) -- e
-    --key34(character, key) -- g
+    key34(character, key) -- g
     key35(character, key) -- h
     key36(character, key) -- j
     key37(character, key) -- k

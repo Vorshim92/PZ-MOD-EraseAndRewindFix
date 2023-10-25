@@ -1,14 +1,11 @@
-	--EraseRewindRPG = "EraseRewindRPG",
-	--EraseRewindRPG_SetDate = "Custom option #1",
-	--EraseRewindRPG_SetDate_tooltip = "Tooltip for custom option #1",
-    --
-	--EraseRewindRPG_SetTimeOfReadBook = "Custom option #1",
-	--EraseRewindRPG_SetTimeOfReadBook_tooltip = "Tooltip for custom option #1",
-    --
+-- SR & ER Ok
+-- ROB letture e scrittura ok
 
-    --Sandbox_EraseRewindRPG = "EraseRewindRPG",
-    --Sandbox_EraseRewindRPG_SetDate = "Custom option #1",
-    --Sandbox_EraseRewindRPG_SetDate_tooltip = "Tooltip for custom option #1",
-    --
-    --Sandbox_EraseRewindRPG_SetTimeOfReadBook = "Custom option #1",
-    --Sandbox_EraseRewindRPG_SetTimeOfReadBook_tooltip = "Tooltip for custom option #1",
+
+--local nome = "ReadOnce Book - qualcosa - qualcosaltro"
+--
+--local nome_cognome = nome:match("^[^ -]* - [^ -]*")
+--
+--nome_cognome:sub(1, nome_cognome:find(" ") - 1)
+--
+--print(nome_cognome)

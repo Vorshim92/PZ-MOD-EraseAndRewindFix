@@ -5,10 +5,11 @@
 ---
 
 require "ISUI/ISInventoryPaneContextMenu"
+local activityCalendar = require("lib/ActivityCalendar")
 local debugDiagnostics = require("lib/DebugDiagnostics")
 local readOnceBook = require("book/ReadOnceBook")
 local timedBook = require("book/TimedBook")
-local chooseBook = require("ChooseBook")
+local chooseBook = require("book/ChooseBook")
 
 ---@type string
 local translation
@@ -55,7 +56,21 @@ local function onSavePlayer(item, character)
 
     --- **If true add player name to read Once Book journal**
     if flag01 then
-        item:setName(item:getName() .. " - " .. character:getFullName() )
+        local extra = ""
+
+        --- **If TimedBook get expected date**
+        if chooseBook.isCorrectBook(item, "TimedBook") then
+            local expectedDateInSecond =  activityCalendar.getExpectedDateInSecond()
+            local expectedDate = activityCalendar.fromSecondToDate(expectedDateInSecond)
+            extra = " - " .. tostring(expectedDate)
+        end
+
+        --- extract name of the book "ReadOnceBook" or "TimedBook"
+        local type = item:getName():match("^[^ -]* - [^ -]*")
+        type:sub(1, type:find(" ") - 1)
+
+        --- **Set name of the book**
+        item:setName(type .. " - " .. character:getFullName() .. extra )
     end
 
     --- **Say message**

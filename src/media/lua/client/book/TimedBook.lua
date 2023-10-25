@@ -14,9 +14,11 @@ local errHandler = require("lib/ErrHandler")
 local pageBook = require("book/PageBook")
 local modDataManager = require("lib/ModDataManager")
 
---- **Minimum Days Before Write Book**
----@type int
-local minimumDaysBeforeWriteBook = SandboxVars.EraseRewindRPG.SetDays
+--- **Minimum Days Before Write Book, from sandBox**
+---@return int
+local function getMinimumDaysBeforeWriteBook()
+    return SandboxVars.EraseRewindRPG.SetDays
+end
 
 --- **Scheduled Book Read From Hd**
 ---@return table double ( dateInSecond )
@@ -28,8 +30,7 @@ end
 ---@return double seconds
 local function getBookWriteDate()
     --- **Set Waiting Days**
-    activityCalendar.setWaitingOfDays(minimumDaysBeforeWriteBook)
-    print("Waiting Days = " .. minimumDaysBeforeWriteBook   .. " days")
+    activityCalendar.setWaitingOfDays( getMinimumDaysBeforeWriteBook() )
 
     --- **Get Expected Date In Seconds**
     return activityCalendar.getExpectedDateInSecond()

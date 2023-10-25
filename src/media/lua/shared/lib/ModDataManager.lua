@@ -42,6 +42,12 @@ function ModDataManager.read(nameFile)
     local lines = {}
     lines = ModData.get(nameFile)
 
+    if not lines then
+            errHandler.errMsg("ModDataManager.read(nameFile)",
+                " lines " .. errHandler.err.IS_NULL)
+        return nil
+    end
+
     ---@type table
     local conversionTotable = {}
 
