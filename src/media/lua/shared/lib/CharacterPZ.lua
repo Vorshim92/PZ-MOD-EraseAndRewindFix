@@ -8,6 +8,9 @@
 
 local CharacterPz = {}
 
+local dataValidator = require("lib/DataValidator")
+local errHandler = require("lib/ErrHandler")
+-- TODO : add ERR
 --- **Add XP**
 ---@param character IsoGameCharacter
 ---@param perk PerkFactory.Perk
@@ -15,11 +18,16 @@ local CharacterPz = {}
 ---@param flag1 boolean default false
 ---@param flag2 boolean default false
 ---@param flag3 boolean default true
+---@return void
 --- - IsoGameCharacter : zombie.characters.IsoGameCharacter
---- - PerkFactory.Perk : zombie.characters.skills.PerkFactory
+--- - PerkFactory.Perk : zombie.characters.skills.PerkFactory.Perk
 --- - IsoGameCharacter.XP : zombie.characters.IsoGameCharacter.XP
 function CharacterPz.addXP_PZ(character, perk, xp, flag1, flag2, flag3)
     if not character or not perk then
+        errHandler.errMsg("CharacterPz.addXP_PZ(character, perk, xp, flag1, flag2, flag3)",
+                errHandler.err.IS_NULL_CHARACTERS .. " or " ..
+                        errHandler.err.IS_NULL_PERK .. " or " ..
+                                errHandler.err.IS_NULL_XP)
         return nil
     end
 
@@ -35,15 +43,19 @@ end
 ---@param perk PerkFactory.Perk
 ---@return float xp
 --- - IsoGameCharacter : zombie.characters.IsoGameCharacter
---- - PerkFactory.Perk : zombie.characters.skills.PerkFactory
+--- - PerkFactory.Perk : zombie.characters.skills.PerkFactory.Perk
 --- - IsoGameCharacter.XP : zombie.characters.IsoGameCharacter.XP
 function CharacterPz.getXp(character, perk)
     if not character or not perk then
+        errHandler.errMsg("CharacterPz.getXp(character, perk)",
+                errHandler.err.IS_NULL_CHARACTERS .. " or " ..
+                        errHandler.err.IS_NULL_PERK)
         return nil
     end
 
+    ---@type float
     local xp = CharacterPz.getXp_PZ(character, perk)
-    return CharacterPz.trunkFloatTo2Decimal( xp ) -- Perks.Maintenance
+    return dataValidator.trunkFloatTo2Decimal( xp ) -- Perks.Maintenance
 end
 
 --- **Get XP perk**
@@ -51,29 +63,41 @@ end
 ---@param perk PerkFactory.Perk
 ---@return float xp
 --- - IsoGameCharacter : zombie.characters.IsoGameCharacter
---- - PerkFactory.Perk : zombie.characters.skills.PerkFactory
+--- - PerkFactory.Perk : zombie.characters.skills.PerkFactory.Perk
 --- - IsoGameCharacter.XP : zombie.characters.IsoGameCharacter.XP
 function CharacterPz.getXp_PZ(character, perk)
     if not character or not perk then
+        errHandler.errMsg("CharacterPz.getXp_PZ(character, perk)",
+                errHandler.err.IS_NULL_CHARACTERS .. " or " .. errHandler.err.IS_NULL_PERK)
         return nil
     end
 
     return character:getXp():getXP(perk) -- Perks.Maintenance
 end
 
+--- **Trunk Float To 2 Decimal**
 ---@param value double
----@return int
+---@return double
 function CharacterPz.trunkFloatTo2Decimal(value)
+    if not value then
+        errHandler.errMsg("CharacterPz.trunkFloatTo2Decimal(value)",
+                errHandler.err.IS_NULL)
+        return nil
+    end
+
     return tonumber(string.format("%.2f", value)) + 0.0
 end
 
---- **Get Charater profession**
+--- **Get Character profession**
 ---@param character IsoGameCharacter
 ---@param profession String
+---@return void
 --- - IsoGameCharacter : zombie.characters.IsoGameCharacter
 --- - SurvivorDesc : zombie.characters.SurvivorDesc
 function CharacterPz.setProfession_PZ(character, profession)
     if not character or not profession then
+        errHandler.errMsg("CharacterPz.setProfession_PZ(character, profession)",
+                errHandler.err.IS_NULL_CHARACTERS .. " or profession " .. errHandler.err.IS_NULL)
         return nil
     end
 
@@ -87,6 +111,8 @@ end
 --- - SurvivorDesc : zombie.characters.SurvivorDesc
 function CharacterPz.getProfession_PZ(character)
     if not character then
+        errHandler.errMsg("CharacterPz.getProfession_PZ(character)",
+                errHandler.err.IS_NULL_CHARACTERS)
         return nil
     end
 
@@ -96,13 +122,21 @@ end
 --- **Remove Character profession**
 ---@param character IsoGameCharacter
 ---@return String
+---@return void
 --- - IsoGameCharacter : zombie.characters.IsoGameCharacter
 function CharacterPz.removeProfession(character)
+    if not character then
+        errHandler.errMsg("CharacterPz.removeProfession(character)",
+                errHandler.err.IS_NULL_CHARACTERS)
+        return nil
+    end
+
     local unemployed = "unemployed"
     CharacterPz.setProfession_PZ(character, unemployed)
 end
 
 --- **Enum Numbers**
+---@return int
 CharacterPz.EnumNumbers = {
     ZERO = 0,
     ONE = 1,
@@ -117,15 +151,20 @@ CharacterPz.EnumNumbers = {
     TEN = 10,
 }
 
---- **Set Perk Level from XP 75 - 150 ...... **
+--- **Set Perk Level from XP 75 - 150 ......**
 ---@param character IsoGameCharacter
 ---@param perk PerkFactory.Perk
 ---@param xp float
+---@return void
 --- - IsoGameCharacter : zombie.characters.IsoGameCharacter
---- - PerkFactory.Perk : zombie.characters.skills.PerkFactory
+--- - PerkFactory.Perk : zombie.characters.skills.PerkFactory.Perk
 --- - IsoGameCharacter.XP : zombie.characters.IsoGameCharacter.XP
 function CharacterPz.setPerkLevelFromXp(character, perk, xp)
     if not character or not perk then
+        errHandler.errMsg("CharacterPz.setPerkLevelFromXp(character, perk, xp)",
+                errHandler.err.IS_NULL_CHARACTERS .. " or " ..
+                        errHandler.err.IS_NULL_PERK .. " or " ..
+                        errHandler.err.IS_NULL_XP)
         return nil
     end
 
@@ -143,9 +182,12 @@ end
 ---@param perk PerkFactory.Perk
 ---@return int
 --- - IsoGameCharacter : zombie.characters.IsoGameCharacter
---- - PerkFactory.Perk : zombie.characters.skills.PerkFactory
+--- - PerkFactory.Perk : zombie.characters.skills.PerkFactory.Perk
 function CharacterPz.getPerkLevel_PZ(character, perk)
     if not character or not perk then
+        errHandler.errMsg("CharacterPz.getPerkLevel_PZ(character, perk)",
+                errHandler.err.IS_NULL_CHARACTERS .. " or " ..
+                        errHandler.err.IS_NULL_PERK)
         return nil
     end
 
@@ -155,12 +197,16 @@ end
 --- **Set Perk Level and level**
 ---@param character IsoGameCharacter
 ---@param perk PerkFactory.Perk
+---@return void
 --- ISPlayerStatsUI.lua 635
---- - IsoGameCharacter : zombie.characters.IsoGameCharact
---- - PerkFactory.Perk : zombie.characters.skills.PerkFactory
+--- - IsoGameCharacter : zombie.characters.IsoGameCharacter
+--- - PerkFactory.Perk : zombie.characters.skills.PerkFactory.Perk
 --- - IsoGameCharacter.XP : zombie.characters.IsoGameCharacter.XP
 function CharacterPz.removePerkLevel(character, perk)
     if not character or not perk then
+        errHandler.errMsg("CharacterPz.removePerkLevel(character, perk)",
+                errHandler.err.IS_NULL_CHARACTERS .. " or " ..
+                        errHandler.err.IS_NULL_PERK)
         return nil
     end
 
@@ -184,16 +230,19 @@ function CharacterPz.removePerkLevel(character, perk)
 
 end
 
+-- TODO : add errHandler
 --- **Set Zombies Killed**
 ---@param character IsoGameCharacter
----@param killZombies int
+---@param killedZombies int
+---@return void
 --- - IsoGameCharacter : zombie.characters.IsoGameCharacter
-function CharacterPz.setZombieKills_PZ(character, killZombies)
-    if not character or not killZombies then
+function CharacterPz.setZombieKills_PZ(character, killedZombies)
+    if not character or type(killedZombies) ~= "number" or
+            math.floor(killedZombies) ~= killedZombies then
         return nil
     end
 
-    character:setZombieKills(killZombies)
+    character:setZombieKills(killedZombies)
 end
 
 --- **Get Zombies Killed**
@@ -202,6 +251,8 @@ end
 --- - IsoGameCharacter : zombie.characters.IsoGameCharacter
 function CharacterPz.getZombieKills_PZ(character)
     if not character then
+        errHandler.errMsg("CharacterPz.getZombieKills_PZ(character)",
+                errHandler.err.IS_NULL_CHARACTERS)
         return nil
     end
 
@@ -215,19 +266,27 @@ end
 --- - IsoGameCharacter : zombie.characters.IsoGameCharacter
 function CharacterPz.learnRecipe_PZ(character, nameRecipe)
     if not character or not nameRecipe then
+        errHandler.errMsg("CharacterPz.learnRecipe_PZ(character, nameRecipe)",
+                errHandler.err.IS_NULL_CHARACTERS .. " or nameRecipe " ..
+                        errHandler.err.IS_NULL)
         return nil
     end
 
+    -- TODO : add return value
     return character:learnRecipe(nameRecipe)
 end
 
 --- **Set Trait**
 ---@param character IsoGameCharacter
----@param ---@return List | TraitCollection trait String
+---@param trait string
+---@return void
 --- - IsoGameCharacter : zombie.characters.IsoGameCharacter
 --- - TraitCollection.TraitSlot : zombie.characters.traits.TraitCollection.TraitSlot
 function CharacterPz.setTraitsPerk_PZ(character, trait)
     if not character or not trait then
+        errHandler.errMsg("CharacterPz.setTraitsPerk_PZ(character, trait)",
+                errHandler.err.IS_NULL_CHARACTERS .. " or trait " ..
+                        errHandler.err.IS_NULL)
         return nil
     end
 
@@ -241,6 +300,8 @@ end
 --- - TraitCollection : zombie.characters.traits.TraitCollection
 function CharacterPz.getTraitsPerk_PZ(character)
     if not character then
+        errHandler.errMsg("CharacterPz.getTraitsPerk_PZ(character)",
+                errHandler.err.IS_NULL_CHARACTERS)
         return nil
     end
 
@@ -248,7 +309,7 @@ function CharacterPz.getTraitsPerk_PZ(character)
 end
 
 ----- **Get Character Traits**
------@param character IsoGameCharacter
+-- ---@param character IsoGameCharacter
 -----@return List | TraitCollection
 ----- - IsoGameCharacter : zombie.characters.IsoGameCharacter
 ----- - IsoGameCharacter.CharacterTraits : zombie.characters.IsoGameCharacter.CharacterTraits
@@ -267,37 +328,51 @@ end
 --- - TraitCollection.TraitSlot : zombie.characters.traits.TraitCollection.TraitSlot
 function CharacterPz.removeTrait_PZ(character, trait)
     if not character or not trait then
+        errHandler.errMsg("CharacterPz.removeTrait_PZ(character, trait)",
+                errHandler.err.IS_NULL_CHARACTERS .. " or trait " ..
+                        errHandler.err.IS_NULL)
         return nil
     end
 
+    -- TODO : add return value
     character:getTraits():remove(trait)
 end
 
 --- **Clear all Traits**
 ---@param character IsoGameCharacter
+---@return void
 --- - IsoGameCharacter : zombie.characters.IsoGameCharacter
 --- - TraitCollection.TraitSlot : zombie.characters.traits.TraitCollection.TraitSlot
 function CharacterPz.removeAllTraits_PZ(character)
     if not character then
+        errHandler.errMsg("CharacterPz.removeAllTraits_PZ(character)",
+                errHandler.err.IS_NULL_CHARACTERS)
         return nil
     end
 
     character:getTraits():clear()
 end
 
+-- TODO : add errHandler
 --- **Add Xp Multiplier**
 ---@param character IsoGameCharacter
 ---@param perk PerkFactory.Perk
 ---@param multiplier float The multiplier value to apply to the XP gain of the specified perk.
 ---@param minLevel int
 ---@param maxLevel int
---- - IsoGameCharacter : zombie.characters.IsoGameCharact
---- - PerkFactory.Perk : zombie.characters.skills.PerkFactory
+---@return void
+--- - IsoGameCharacter : zombie.characters.IsoGameCharacter
+--- - PerkFactory.Perk : zombie.characters.skills.PerkFactory.Perk
 function CharacterPz.addXpMultiplier_PZ(character, perk, multiplier, minLevel, maxLevel)
     if not character or not perk or not
         multiplier or not minLevel or not
             maxLevel then
-
+        errHandler.errMsg("CharacterPz.addXpMultiplier_PZ(character, perk, multiplier, minLevel, maxLevel)",
+                errHandler.err.IS_NULL_CHARACTERS .. " or " ..
+                        errHandler.err.IS_NULL_PERK .. " or " ..
+                                errHandler.err.IS_NULL .. " or " ..
+                                        errHandler.err.IS_NULL .. " or " ..
+                                                errHandler.err.IS_NULL)
         return nil
     end
 
@@ -329,9 +404,12 @@ end
 ---@param perk PerkFactory.Perk
 ---@return float
 --- - IsoGameCharacter : zombie.characters.IsoGameCharacter
---- - PerkFactory.Perk : zombie.characters.skills.PerkFactory
+--- - PerkFactory.Perk : zombie.characters.skills.PerkFactory.Perk
 function CharacterPz.getMultiplier_PZ(character, perk)
     if not character or not perk then
+        errHandler.errMsg("CharacterPz.getMultiplier_PZ(character, perk)",
+                errHandler.err.IS_NULL_CHARACTERS .. " or " ..
+                        errHandler.err.IS_NULL_PERK)
         return nil
     end
 
@@ -341,10 +419,14 @@ end
 --- **Remove Multiplier**
 ---@param character IsoGameCharacter
 ---@param perk PerkFactory.Perk
+---@return void
 --- - IsoGameCharacter : zombie.characters.IsoGameCharacter
---- - PerkFactory.Perk : zombie.characters.skills.PerkFactory
+--- - PerkFactory.Perk : zombie.characters.skills.PerkFactory.Perk
 function CharacterPz.removeMultiplier(character, perk)
     if not character or not perk then
+        errHandler.errMsg("CharacterPz.removeMultiplier(character, perk)",
+                errHandler.err.IS_NULL_CHARACTERS .. " or " ..
+                        errHandler.err.IS_NULL_PERK)
         return nil
     end
 
@@ -353,12 +435,14 @@ function CharacterPz.removeMultiplier(character, perk)
 
 end
 
+-- TODO : add errHandler
 --- **Set PerkBoost 1 - 75%, 2 - 100%, 3 - 125%, default 0 ?? - 50% **
 ---@param character IsoGameCharacter
 ---@param perk PerkFactory.Perk
 ---@param levelBoost int
+---@return void
 --- - IsoGameCharacter : zombie.characters.IsoGameCharacter
---- - PerkFactory.Perk : zombie.characters.skills.PerkFactory
+--- - PerkFactory.Perk : zombie.characters.skills.PerkFactory.Perk
 function CharacterPz.setPerkBoost_PZ(character, perk, levelBoost)
     -- Perks.Cooking
     if not character or not perk or
@@ -372,11 +456,15 @@ end
 --- **Get Perk Boost**
 ---@param character IsoGameCharacter
 ---@param perk PerkFactory.Perk
+---@return int perkBoost
 --- - IsoGameCharacter : zombie.characters.IsoGameCharacter
---- - PerkFactory.Perk : zombie.characters.skills.PerkFactory
+--- - PerkFactory.Perk : zombie.characters.skills.PerkFactory.Perk
 function CharacterPz.getPerkBoost_PZ(character, perk)
     -- Perks.Cooking
     if not character or not perk then
+        errHandler.errMsg("CharacterPz.getPerkBoost_PZ(character, perk)",
+                errHandler.err.IS_NULL_CHARACTERS .. " or " ..
+                        errHandler.err.IS_NULL_PERK)
         return nil
     end
 
@@ -386,11 +474,15 @@ end
 --- **Remove Perk Boost**
 ---@param character IsoGameCharacter
 ---@param perk PerkFactory.Perk
+---@return void
 --- - IsoGameCharacter : zombie.characters.IsoGameCharacter
---- - PerkFactory.Perk : zombie.characters.skills.PerkFactory
+--- - PerkFactory.Perk : zombie.characters.skills.PerkFactory.Perk
 function CharacterPz.removePerkBoost(character, perk)
     -- Perks.Cooking
     if not character or not perk then
+        errHandler.errMsg("CharacterPz.removePerkBoost(character, perk)",
+                errHandler.err.IS_NULL_CHARACTERS .. " or " ..
+                        errHandler.err.IS_NULL_PERK)
         return nil
     end
 
@@ -402,6 +494,18 @@ end
 ---@param recipe string
 --- - IsoGameCharacter : zombie.characters.IsoGameCharacter
 function CharacterPz.addKnownRecipe(character, recipe)
+    if not character then
+        errHandler.errMsg("CharacterPz.addKnownRecipe(character, recipe)",
+                errHandler.err.IS_NULL_CHARACTERS)
+        return nil
+    end
+
+    --if not character or type(recipe) ~= "string" then
+    --    print("no")
+    --    return nil
+    --end
+
+    -- TODO : add return value
     CharacterPz.learnRecipe_PZ(character, recipe)
 end
 
@@ -420,9 +524,13 @@ end
 --- **Get remove Known Recipe**
 ---@param character IsoGameCharacter
 ---@param recipe string
+---@return void
 --- - IsoGameCharacter : zombie.characters.IsoGameCharacter
 function CharacterPz.removeKnowRecipe_PZ(character, recipe)
     if not character or not recipe then
+        errHandler.errMsg("CharacterPz.removeKnowRecipe_PZ(character, recipe)",
+                errHandler.err.IS_NULL_CHARACTERS .. " or recipe " ..
+                        errHandler.err.IS_NULL)
         return nil
     end
 
@@ -435,9 +543,13 @@ end
 --- - IsoGameCharacter : zombie.characters.IsoGameCharacter
 function CharacterPz.learnRecipe_PZ(character, recipe)
     if not character or not recipe then
+        errHandler.errMsg("CharacterPz.learnRecipe_PZ(character, recipe)",
+                errHandler.err.IS_NULL_CHARACTERS .. " or recipe " ..
+                        errHandler.err.IS_NULL)
         return nil
     end
 
+    -- TODO : add return value
     character:learnRecipe(recipe)
 end
 

@@ -1,0 +1,6 @@
+ContextMenu_EN = {
+    ContextMenu_WrittenBook = "Written Book",
+    ContextMenu_TranscribeBook = "Transcribe Book",
+    ContextMenu_RebootClient = "You MUST close the game and reboot it to save the book.",
+    ContextMenu_ToEarly = "You can't transcribe this book yet.",
+}

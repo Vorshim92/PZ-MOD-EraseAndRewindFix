@@ -5,12 +5,29 @@ module EraseRewindRPG
         Base
     }
 
-    item EraseRewindJournal 
+    item ReadOnceBook
     {
         Weight = 0.42,
         Type = Literature,
-        DisplayName = Erase Rewind Journal,
+        DisappearOnUse = TRUE,
+        DisplayName = Read Once Book,
+        DisplayCategory = SkillBook,
         Icon = Book,
-        StaticModel = Book
+        StaticModel = Book,
+        Tooltip = Tooltip_ReadOnceBook,
     }
+
+    item TimedBook
+    {
+        Weight = 0.42,
+        Type = Literature,
+        DisappearOnUse = TRUE,
+        DisplayName = Timed Book,
+        DisplayCategory = SkillBook,
+        Icon = Book,
+        StaticModel = Book,
+        Tooltip = Tooltip_TimedBook,
+    }
+
+
 }

@@ -28,7 +28,7 @@ end
 ---@param perk PerkFactory.Perk
 ---@param level int
 ---@param xp float
---- - PerkFactory.Perk : zombie.characters.skills.PerkFactor
+--- - PerkFactory.Perk : zombie.characters.skills.PerkFactory.Perk
 function PerkDetailsObj:addPerkDetails(perk, level, xp)
     self.perk = perk
     self.level = level
@@ -37,6 +37,7 @@ end
 
 --- **Set level**
 ---@param level int
+---@return void
 function PerkDetailsObj:setLevel(level)
     self.level = level
 end
@@ -49,6 +50,7 @@ end
 
 --- **Set Level**
 ---@param xp float
+---@return void
 function PerkDetailsObj:setXp(xp)
     self.xp = xp
 end
@@ -61,7 +63,8 @@ end
 
 --- **Set perk**
 ---@param perk PerkFactory.Perk
---- - PerkFactory.Perk : zombie.characters.skills.PerkFactor
+---
+--- - PerkFactory.Perk : zombie.characters.skills.PerkFactory.Perk.Perk
 function PerkDetailsObj:setPerk(perk)
     self.perk = perk
 end
@@ -75,6 +78,7 @@ end
 
 --- **Set Boost**
 ---@param boostLevel int
+---
 function PerkDetailsObj:setBoostLevel(boostLevel)
     self.boostLevel = boostLevel
 end
@@ -87,6 +91,7 @@ end
 
 --- **Set Multiplier**
 ---@param multiplier double
+---@return void
 function PerkDetailsObj:setMultiplier(multiplier)
     self.multiplier = multiplier
 end
@@ -99,6 +104,7 @@ end
 
 --- **Set Flag**
 ---@param flag boolean
+---
 function PerkDetailsObj:setFlag(flag)
     self.flag = flag
 end
@@ -111,6 +117,7 @@ end
 
 --- **Set idGroup**
 ---@param idGroup int
+---
 function PerkDetailsObj:setIdGroup(idGroup)
     self.idGroup = idGroup
 end

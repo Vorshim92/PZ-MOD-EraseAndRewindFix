@@ -11,6 +11,7 @@ require("lib/PerkDetailsObj")
 CharacterBaseObj = BaseObject:derive("CharacterBaseObj")
 
 --- **Create a nuw CharacterBaseObj**
+---@return CharacterBaseObj
 function CharacterBaseObj:new()
     local o = {}
     setmetatable(o, self)
@@ -29,6 +30,8 @@ end
 ---@param perk PerkFactory.Perk
 ---@param level int
 ---@param xp float
+---@return void
+--- - PerkFactory.Perk : zombie.characters.skills.PerkFactory.Perk
 function CharacterBaseObj:currentCharacter(profession, perk, level, xp)
     self.profession = profession
 
@@ -40,6 +43,7 @@ end
 ---@param perk PerkFactory.Perk
 ---@param level int
 ---@param xp double
+---@return void
 function CharacterBaseObj:addPerkDetails(perk, level, xp)
     local PerkDetailsObj01 = PerkDetailsObj:new()
     PerkDetailsObj01:addPerkDetails(perk, level, xp)
@@ -55,6 +59,7 @@ end
 
 --- **Add Trait**
 ---@param recipe string
+---@return void
 function CharacterBaseObj:addRecipe(recipe)
     table.insert(self.recipes_List, recipe)
 end
@@ -67,6 +72,7 @@ end
 
 --- **Add Trait**
 ---@param trait String
+---@return void
 function CharacterBaseObj:addTrait(trait)
     table.insert(self.traits_List, trait)
 end
@@ -85,6 +91,7 @@ end
 
 --- **Set profession**
 ---@param profession string
+---@return void
 function CharacterBaseObj:setProfession(profession)
     self.profession = profession
 end
@@ -97,6 +104,7 @@ end
 
 --- **Set calories**
 ---@param calories double
+---@return void
 function CharacterBaseObj:setCalories(calories)
     self.calories = calories
 end
@@ -109,6 +117,7 @@ end
 
 --- **Set Weight**
 ---@param weight double
+---@return void
 function CharacterBaseObj:setWeight(weight)
     self.weight = weight
 end
