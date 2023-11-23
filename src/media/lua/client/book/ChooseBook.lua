@@ -24,7 +24,7 @@ end
 
 --- **Check if book is correct**
 ---@param item InventoryItem
----@return string|nil
+---@return boolean
 function ChooseBook.isCorrectBook(item, nameBook)
     if item:getType() == readBook[nameBook] then
         return true

@@ -41,7 +41,15 @@ end
 ---@return void
 --- - IsoGameCharacter : zombie.characters.IsoGameCharacter
 function TimedBook.readBook(character)
+    if not character then
+        errHandler.errMsg("TimedBook.readBook(character)",
+                errHandler.err.IS_NULL_CHARACTER)
+        return nil
+    end
+
     if not modDataManager.isExists(pageBook.Character.TIMED_BOOK) then
+        errHandler.errMsg("TimedBook.readBook(character)",
+                " mod-data - " .. pageBook.Character.TIMED_BOOK .. " is not exists")
         return nil
     end
 
@@ -55,7 +63,7 @@ end
 function TimedBook.writeBook(character)
     --- **Check if character is nil**
     if not character then
-        errHandler.errMsg("ScheduledBookRead.writeBook(character)",
+        errHandler.errMsg("TimedBook.writeBook(character)",
                 errHandler.err.IS_NULL_CHARACTER)
         return nil
     end

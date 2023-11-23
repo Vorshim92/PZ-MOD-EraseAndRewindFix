@@ -8,13 +8,14 @@
 
 local CharacterMultiplier = {}
 
+require("lib/CharacterBaseObj")
+
 local characterLib = require("CharacterLib")
 local characterPz = require("lib/CharacterPZ")
 local errHandler = require("lib/ErrHandler")
 local pageBook = require("book/PageBook")
 local modDataManager = require("lib/ModDataManager")
 
-require("lib/CharacterBaseObj")
 
 -- @param perk PerkFactory.Perk
 -- @param multiplier float

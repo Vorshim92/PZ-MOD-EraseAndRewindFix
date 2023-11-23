@@ -8,13 +8,14 @@
 
 local CharacterTrait = {}
 
+require("lib/CharacterBaseObj")
+
 local characterLib = require("CharacterLib")
 local characterPz = require("lib/CharacterPZ")
 local errHandler = require("lib/ErrHandler")
 local pageBook = require("book/PageBook")
 local modDataManager = require("lib/ModDataManager")
 
-require("lib/CharacterBaseObj")
 ---Read Trait From Hd
 ---@return table - string
 local function readTraitFromHd()

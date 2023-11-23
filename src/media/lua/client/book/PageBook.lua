@@ -11,17 +11,29 @@ local ModData = {}
 --- **ModData Character**
 ---@return table string
 ModData.Character = {
+    ---@type string
     BOOST = "characterBoost",
+    ---@type string
     CALORIES = "characterCalories",
+    ---@type string
     LIFE_TIME = "characterLifeTime",
+    ---@type string
     MULTIPLIER = "characterMultiplier",
+    ---@type string
     PERK_DETAILS = "characterPerkDetails",
+    ---@type string
     PROFESSION = "characterProfession",
+    ---@type string
     RECIPES = "characterRecipes",
+    ---@type string
     TRAITS = "characterTraits",
+    ---@type string
     READ_ONCE_BOOK = "readOnceBook",
+    ---@type string
     TIMED_BOOK = "timedBook",
+    ---@type string
     WEIGHT = "characterWeight",
+    ---@type string
     KILLED_ZOMBIES = "characterKilledZombies",
 }
 

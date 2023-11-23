@@ -5,6 +5,7 @@
 ---
 
 require "ISUI/ISInventoryPaneContextMenu"
+
 local activityCalendar = require("lib/ActivityCalendar")
 local debugDiagnostics = require("lib/DebugDiagnostics")
 local readOnceBook = require("book/ReadOnceBook")
@@ -95,13 +96,21 @@ local function addSaveContext(character, context, items)
     --- **Update all the characteristics of the character**
     character = debugDiagnostics.characterUpdate()
 
-    ---@type InventoryItem
-    --- **Retrive the selected item from the GUI inventory**
-    local item = items[1].items[1]
+    local item
 
-    --- **If a book create a context menu**
-    if chooseBook.isBook(item)  then
-        context:addOption(translation, item, onSavePlayer, character)
+    for _, v in ipairs(items) do
+        ---@type InventoryItem
+        item = v
+
+        --- **Retrive the selected item from the GUI inventory**
+        if not instanceof(v, "InventoryItem") then
+            item = v.items[1]
+        end
+
+        --- **If a book create a context menu**
+        if chooseBook.isBook(item)  then
+            context:addOption(translation, item, onSavePlayer, character)
+        end
     end
 end
 

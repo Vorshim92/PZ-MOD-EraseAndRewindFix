@@ -8,14 +8,15 @@
 
 local CharacterBoost = {}
 
+require("lib/CharacterBaseObj")
+
 local characterLib = require("CharacterLib")
 local characterPz = require("lib/CharacterPZ")
-local dataValidator = require("lib/DataValidator")
+local debugDiagnostics = require("lib/DebugDiagnostics")
 local errHandler = require("lib/ErrHandler")
 local pageBook = require("book/PageBook")
 local modDataManager = require("lib/ModDataManager")
 
-require("lib/CharacterBaseObj")
 
 -- @param perk PerkFactory.Perk
 -- @param boostLevel int

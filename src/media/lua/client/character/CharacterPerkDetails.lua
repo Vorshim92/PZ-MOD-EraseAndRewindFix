@@ -8,6 +8,8 @@
 
 local CharacterPerkDetails = {}
 
+require("lib/CharacterBaseObj")
+
 local characterLib = require("CharacterLib")
 local characterPz = require("lib/CharacterPZ")
 local errHandler = require("lib/ErrHandler")
@@ -15,7 +17,6 @@ local pageBook = require("book/PageBook")
 local modDataManager = require("lib/ModDataManager")
 local perkFactoryPZ = require("lib/PerkFactoryPZ")
 
-require("lib/CharacterBaseObj")
 
 --- **Read Character Perk Details From Hd**
 ---@return CharacterBaseObj PerkFactory.Perk perk, int level, float xp, boolean flag
@@ -81,12 +82,12 @@ function CharacterPerkDetails.readBook(character)
         --- **check if mod-data profession are exits**
     elseif not modDataManager.isExists(pageBook.Character.PROFESSION) then
         errHandler.errMsg("CharacterPerkDetails.readBook(character)",
-                " mod-data " .. pageBook.Character.PROFESSION .. " not exists")
+                " mod-data " .. pageBook.Character.PROFESSION .. " is not exists")
         return nil
         --- **check if mod-data perkDetails are exits**
     elseif not modDataManager.isExists(pageBook.Character.PERK_DETAILS) then
         errHandler.errMsg("CharacterPerkDetails.readBook(character)",
-                " mod-data " .. pageBook.Character.PERK_DETAILS .. " not exists")
+                " mod-data " .. pageBook.Character.PERK_DETAILS .. " is not exists")
         return nil
     end
 
@@ -131,7 +132,7 @@ function CharacterPerkDetails.writeBook(character)
     -- @param xp float
     for _, v in pairs(characterAllSkills:getPerkDetails()) do
         local value = ( v.perk:getName() .. "-" ..
-                tostring(v:getLevel())  .. "-" ..
+                tostring(v:getCurrentLevel())  .. "-" ..
                 tostring(v:getXp()) )
 
         table.insert(lines, value)

@@ -37,7 +37,7 @@ local advancedTest
 
 --- **Show more info about test**
 ---@param advancedTest_ boolean
----
+---@return void
 function DebugDiagnostics.setVerbose(advancedTest_)
     advancedTest = advancedTest_
 end
@@ -422,9 +422,7 @@ function DebugDiagnostics.createCharacter()
     characterPz.setPerkLevelFromXp(character, Perks.SmallBlunt, 75)
 
     -- set boost
-    characterPz.setPerkBoost_PZ(character, Perks.Fitness, 3)
-    characterPz.setPerkBoost_PZ(character, Perks.Strength, 3)
-    characterPz.setPerkBoost_PZ(character, Perks.Woodwork, 3)
+    characterPz.setPerkBoost_PZ(character, Perks.Axe, 3)
 
     -- set trait
     characterPz.setTraitsPerk_PZ(character,"HardOfHearing" )

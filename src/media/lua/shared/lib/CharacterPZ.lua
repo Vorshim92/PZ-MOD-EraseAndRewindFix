@@ -435,8 +435,7 @@ function CharacterPz.removeMultiplier(character, perk)
 
 end
 
--- TODO : add errHandler
---- **Set PerkBoost 1 - 75%, 2 - 100%, 3 - 125%, default 0 ?? - 50% **
+--- **Set XP Boost 1 - 75%, 2 - 100%, 3 - 125%, default 0 ?? - 50%**
 ---@param character IsoGameCharacter
 ---@param perk PerkFactory.Perk
 ---@param levelBoost int
@@ -447,6 +446,10 @@ function CharacterPz.setPerkBoost_PZ(character, perk, levelBoost)
     -- Perks.Cooking
     if not character or not perk or
             not levelBoost or levelBoost > CharacterPz.EnumNumbers.THREE then
+        errHandler.errMsg("CharacterPz.setPerkBoost_PZ(character, perk, levelBoost)",
+                errHandler.err.IS_NULL_CHARACTERS .. " or " ..
+                        errHandler.err.IS_NULL_PERK .. " or levelBoost " ..
+                                errHandler.err.IS_NULL )
         return nil
     end
 
@@ -500,11 +503,6 @@ function CharacterPz.addKnownRecipe(character, recipe)
         return nil
     end
 
-    --if not character or type(recipe) ~= "string" then
-    --    print("no")
-    --    return nil
-    --end
-
     -- TODO : add return value
     CharacterPz.learnRecipe_PZ(character, recipe)
 end
@@ -515,6 +513,8 @@ end
 --- - IsoGameCharacter : zombie.characters.IsoGameCharacter
 function CharacterPz.getKnownRecipes_PZ(character)
     if not character then
+        errHandler.errMsg("CharacterPz.getKnownRecipes_PZ(character)",
+                errHandler.err.IS_NULL_CHARACTERS)
         return nil
     end
 

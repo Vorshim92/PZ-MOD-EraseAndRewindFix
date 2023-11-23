@@ -7,7 +7,7 @@
 --- LAST UPDATE 05-09-2023
 
 ---@class CharacterManagement
----
+
 local CharacterManagement = {}
 
 local characterBoost = require("character/CharacterBoost")
@@ -21,7 +21,7 @@ local characterTrait = require("character/CharacterTrait")
 local errHandler = require("lib/ErrHandler")
 local pageBook = require("book/PageBook")
 local modDataManager = require("lib/ModDataManager")
-local patchSurvivalRewards = require("patchSurvivalRewards/PatchSurvivalRewards")
+local patchSurvivalRewards = require("patch/survivalRewards/PatchSurvivalRewards")
 
 --- **Remove all Mod Data**
 ---@return void

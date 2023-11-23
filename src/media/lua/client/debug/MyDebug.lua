@@ -18,6 +18,38 @@ local isoPlayerPZ = require("lib/IsoPlayerPZ")
 local characterLib = require("CharacterLib")
 local dataValidator = require("lib/DataValidator")
 
+local function perkBoostTdd()
+    debugDiagnostics.setVerbose(true)
+
+    characterBoost.writeBook(character)
+    characterBoost.readBook(character)
+
+    debugDiagnostics.checkTest( characterPz.getPerkBoost_PZ(character, Perks.Axe),
+            1, "PerkBoost Axe")
+
+    debugDiagnostics.displayTest()
+end
+
+local function perkBoost()
+    local character = getPlayer()
+    characterPz.setPerkBoost_PZ(character, debugDiagnostics.Perks.AXE, 1)
+    local perkBoostValue = characterPz.getPerkBoost_PZ(character, debugDiagnostics.Perks.AXE)
+    print(perkBoostValue)
+end
+
+local function createPerkBoost()
+    local character = getPlayer()
+
+    characterPz.setPerkBoost_PZ(character, debugDiagnostics.Perks.SPRINTING, 0)
+    characterPz.setPerkBoost_PZ(character, debugDiagnostics.Perks.LIGHTFOOT, 1)
+    characterPz.setPerkBoost_PZ(character, debugDiagnostics.Perks.NIMBLE, 2)
+    characterPz.setPerkBoost_PZ(character, debugDiagnostics.Perks.SNEAK, 3)
+    characterPz.setPerkBoost_PZ(character, debugDiagnostics.Perks.AXE, 0)
+    characterPz.setPerkBoost_PZ(character, debugDiagnostics.Perks.LONGBLUNT, 1)
+    characterPz.setPerkBoost_PZ(character, debugDiagnostics.Perks.SMALLBLUNT, 2)
+    characterPz.setPerkBoost_PZ(character, debugDiagnostics.Perks.LONGBLADE, 3)
+end
+
 ---@param character IsoGameCharacter
 local function key34(character, key)
     if key == 34 then -- <<<< g
@@ -30,32 +62,24 @@ end
 ---@param character IsoGameCharacter
 local function key35(character, key)
     if key == 35 then -- <<< h
-        print("Key = h > remove all moddata\n")
-        characterManagement.removeAllModData()
+        print("Key = h > set perkBoot \n")
+        createPerkBoost()
     end
 end
 
 ---@param character IsoGameCharacter
 local function key36(character, key)
     if key == 36 then -- <<<< j
-        print("Key = j > Sandbox \n")
-        --print( "SetDate = " .. tostring(SandboxVars.EraseRewindRPG.SetDays) )
-        --print( "SetTimeOfReadBook = " .. tostring(SandboxVars.EraseRewindRPG.SetTimeOfReadBook) )
-        local scheduledBookRead =
-            modDataManager.read(pageBook.Character.TIMED_BOOK)
-
-        print("------------------------")
-        print(activityCalendar.fromSecondToDate(scheduledBookRead[1]))
-        print("------------------------")
-
+        print("Key = j > characterManagement.readBook \n")
+        characterManagement.readBook(character)
     end
 end
 
 ---@param character IsoGameCharacter
 local function key37(character, key)
     if key == 37 then -- <<<< k
-        print("Key = k > remove TIMED_BOOK \n")
-        modDataManager.remove(pageBook.Character.TIMED_BOOK)
+        print("Key = k > characterManagement.writeBook \n")
+        characterManagement.writeBook(character)
     end
 end
 
@@ -70,7 +94,7 @@ end
 ---@param character IsoGameCharacter
 local function key17(character, key)
     if key == 17 then -- <<<< w
-        print("Key = w > \n")
+        print("Key = w >  \n")
 
     end
 end
@@ -78,21 +102,21 @@ end
 ---@param character IsoGameCharacter
 local function key18(character, key)
     if key == 18 then -- <<<< e
-        print("Key = e > \n")
-
+        print("Key = e > characterManagement.removeAllModData \n")
+        -- characterManagement.removeAllModData()
     end
 end
 
 local function onCustomUIKeyPressed(key)
     local character = getPlayer()
-
-    key16(character, key) -- q kill character
-    key17(character, key) -- w
-    key18(character, key) -- e
-    key34(character, key) -- g
-    key35(character, key) -- h
-    key36(character, key) -- j
-    key37(character, key) -- k
+    --
+    --key16(character, key) -- q kill character
+    --key17(character, key) -- w
+    --key18(character, key) -- e
+    --key34(character, key) -- g
+    --key35(character, key) -- h
+    --key36(character, key) -- j
+    --key37(character, key) -- k
 end
 
---Events.OnCustomUIKeyPressed.Add(onCustomUIKeyPressed)
+Events.OnCustomUIKeyPressed.Add(onCustomUIKeyPressed)

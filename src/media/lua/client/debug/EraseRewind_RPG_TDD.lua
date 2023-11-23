@@ -4,6 +4,8 @@
 --- DateTime: 30/09/23 17:21
 ---
 
+require("lib/CharacterBaseObj")
+
 local characterKilledZombies = require("character/CharacterKilledZombies")
 local characterLifeTime = require("character/CharacterLifeTime")
 local characterBoost = require("character/CharacterBoost")
@@ -21,7 +23,6 @@ local characterPz = require("lib/CharacterPZ")
 local isoPlayerPZ = require("lib/IsoPlayerPZ")
 local characterLib = require("CharacterLib")
 local characterManagement = require("character/CharacterManagement")
-require("lib/CharacterBaseObj")
 
 ---@param character IsoGameCharacter
 local function character_TDD(character)
@@ -143,12 +144,8 @@ local function character_TDD(character)
     characterBoost.writeBook(character)
     characterBoost.readBook(character)
 
-    debugDiagnostics.checkTest( characterPz.getPerkBoost_PZ(character, Perks.Fitness),
-            3, "PerkBoost Fitness")
-    debugDiagnostics.checkTest( characterPz.getPerkBoost_PZ(character, Perks.Strength),
-            3, "PerkBoost Strength")
-    debugDiagnostics.checkTest( characterPz.getPerkBoost_PZ(character, Perks.Woodwork),
-            3, "PerkBoost Woodwork")
+    debugDiagnostics.checkTest( characterPz.getPerkBoost_PZ(character, Perks.Axe),
+            3, "PerkBoost Axe")
 
     debugDiagnostics.displayTest()
     -- TODO - add more tests, manca il controllo del tempo. Non riesco a mandara avanti il tempo con le API
@@ -165,8 +162,6 @@ local function key34(character, key)
 
         character_TDD(character)
 
-        debugDiagnostics.deleteCharacter()
-        debugDiagnostics.createBasicCharacter()
     end
 end
 
@@ -222,13 +217,13 @@ end
 local function onCustomUIKeyPressed(key)
     local character = getPlayer()
 
-    --key16(character, key) -- q kill character
-    --key17(character, key) -- w
-    --key18(character, key) -- e
-    --key34(character, key) -- g
-    --key35(character, key) -- h
-    --key36(character, key) -- j
-    --key37(character, key) -- k
+    key16(character, key) -- q kill character
+    key17(character, key) -- w
+    key18(character, key) -- e
+    key34(character, key) -- g
+    key35(character, key) -- h
+    key36(character, key) -- j
+    key37(character, key) -- k
 end
 
 --Events.OnCustomUIKeyPressed.Add(onCustomUIKeyPressed)

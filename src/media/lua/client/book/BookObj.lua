@@ -5,6 +5,7 @@
 ---
 
 require "TimedActions/ISReadABook"
+
 local debugDiagnostics = require("lib/DebugDiagnostics")
 local chooseBook = require("book/ChooseBook")
 local errHandler = require("lib/ErrHandler")
@@ -59,17 +60,20 @@ function ISReadABook:perform()
     if not chooseBook.isBook(item) then
         ER_OVER_WRITE_ISReadABook_perform(self)
     else
+        --- **Check if book is correct**
         if chooseBook.isCorrectBook(item, readOnceBook_) then
 
             --- **Load mod-data from readOnceBook - Character stats**
             readOnceBook.readBook(debugDiagnostics.characterUpdate())
 
+            --- **Check if book is correct**
         elseif chooseBook.isCorrectBook(item, timedBook_) then
 
             --- **Load mod-data from TimeBookRead - Character stats**
             timedBook.readBook(debugDiagnostics.characterUpdate())
         end
 
+        --- **Update all the characteristics of the character**
         ---@type IsoGameCharacter
         local character = debugDiagnostics.characterUpdate()
 
@@ -118,6 +122,7 @@ function ISReadABook:new(character, item, time)
         er_OverWrite.loopedAction = false
         er_OverWrite.useProgressBar = false
         er_OverWrite.maxTime = getWaitingTime()
+
         er_OverWrite.stopOnWalk = false
         character:playSound(closeBook)
     end

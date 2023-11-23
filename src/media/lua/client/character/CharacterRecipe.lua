@@ -8,12 +8,13 @@
 
 local CharacterRecipe = {}
 
+require("lib/CharacterBaseObj")
+
 local characterLib = require("CharacterLib")
 local characterPz = require("lib/CharacterPZ")
 local errHandler = require("lib/ErrHandler")
 local pageBook = require("book/PageBook")
 local modDataManager = require("lib/ModDataManager")
-require("lib/CharacterBaseObj")
 
 --- **Read Recipe From Hd**
 ---@return CharacterBaseObj getRecipes table string
