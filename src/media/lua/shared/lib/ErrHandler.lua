@@ -52,6 +52,8 @@ ErrHandler.err = {
     ---@type string
     IS_NOT_NUMBER = "is not number",
     ---@type string
+    IS_NOT_PROFESSION = "is null profession",
+    ---@type string
     IS_NOT_STRING = "is not string",
     ---@type string
     IS_NOT_TABLE = "is not table",
@@ -64,5 +66,7 @@ ErrHandler.err = {
     ---@type string
     IS_NULL_XP = "is null xp",
 }
+
+
 
 return ErrHandler

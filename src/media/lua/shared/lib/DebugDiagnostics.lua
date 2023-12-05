@@ -362,7 +362,7 @@ function DebugDiagnostics.deleteCharacter()
     CharacterDeleteObj = characterLib.getAllPerks(character)
 
     for _, v in pairs(CharacterDeleteObj:getPerkDetails()) do
-        characterPz.removePerkBoost(character, v:getPerk())
+        characterPz.removeXPBoost(character, v:getPerk())
     end
 
     -- remove Zombie Kills
@@ -422,7 +422,7 @@ function DebugDiagnostics.createCharacter()
     characterPz.setPerkLevelFromXp(character, Perks.SmallBlunt, 75)
 
     -- set boost
-    characterPz.setPerkBoost_PZ(character, Perks.Axe, 3)
+    characterPz.setXPBoost(character, Perks.Axe, 3)
 
     -- set trait
     characterPz.setTraitsPerk_PZ(character,"HardOfHearing" )

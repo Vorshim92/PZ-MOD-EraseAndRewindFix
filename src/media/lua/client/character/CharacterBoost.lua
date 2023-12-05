@@ -17,22 +17,45 @@ local errHandler = require("lib/ErrHandler")
 local pageBook = require("book/PageBook")
 local modDataManager = require("lib/ModDataManager")
 
+--- **desperate Fix, XPBoost doesn't work well**
+---@param character IsoGameCharacter
+---@param perk PerkFactory.Perk
+---@param xpBoost int
+---@return void
+--- - IsoGameCharacter : zombie.characters.IsoGameCharacter
+--- - PerkFactory.Perk : zombie.characters.skills.PerkFactory.Perk
+local function desperateFix(character, perk, xpBoost)
+    for i = 0, 10 do
+        if characterPz.getXPBoost(character, perk) ~= xpBoost then
+            if i < 8 then
+                characterPz.setXPBoost(character, perk, xpBoost)
+                character = debugDiagnostics.characterUpdate()
+            else
+                for i = 1, 100000000 do
+
+                end
+                characterPz.setXPBoost(character, perk, xpBoost)
+                character = debugDiagnostics.characterUpdate()
+            end
+        end
+    end
+end
 
 -- @param perk PerkFactory.Perk
 -- @param boostLevel int
 local lines_ = {}
 
 ---@param perk PerkFactory.Perk
----@param boostLevel int
+---@param xpBoost int
 ---@return table <PerkFactory.Perk, int>
 --- - PerkFactory.Perk : zombie.characters.skills.PerkFactor
-local function addLines(perk, boostLevel)
+local function addLines(perk, xpBoost)
     table.insert(lines_, {
         ---@field PerkFactory.Perk
         perk = perk,
 
         ---@field int
-        boostLevel = boostLevel
+        xpBoost = xpBoost
     })
 end
 
@@ -83,7 +106,8 @@ function CharacterBoost.readBook(character)
 
     -- **Set Boost**
     for _, v in pairs(boost) do
-        characterPz.setPerkBoost_PZ(character, v.perk, v.boostLevel)
+        characterPz.setXPBoost(character, v.perk, v.xpBoost)
+        desperateFix(character, v.perk, v.xpBoost)
     end
 end
 
@@ -107,7 +131,7 @@ function CharacterBoost.writeBook(character)
     for _, v in pairs(CharacterPerksBoostObj:getPerkDetails()) do
         -- @param PerkFactory.Perk
         -- @param BoostLevel int
-        addLines(v:getPerk(), v:getBoostLevel())
+        addLines(v:getPerk(), v:getXPBoost())
     end
 
     --- **Save Boost to mod-data**

@@ -50,73 +50,100 @@ local function createPerkBoost()
     characterPz.setPerkBoost_PZ(character, debugDiagnostics.Perks.LONGBLADE, 3)
 end
 
----@param character IsoGameCharacter
-local function key34(character, key)
-    if key == 34 then -- <<<< g
-        print("Key = g > createCharacter \n")
+local function key82(character, key)
+    if key == 82 then -- <<<< Numpad 0
+        print("Key = Numpad 0 > createCharacter \n")
         debugDiagnostics.deleteCharacter()
         debugDiagnostics.createCharacter()
     end
 end
 
----@param character IsoGameCharacter
-local function key35(character, key)
-    if key == 35 then -- <<< h
-        print("Key = h > set perkBoot \n")
-        createPerkBoost()
+local function key79(character, key)
+    if key == 79 then -- <<<< Numpad 1
+        print("Key = Numpad 1 > createBasicCharacter \n")
+        debugDiagnostics.deleteCharacter()
+        debugDiagnostics.createBasicCharacter()
     end
 end
 
----@param character IsoGameCharacter
-local function key36(character, key)
-    if key == 36 then -- <<<< j
-        print("Key = j > characterManagement.readBook \n")
-        characterManagement.readBook(character)
+local function key80(character, key)
+    if key == 80 then -- <<<< Numpad 2
+        print("Key = Numpad 2 >  \n")
+
     end
 end
 
----@param character IsoGameCharacter
-local function key37(character, key)
-    if key == 37 then -- <<<< k
-        print("Key = k > characterManagement.writeBook \n")
-        characterManagement.writeBook(character)
+local function key81(character, key)
+    if key == 81 then -- <<<< Numpad 3
+        print("Key = Numpad 3 >  \n")
+
+    end
+end
+
+local function key75(character, key)
+    if key == 75 then -- <<<< Numpad 4
+        print("Key = Numpad 4 >  \n")
+
+    end
+end
+
+local function key76(character, key)
+    if key == 76 then -- <<<< Numpad 5
+        print("Key = Numpad 5 >  \n")
+
+    end
+end
+
+local function key77(character, key)
+    if key == 77 then -- <<<< Numpad 6
+        print("Key = Numpad 6 >  \n")
+
+    end
+end
+
+local function key71(character, key)
+    if key == 71 then -- <<<< Numpad 7
+        print("Key = Numpad 7 >  \n")
+
+    end
+end
+
+local function key72(character, key)
+    if key == 72 then -- <<<< Numpad 8
+        print("Key = Numpad 8 >  \n")
+
+    end
+end
+
+local function key73(character, key)
+    if key == 73 then -- <<<< Numpad 9
+        print("Key = Numpad 9 >  \n")
+
     end
 end
 
 ---@param character IsoGameCharacter
 local function key16(character, key)
     if key == 16 then -- <<<< q
-        print("Key = q > kill character \n")
+        print("Key = q > kill Character \n")
         character:die()
-    end
-end
-
----@param character IsoGameCharacter
-local function key17(character, key)
-    if key == 17 then -- <<<< w
-        print("Key = w >  \n")
-
-    end
-end
-
----@param character IsoGameCharacter
-local function key18(character, key)
-    if key == 18 then -- <<<< e
-        print("Key = e > characterManagement.removeAllModData \n")
-        -- characterManagement.removeAllModData()
     end
 end
 
 local function onCustomUIKeyPressed(key)
     local character = getPlayer()
-    --
-    --key16(character, key) -- q kill character
-    --key17(character, key) -- w
-    --key18(character, key) -- e
-    --key34(character, key) -- g
-    --key35(character, key) -- h
-    --key36(character, key) -- j
-    --key37(character, key) -- k
+
+    key16(character, key) -- q kill character
+    key82(character, key) -- Numpad 0
+    key79(character, key) -- Numpad 1
+    key80(character, key) -- Numpad 2
+    key81(character, key) -- Numpad 3
+    key75(character, key) -- Numpad 4
+    key76(character, key) -- Numpad 5
+    key77(character, key) -- Numpad 6
+    key71(character, key) -- Numpad 7
+    key72(character, key) -- Numpad 8
+    key73(character, key) -- Numpad 9
 end
 
 Events.OnCustomUIKeyPressed.Add(onCustomUIKeyPressed)

@@ -152,57 +152,14 @@ local function character_TDD(character)
     print("Manca il controllo del tempo. Non riesco a mandara avanti il tempo con le API")
 end
 
----@param character IsoGameCharacter
-local function key34(character, key)
-    if key == 34 then -- <<<< g
-        print("Key = g > character_TDD \n")
+local function key82(character, key)
+    if key == 82 then -- <<<< Numpad 0
+        print("Key = Numpad 0 > createCharacter \n")
         debugDiagnostics.setVerbose(false)
         debugDiagnostics.deleteCharacter()
         debugDiagnostics.createCharacter()
 
         character_TDD(character)
-
-    end
-end
-
----@param character IsoGameCharacter
-local function key35(character, key)
-    if key == 35 then -- <<< h
-        print("Key = h > createBasicCharacter  \n")
-        debugDiagnostics.deleteCharacter()
-        debugDiagnostics.createBasicCharacter()
-    end
-end
-
----@param character IsoGameCharacter
-local function key36(character, key)
-    if key == 36 then -- <<<< j
-        print("Key = j > writeBook \n")
-        characterManagement.writeBook(character)
-    end
-end
-
----@param character IsoGameCharacter
-local function key37(character, key)
-    if key == 37 then -- <<<< k
-        print("Key = k > readBook \n")
-        characterManagement.readBook(character)
-    end
-end
-
----@param character IsoGameCharacter
-local function key17(character, key)
-    if key == 17 then -- <<<< w
-        print("Key = w >   \n")
-
-    end
-end
-
----@param character IsoGameCharacter
-local function key18(character, key)
-    if key == 18 then -- <<<< e
-        print("Key = e >  \n")
-
     end
 end
 
@@ -218,12 +175,7 @@ local function onCustomUIKeyPressed(key)
     local character = getPlayer()
 
     key16(character, key) -- q kill character
-    key17(character, key) -- w
-    key18(character, key) -- e
-    key34(character, key) -- g
-    key35(character, key) -- h
-    key36(character, key) -- j
-    key37(character, key) -- k
+    key82(character, key) -- Numpad 0
 end
 
---Events.OnCustomUIKeyPressed.Add(onCustomUIKeyPressed)
+Events.OnCustomUIKeyPressed.Add(onCustomUIKeyPressed)

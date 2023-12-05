@@ -9,7 +9,7 @@
 local ActivityCalendar = {}
 
 local dataValidator = require("lib/DataValidator")
-
+local errHandler = require("lib/ErrHandler")
 local month = {
     Jan = 1, Feb = 2, Mar = 3, Apr = 4, May = 5, Jun = 6,
     Jul = 7, Aug = 8, Sep = 9, Oct = 10, Nov = 11, Dec = 12
@@ -35,6 +35,12 @@ end
 --- - PZCalendar : zombie.util.PZCalendar
 ---@deprecated
 local function setTimeInMillis(millisSeconds)
+    if not dataValidator.isDouble(millisSeconds) then
+        errHandler.errMsg("setTimeInMillis(millisSeconds)",
+                errHandler.err.IS_NOT_DOUBLE_FLOAT)
+        return nil
+    end
+
     getGameTime():getCalender():setTimeInMillis(millisSeconds)
 end
 
@@ -51,6 +57,12 @@ end
 ---@return string
 --- - "Fri Jul 09 09:43:41 CEST 1993"
 function ActivityCalendar.fromSecondToDate(timestamp)
+    if not dataValidator.isDouble(timestamp) then
+        errHandler.errMsg("fromSecondToDate(timestamp)",
+                errHandler.err.IS_NOT_DOUBLE_FLOAT)
+        return nil
+    end
+
     local formattedDate = os.date("%a %b %d %H:%M:%S %Z %Y", timestamp)
     return formattedDate
 end
@@ -60,6 +72,12 @@ end
 ---@return string
 --- - "Fri Jul 09 09:43:41 CEST 1993"
 function ActivityCalendar.fromMillisToDate(timestamp)
+    if not dataValidator.isDouble(timestamp) then
+        errHandler.errMsg("fromMillisToDate(timestamp)",
+                errHandler.err.IS_NOT_DOUBLE_FLOAT)
+        return nil
+    end
+
     local millisToSeconds = timestamp * 1000
     return ActivityCalendar.fromSecondToDate(millisToSeconds)
 end
@@ -71,7 +89,9 @@ end
 function ActivityCalendar.extractDate(date)
     --- **Check if date is string**
     if not dataValidator.isString(date) then
-        return
+        errHandler.errMsg("extractDate(date)",
+                errHandler.err.IS_NOT_STRING)
+        return nil
     end
 
     ---@type table
@@ -135,6 +155,12 @@ end
 ---@param days int
 ---@return double seconds
 local function getSecondsFromDays(days)
+    if not dataValidator.isInt(days) then
+        errHandler.errMsg("getSecondsFromDays(days)",
+                errHandler.err.IS_NOT_INT)
+        return nil
+    end
+
     return days * SECOND_IN_DAY
 end
 
@@ -142,6 +168,12 @@ end
 ---@param seconds double
 ---@return int days
 local function getDaysFromSeconds(seconds)
+    if not dataValidator.isDouble(seconds) then
+        errHandler.errMsg("getDaysFromSeconds(seconds)",
+                errHandler.err.IS_NOT_DOUBLE_FLOAT)
+        return nil
+    end
+
     return seconds / SECOND_IN_DAY
 end
 
@@ -163,6 +195,12 @@ end
 ---@param waitingDays int
 ---@return void
 function ActivityCalendar.setWaitingOfDays(waitingDays)
+    if not dataValidator.isNumber(waitingDays) then
+        errHandler.errMsg("setWaitingOfDays(waitingDays)",
+                errHandler.err.IS_NOT_NUMBER)
+        return nil
+    end
+
     expectedDateInSecond = getStarTime() + getSecondsFromDays(waitingDays)
 end
 
@@ -170,6 +208,12 @@ end
 ---@param expectedDate double
 ---@return void
 function ActivityCalendar.setExpectedDateInSecond(expectedDate)
+    if not dataValidator.isDouble(expectedDate) then
+        errHandler.errMsg("setExpectedDateInSecond(expectedDate)",
+                errHandler.err.IS_NOT_DOUBLE_FLOAT)
+        return nil
+    end
+
     expectedDateInSecond = expectedDate
 end
 
