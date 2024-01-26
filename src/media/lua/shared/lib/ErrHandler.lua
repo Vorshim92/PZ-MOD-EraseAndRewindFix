@@ -62,11 +62,11 @@ ErrHandler.err = {
     ---@type string
     IS_NULL_CHARACTERS = "is null characters",
     ---@type string
+    IS_NOT_CHARACTERS = "is not characters",
+    ---@type string
     IS_NULL_PERK = "is null perk",
     ---@type string
     IS_NULL_XP = "is null xp",
 }
-
-
 
 return ErrHandler

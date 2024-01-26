@@ -6,11 +6,12 @@
 
 ---@class CharacterLib
 
+require("lib/CharacterBaseObj")
+
 local characterPz = require("lib/CharacterPZ")
-local perkFactoryPZ = require("lib/PerkFactoryPZ")
 local dataValidator = require("lib/DataValidator")
 local errHandler = require("lib/ErrHandler")
-require("lib/CharacterBaseObj")
+local perkFactoryPZ = require("lib/PerkFactoryPZ")
 
 local CharacterLib = {}
 

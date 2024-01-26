@@ -154,7 +154,7 @@ end
 
 local function key82(character, key)
     if key == 82 then -- <<<< Numpad 0
-        print("Key = Numpad 0 > createCharacter \n")
+        print("Key = Numpad 0 > character_TDD \n")
         debugDiagnostics.setVerbose(false)
         debugDiagnostics.deleteCharacter()
         debugDiagnostics.createCharacter()
@@ -164,9 +164,9 @@ local function key82(character, key)
 end
 
 ---@param character IsoGameCharacter
-local function key16(character, key)
-    if key == 16 then -- <<<< q
-        print("Key = q > kill Character \n")
+local function key73(character, key)
+    if key == 73 then -- <<<< numpad 9
+        print("Key = numpad 9 > kill Character \n")
         character:die()
     end
 end
@@ -174,8 +174,8 @@ end
 local function onCustomUIKeyPressed(key)
     local character = getPlayer()
 
-    key16(character, key) -- q kill character
-    key82(character, key) -- Numpad 0
+    key82(character, key) -- Numpad 0 character_TDD
+    key73(character, key) -- Numpad 9 kill character
 end
 
 Events.OnCustomUIKeyPressed.Add(onCustomUIKeyPressed)
