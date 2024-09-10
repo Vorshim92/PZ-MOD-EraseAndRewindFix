@@ -107,7 +107,7 @@ function CharacterBoost.readBook(character)
     -- **Set Boost**
     for _, v in pairs(boost) do
         characterPz.setXPBoost(character, v.perk, v.xpBoost)
-        desperateFix(character, v.perk, v.xpBoost)
+        -- desperateFix(character, v.perk, v.xpBoost)
     end
 end
 
@@ -128,7 +128,7 @@ function CharacterBoost.writeBook(character)
     -- @type CharacterBaseObj
     local CharacterPerksBoostObj = characterLib.getPerksBoost(character)
 
-    for _, v in pairs(CharacterPerksBoostObj:getPerkDetails()) do
+    for _, v in pairs(CharacterPerksBoostObj:getPerkDetails()) do 
         -- @param PerkFactory.Perk
         -- @param BoostLevel int
         addLines(v:getPerk(), v:getXPBoost())

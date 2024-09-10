@@ -67,7 +67,7 @@ function CharacterManagement.readBook(character)
     characterNutrition.readBook()
     characterTrait.readBook(character)
     characterRecipe.readBook(character)
-    -- characterBoost.readBook(character)
+    characterBoost.readBook(character)
     characterMultiplier.readBook(character)
 
     ------- PATCH ------------
