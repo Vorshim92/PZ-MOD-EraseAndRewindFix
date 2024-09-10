@@ -48,7 +48,7 @@ function ReadOnceBook.writeBook(character)
 
     if flag then
         local lines = {}
-        table.insert(lines, bookWriteDateInSeconds)
+        table.insert(lines, "true")
         --- **Remove scheduled BookRead date to mod data**
         modDataManager.remove(pageBook.Character.READ_ONCE_BOOK)
 
