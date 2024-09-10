@@ -1,6 +1,6 @@
 ContextMenu_IT = {
     ContextMenu_WrittenBook = "Libro scritto",
     ContextMenu_TranscribeBook = "Trascrivi libro",
-    ContextMenu_RebootClient = "DEVI uscire dal gioco e riavviarlo per salvare il libro.",
     ContextMenu_ToEarly = "Non puoi ancora scrivere questo libro.",
+    ContextMenu_AlreadyWrite = "Hai gia scritto questo libro.",
 }

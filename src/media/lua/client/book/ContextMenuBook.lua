@@ -29,8 +29,7 @@ local function onSavePlayer(item, character)
     local closeBook = "CloseBook"
 
     --- **Translate to selected language**
-    translation = getText( "ContextMenu_WrittenBook") .. " - " ..
-            getText("ContextMenu_RebootClient")
+    translation = getText( "ContextMenu_WrittenBook")
 
     --- **Play sound**
     character:playSound(openBook)
@@ -39,12 +38,13 @@ local function onSavePlayer(item, character)
     local flag01 = false
 
     if chooseBook.isCorrectBook(item, "ReadOnceBook") then
-
-        --- **Write mod-data - Write book**
-        readOnceBook.writeBook(character, item)
-        flag01 = true
+        --- **Check if the book can be write mod-data**
+        if readOnceBook.writeBook(character, item) then
+            flag01 = true
+        else
+            translation = getText("ContextMenu_AlreadyWrite")
+        end
     elseif chooseBook.isCorrectBook(item, "TimedBook") then
-
         --- **Write mod-data - Write book**
         if timedBook.writeBook(character) then
             flag01 = true

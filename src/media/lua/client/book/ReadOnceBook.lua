@@ -28,7 +28,7 @@ end
 
 --- **Write Book**
 ---@param character IsoGameCharacter
----@return void
+---@return boolean
 --- - IsoGameCharacter : zombie.characters.IsoGameCharacter
 function ReadOnceBook.writeBook(character)
     --- **Check if character is null**
@@ -37,8 +37,26 @@ function ReadOnceBook.writeBook(character)
                 errHandler.err.IS_NULL_CHARACTERS)
         return nil
     end
+    local flag = true
 
-    characterManagement.writeBook(character)
+    if modDataManager.isExists(pageBook.Character.READ_ONCE_BOOK) then
+    flag = false
+    end
+
+
+    if flag then
+        local lines = {}
+        table.insert(lines, bookWriteDateInSeconds)
+        --- **Remove scheduled BookRead date to mod data**
+        modDataManager.remove(pageBook.Character.READ_ONCE_BOOK)
+
+        --- **Save scheduled BookRead date to mod data**
+        modDataManager.save(pageBook.Character.READ_ONCE_BOOK, lines)
+
+        --- **Write Book**
+        characterManagement.writeBook(character)
+    end
+return flag
 end
 
 return ReadOnceBook
