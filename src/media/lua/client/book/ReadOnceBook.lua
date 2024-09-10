@@ -10,6 +10,8 @@ local ReadOnceBook = {}
 
 local characterManagement = require("character/CharacterManagement")
 local errHandler = require("lib/ErrHandler")
+local modDataManager = require("lib/ModDataManager")
+local pageBook = require("book/PageBook")
 
 --- **Read Book**
 ---@param character IsoGameCharacter
