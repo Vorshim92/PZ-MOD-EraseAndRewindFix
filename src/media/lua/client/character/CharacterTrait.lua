@@ -20,7 +20,7 @@ local modDataManager = require("lib/ModDataManager")
 -- PATCH SKILL LIMITER
 local isSkillLimiter = false
 local SkillLimiter = {}
-if getActivatedMods():contains("SkillLimiter_RPG_BETA") then
+if getActivatedMods():contains("SkillLimiter_BETA") then
     isSkillLimiter = true
     SkillLimiter = require("SkillLimiter")
 end
