@@ -64,7 +64,7 @@ function PerkFactoryPZ.convertLevelToXp(perk, level)
         return nil
     --- **Check if level is null**
     elseif not level then
-        errHandler.errMsg("PerkFactoryPZ.convertLevelToXp(perk, level)", "level " .. errHandler.err.IS_NULL)
+        errHandler.errMsg("PerkFactoryPZ.convertLevelToXp(perk, level)", "level " .. errHandler.err.IS_NULL_LEVEL)
         return nil
     end
 

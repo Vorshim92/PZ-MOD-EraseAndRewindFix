@@ -64,9 +64,7 @@ function CharacterPz.addXP_PZ(character, perk, xp, flag1, flag2, flag3)
     flag1 = flag1 or true -- is the default
     flag2 = flag2 or false -- is the default
     flag3 = flag3 or false -- is the default
-
-    character:getXp():AddXP(perk, xp, true, true, false);
-
+    character:getXp():AddXP(perk, xp, flag1, flag2, flag3);
 end
 
 --- **Get XP perk with truncate to two decimal place**

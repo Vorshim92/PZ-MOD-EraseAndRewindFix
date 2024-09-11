@@ -66,6 +66,8 @@ ErrHandler.err = {
     ---@type string
     IS_NULL_PERK = "is null perk",
     ---@type string
+    IS_NULL_LEVEL = "is null level",
+    ---@type string
     IS_NULL_XP = "is null xp",
 }
 
