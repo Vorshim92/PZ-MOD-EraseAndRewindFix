@@ -6,6 +6,14 @@
 
 --- LAST UPDATE 05-09-2023
 
+-- PATCH SKILL LIMITER
+local isSkillLimiter = false
+local characterSkillLimit = {}
+if getActivatedMods():contains("SkillLimiter_BETA") then
+    isSkillLimiter = true
+    characterSkillLimit = require("character/CharacterSkillLimit")
+end
+
 ---@class CharacterManagement
 
 local CharacterManagement = {}
@@ -61,8 +69,12 @@ function CharacterManagement.readBook(character)
         return nil
     end
 
-    characterPerkDetails.readBook(character)
     characterTrait.readBook(character)
+    -- PATCH SKILL LIMITER
+    if isSkillLimiter then
+        characterSkillLimit.readbook()
+    end
+    characterPerkDetails.readBook(character)
     characterKilledZombies.readBook(character)
     characterLifeTime.readBook()
     characterNutrition.readBook()

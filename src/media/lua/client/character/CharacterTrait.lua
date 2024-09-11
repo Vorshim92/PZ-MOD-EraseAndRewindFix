@@ -17,15 +17,6 @@ local pageBook = require("book/PageBook")
 local modDataManager = require("lib/ModDataManager")
 
 
--- PATCH SKILL LIMITER
-local isSkillLimiter = false
-local SkillLimiter = {}
-if getActivatedMods():contains("SkillLimiter_BETA") then
-    isSkillLimiter = true
-    SkillLimiter = require("SkillLimiter")
-end
----@type string
-local characterMaxSkillModData = "characterMaxSkill"
 
 
 ---Read Trait From Hd
@@ -66,19 +57,6 @@ function CharacterTrait.readBook(character)
         -- @param trait string
         characterPz.setTraitsPerk_PZ(character, v)
     end
-
-        if isSkillLimiter and modDataManager.isExists(characterMaxSkillModData) then
-        --- **Check if ModData exists**
-            --- **Remove ModData**
-            modDataManager.remove(characterMaxSkillModData)
-            
-            SkillLimiter.initCharacter()
-            
-        end
-    
-    
-
-
 end
 
 --- **Write Trait To Hd**
