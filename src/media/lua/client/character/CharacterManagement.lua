@@ -61,8 +61,8 @@ function CharacterManagement.readBook(character)
         return nil
     end
 
-    characterTrait.readBook(character)
     characterPerkDetails.readBook(character)
+    characterTrait.readBook(character)
     characterKilledZombies.readBook(character)
     characterLifeTime.readBook()
     characterNutrition.readBook()
