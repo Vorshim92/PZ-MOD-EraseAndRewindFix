@@ -46,7 +46,9 @@ function CharacterManagement.removeAllModData()
     modDataManager.remove(pageBook.Character.TIMED_BOOK)
     modDataManager.remove(pageBook.Character.WEIGHT)
     modDataManager.remove(pageBook.Character.KILLED_ZOMBIES)
-
+    if isSkillLimiter then
+        modDataManager.remove(pageBook.Character.SKILL_LIMITER)
+    end
     ------- PATCH ------------
     --- survivalRewards 2797671069
     --- https://steamcommunity.com/sharedfiles/filedetails/?id=2797671069&searchtext=2797671069
@@ -111,6 +113,11 @@ function CharacterManagement.writeBook(character)
     characterLifeTime.writeBook()
     characterNutrition.writeBook()
     characterTrait.writeBook(character)
+
+    -- PATCH SKILL LIMITER
+    if isSkillLimiter then
+        characterSkillLimit.writebook()
+    end
     characterRecipe.writeBook(character)
     characterBoost.writeBook(character)
     characterMultiplier.writeBook(character)

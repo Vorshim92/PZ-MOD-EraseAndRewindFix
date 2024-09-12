@@ -3,10 +3,7 @@ local modDataManager = require("lib/ModDataManager")
 
 -- PATCH SKILL LIMITER
 local CharacterSkillLimit = {}
-local SkillLimiter = {}
-if getActivatedMods():contains("SkillLimiter_BETA") then
-    SkillLimiter = require("SkillLimiter")
-end
+local SkillLimiter = require("SkillLimiter") or {}
 ---@type string
 local characterMaxSkillModData = "characterMaxSkill"
 
@@ -18,6 +15,13 @@ if  modDataManager.isExists(characterMaxSkillModData) then
         
         SkillLimiter.initCharacter()
         
+    end
+end
+
+function CharacterSkillLimit.writeBook()
+    --- **Check if ModData exists**
+    if modDataManager.isExists(characterMaxSkillModData) then
+        modDataManager.remove(pageBook.Character.SKILL_LIMITER)
     end
 end
 

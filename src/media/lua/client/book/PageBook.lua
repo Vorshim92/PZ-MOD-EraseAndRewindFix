@@ -35,6 +35,8 @@ ModData.Character = {
     WEIGHT = "characterWeight",
     ---@type string
     KILLED_ZOMBIES = "characterKilledZombies",
+    ---@type string
+    SKILL_LIMITER = "characterSkillLimiter"
 }
 
 return ModData
