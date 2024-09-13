@@ -11,7 +11,7 @@ local isSkillLimiter = false
 local characterSkillLimit = {}
 if getActivatedMods():contains("SkillLimiter_BETA") then
     isSkillLimiter = true
-    characterSkillLimit = require("character/CharacterSkillLimit")
+    characterSkillLimit = require("patch/skillLimiter/CharacterSkillLimit")
 end
 
 ---@class CharacterManagement
