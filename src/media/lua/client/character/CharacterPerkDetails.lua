@@ -101,7 +101,7 @@ function CharacterPerkDetails.readBook(character)
     -- @param perk PerkFactory.Perk
     -- @param xp float
     for _, v in pairs(characterSkills:getPerkDetails()) do
-        characterPz.setPerkLevelFromXp(character, v:getPerk(), v:getXp())
+        characterPz.addXP_PZ(character, v:getPerk(), v:getXp(), false, false, false)
     end
 
     ---@type table

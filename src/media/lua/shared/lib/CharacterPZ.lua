@@ -345,16 +345,16 @@ function CharacterPz.removePerkLevel(character, perk)
         character:LoseLevel(perk)
     end
 
-    ---@type float
-    local xpPerk = CharacterPz.getXp(character, perk)
-    xpPerk = -xpPerk
+    -- ---@type float
+    -- local xpPerk = CharacterPz.getXp(character, perk)
+    -- xpPerk = -xpPerk
 
-    if xpPerk == 0 then
-        return
-    end
+    -- if xpPerk == 0 then
+    --     return
+    -- end
 
-    CharacterPz.addXP_PZ(character, perk, xpPerk,
-            true,false, false )
+    -- CharacterPz.addXP_PZ(character, perk, xpPerk,
+    --         true,false, false )
 
 end
 

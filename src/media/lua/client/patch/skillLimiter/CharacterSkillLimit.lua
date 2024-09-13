@@ -4,8 +4,10 @@ local SkillLimiter = require("SkillLimiter") or {}
 ---@type string
 local characterMaxSkillModData = "characterMaxSkill"
 local modDataManager = require("lib/ModDataManager")
+local pageBook = require("book/PageBook")
 
-function CharacterSkillLimit.readbook()
+
+function CharacterSkillLimit.readBook()
     if  modDataManager.isExists(characterMaxSkillModData) then
     --- **Check if ModData exists**
         --- **Remove ModData SkillLimiter per preparare il restore col libro**
