@@ -157,7 +157,7 @@ function CharacterLib.getAllPerks(character)
         -- piccolo fix per evitare numeri negativi
         local actualXp = xp - ISSkillProgressBar.getPreviousXpLvl(perk, level)
         if actualXp < 0 then
-            xp = xp + actualXp
+            xp = xp + -actualXp
         end
 
         -- Add to objects

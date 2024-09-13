@@ -103,12 +103,18 @@ function CharacterPerkDetails.readBook(character)
     for _, v in pairs(characterSkills:getPerkDetails()) do
         
         characterPz.setDesiredPerkLevel(character, v:getPerk(), v:getCurrentLevel())
-        print("XP TOTALI: " .. v:getXp())
-        local xp = v:getXp() - ISSkillProgressBar.getPreviousXpLvl(v:getPerk(), v:getCurrentLevel());
-        print("XP RIMASTI: " .. xp)
-        xp = round(xp,2)
-        -- character:getXp():AddXP(v:getPerk(), xp, false, false, false);
-        characterPz.addXP_PZ(character, v:getPerk(), xp, false, false, false)
+
+        local totalXp = v:getXp()
+        print("XP TOTALI: " .. totalXp) --25
+        local prevLvlTotalXp = ISSkillProgressBar.getPreviousXpLvl(v:getPerk(), v:getCurrentLevel()) --75
+        local diffXp = totalXp - prevLvlTotalXp -- (-50)
+        --se negativa la differenza o uguale a 0 lasciamo così com'è.
+        --già setDesiredPerkLevel ci pensa sincronizzare gli XP al lvl impostato
+        if diffXp > 0 then
+            --se ci sono degli xp extra farmati del lvl corrente li aggiungiamo
+            diffXp = round(diffXp,2)
+            characterPz.addXP_PZ(character, v:getPerk(), diffXp, false, false, false)    
+        end
     end
 
     ---@type table
