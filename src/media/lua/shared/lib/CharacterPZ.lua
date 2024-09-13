@@ -64,7 +64,8 @@ function CharacterPz.addXP_PZ(character, perk, xp, flag1, flag2, flag3)
     flag1 = flag1 or true -- is the default
     flag2 = flag2 or false -- is the default
     flag3 = flag3 or false -- is the default
-    character:getXp():AddXP(perk, xp, flag1, flag2, flag3);
+    --it's better to not call LuaEvent so first bool is false
+    character:getXp():AddXP(perk, xp, false, false, false);
 end
 
 --- **Get XP perk with truncate to two decimal place**
@@ -345,18 +346,82 @@ function CharacterPz.removePerkLevel(character, perk)
         character:LoseLevel(perk)
     end
 
-    -- ---@type float
-    -- local xpPerk = CharacterPz.getXp(character, perk)
-    -- xpPerk = -xpPerk
+    ---@type float
+    local xpPerk = CharacterPz.getXp(character, perk)
+    xpPerk = -xpPerk
 
-    -- if xpPerk == 0 then
-    --     return
-    -- end
+    if xpPerk == 0 then
+        return
+    end
 
-    -- CharacterPz.addXP_PZ(character, perk, xpPerk,
-    --         true,false, false )
+    CharacterPz.addXP_PZ(character, perk, xpPerk,
+            true,false, false )
 
 end
+
+
+--- **Set Perk Level and level**
+---@param character IsoGameCharacter
+---@param perk PerkFactory.Perk
+---@return void
+--- ISPlayerStatsUI.lua 635
+--- - IsoGameCharacter : zombie.characters.IsoGameCharacter
+--- - PerkFactory.Perk : zombie.characters.skills.PerkFactory.Perk
+--- - IsoGameCharacter.XP : zombie.characters.IsoGameCharacter.XP
+function CharacterPz.setDesiredPerkLevel(character, perk, desiredLevel)
+    -- Input validation
+    if not character then
+        errHandler.errMsg("CharacterPz.setDesiredPerkLevel(character, perk, desiredLevel)",
+                          errHandler.err.IS_NULL_CHARACTERS)
+        return nil
+    elseif not dataValidator.isCharacter(character) then
+        errHandler.errMsg("CharacterPz.setDesiredPerkLevel(character, perk, desiredLevel)",
+                          errHandler.err.IS_NOT_CHARACTERS)
+        return nil
+    elseif not perk then
+        errHandler.errMsg("CharacterPz.setDesiredPerkLevel(character, perk, desiredLevel)",
+                          errHandler.err.IS_NULL_PERK)
+        return nil
+    elseif type(desiredLevel) ~= "number" then
+        errHandler.errMsg("CharacterPz.setDesiredPerkLevel(character, perk, desiredLevel)",
+                          "Desired level must be a number.")
+        return nil
+    end
+
+    -- Ensure desiredLevel is within valid boundaries
+    local maxPerkLevel = 10  -- Adjust based on game limits
+    if desiredLevel < 0 then
+        desiredLevel = 0
+    elseif desiredLevel > maxPerkLevel then
+        desiredLevel = maxPerkLevel
+    end
+
+    -- Get the current perk level
+    local currentLevelPerk = CharacterPz.getPerkLevel_PZ(character, perk)
+    local levelDifference = desiredLevel - currentLevelPerk
+
+    -- Adjust levels
+    if levelDifference > 0 then
+        -- Increase levels
+        for _ = 1, levelDifference do
+            character:LevelPerk(perk, false)
+        end
+    elseif levelDifference < 0 then
+        -- Decrease levels
+        for _ = 1, -levelDifference do
+            character:LoseLevel(perk)
+        end
+    else
+        -- Levels are equal; no action needed
+        return
+    end
+
+    -- Update XP and synchronize
+    character:getXp():setXPToLevel(perk, character:getPerkLevel(perk))
+    SyncXp(character)
+end
+
+
 
 -- TODO : add errHandler
 --- **Set Zombies Killed**

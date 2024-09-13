@@ -64,7 +64,7 @@ local function deleteCharacter(character)
     -- @param perk PerkFactory.Perk
     --- - PerkFactory.Perk : zombie.characters.skills.PerkFactory
     for _, v in pairs(characterAllSkills:getPerkDetails()) do
-        characterPz.removePerkLevel(character, v:getPerk())
+        characterPz.setDesiredPerkLevel(character, v:getPerk(), 0)
     end
 
     characterPz.removeProfession(character)
@@ -101,7 +101,14 @@ function CharacterPerkDetails.readBook(character)
     -- @param perk PerkFactory.Perk
     -- @param xp float
     for _, v in pairs(characterSkills:getPerkDetails()) do
-        characterPz.addXP_PZ(character, v:getPerk(), v:getXp(), false, false, false)
+        
+        characterPz.setDesiredPerkLevel(character, v:getPerk(), v:getCurrentLevel())
+        print("XP TOTALI: " .. v:getXp())
+        local xp = v:getXp() - ISSkillProgressBar.getPreviousXpLvl(v:getPerk(), v:getCurrentLevel());
+        print("XP RIMASTI: " .. xp)
+        xp = round(xp,2)
+        -- character:getXp():AddXP(v:getPerk(), xp, false, false, false);
+        characterPz.addXP_PZ(character, v:getPerk(), xp, false, false, false)
     end
 
     ---@type table

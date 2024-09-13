@@ -149,10 +149,16 @@ function CharacterLib.getAllPerks(character)
         local perk = perkFactoryPZ.getPerk_PZ(Perks.fromIndex(i))
 
         ---@type int
-        local level = characterPz.getPerkLevel_PZ(character, perk)
+        local level = characterPz.getPerkLevel_PZ(character, perk) 
 
         ---@type double
         local xp = characterPz.getXp(character, perk)
+
+        -- piccolo fix per evitare numeri negativi
+        local actualXp = xp - ISSkillProgressBar.getPreviousXpLvl(perk, level)
+        if actualXp < 0 then
+            xp = xp + actualXp
+        end
 
         -- Add to objects
         CharacterObj01:addPerkDetails(perk, level, xp)
