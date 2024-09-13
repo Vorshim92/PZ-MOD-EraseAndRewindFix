@@ -1,11 +1,9 @@
-local modDataManager = require("lib/ModDataManager")
-
-
 -- PATCH SKILL LIMITER
 local CharacterSkillLimit = {}
 local SkillLimiter = require("SkillLimiter") or {}
 ---@type string
 local characterMaxSkillModData = "characterMaxSkill"
+local modDataManager = require("lib/ModDataManager")
 
 function CharacterSkillLimit.readbook()
     if  modDataManager.isExists(characterMaxSkillModData) then

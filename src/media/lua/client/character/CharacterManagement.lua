@@ -74,7 +74,7 @@ function CharacterManagement.readBook(character)
     characterTrait.readBook(character)
     -- PATCH SKILL LIMITER
     if isSkillLimiter then
-        characterSkillLimit.readbook()
+        characterSkillLimit.readBook()
     end
     characterPerkDetails.readBook(character)
     characterKilledZombies.readBook(character)
@@ -116,7 +116,7 @@ function CharacterManagement.writeBook(character)
 
     -- PATCH SKILL LIMITER
     if isSkillLimiter then
-        characterSkillLimit.writebook()
+        characterSkillLimit.writeBook()
     end
     characterRecipe.writeBook(character)
     characterBoost.writeBook(character)
