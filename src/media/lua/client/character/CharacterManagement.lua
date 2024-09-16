@@ -9,7 +9,7 @@
 -- PATCH SKILL LIMITER
 local isSkillLimiter = false
 local characterSkillLimit = {}
-if getActivatedMods():contains("SkillLimiter_BETA") then
+if getActivatedMods():contains("SkillLimiter_fix") then
     isSkillLimiter = true
     characterSkillLimit = require("patch/skillLimiter/CharacterSkillLimit")
 end
