@@ -221,7 +221,7 @@ end
 --- - The date retrieved from API is 24 hours behind the digital clock in game, I added 24 hours
 --- - Format date: Fri Jul 09 09:43:41 CEST 1993
 ---@return double seconds
-local function getStarTime()
+function ActivityCalendar.getStarTime()
     ---@type string
     local date = ActivityCalendar.getTime()
 
