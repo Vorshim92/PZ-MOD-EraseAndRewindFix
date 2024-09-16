@@ -3,38 +3,11 @@
     pageBook = require("book/PageBook")
     -- vecchie chiavi per per i libri
     -- Vecchie chiavi per i libri
-local oldKeys = {
-    "characterBoost",
-    "characterCalories",
-    "characterLifeTime",
-    "characterMultiplier",
-    "characterPerkDetails",
-    "characterProfession",
-    "characterRecipes",
-    "characterTraits",
-    "characterWeight",
-    "characterKilledZombies",
-    "characterSkillLimiter"
-}
 
--- Nuove chiavi per ReadOnceBook, nell'ordine corrispondente
-local newKeys = {
-    "characterBoost_ReadOnce",
-    "characterCalories_ReadOnce",
-    "characterLifeTime_ReadOnce",
-    "characterMultiplier_ReadOnce",
-    "characterPerkDetails_ReadOnce",
-    "characterProfession_ReadOnce",
-    "characterRecipes_ReadOnce",
-    "characterTraits_ReadOnce",
-    "characterWeight_ReadOnce",
-    "characterKilledZombies_ReadOnce",
-    "characterSkillLimiter_ReadOnce"
-}
 
 
     -- se esiste un vecchio backup verrà spostato nel nuovo readOnceBook (per questioni pratiche meglio rispetto al timed che ha la variabile del tempo)
-    local function migrateOldBackups(oldKeys)
+    local function migrateOldBackups()
         local flag = false
         -- faccio prima un check veloce sull'esistenza di quella chiavi vecchie
         -- se esiste una chiave vecchia allora conviene cominciare il trasferimento 
@@ -48,6 +21,34 @@ local newKeys = {
             print("Nessun vecchio backup trovato. Migrazione non necessaria.")
             return
         end
+        local oldKeys = {
+            "characterBoost",
+            "characterCalories",
+            "characterLifeTime",
+            "characterMultiplier",
+            "characterPerkDetails",
+            "characterProfession",
+            "characterRecipes",
+            "characterTraits",
+            "characterWeight",
+            "characterKilledZombies",
+            "characterSkillLimiter"
+        }
+        
+        -- Nuove chiavi per ReadOnceBook, nell'ordine corrispondente
+        local newKeys = {
+            "characterBoost_ReadOnce",
+            "characterCalories_ReadOnce",
+            "characterLifeTime_ReadOnce",
+            "characterMultiplier_ReadOnce",
+            "characterPerkDetails_ReadOnce",
+            "characterProfession_ReadOnce",
+            "characterRecipes_ReadOnce",
+            "characterTraits_ReadOnce",
+            "characterWeight_ReadOnce",
+            "characterKilledZombies_ReadOnce",
+            "characterSkillLimiter_ReadOnce"
+        }
         -- si resetta il TIMED per sicurezza
         if modDataManager.isExists(pageBook.Character.TIMED_BOOK) then
             modDataManager.remove(pageBook.Character.TIMED_BOOK)
