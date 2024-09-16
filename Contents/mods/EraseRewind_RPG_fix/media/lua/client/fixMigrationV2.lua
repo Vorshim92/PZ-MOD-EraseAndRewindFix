@@ -11,16 +11,6 @@
         local flag = false
         -- faccio prima un check veloce sull'esistenza di quella chiavi vecchie
         -- se esiste una chiave vecchia allora conviene cominciare il trasferimento 
-        for _, oldKey in pairs(oldKeys) do
-            if modDataManager.isExists(oldKey) then
-                flag = true
-                break
-            end
-        end
-        if not flag then
-            print("Nessun vecchio backup trovato. Migrazione non necessaria.")
-            return
-        end
         local oldKeys = {
             "characterBoost",
             "characterCalories",
@@ -49,6 +39,16 @@
             "characterKilledZombies_ReadOnce",
             "characterSkillLimiter_ReadOnce"
         }
+        for _, oldKey in pairs(oldKeys) do
+            if modDataManager.isExists(oldKey) then
+                flag = true
+                break
+            end
+        end
+        if not flag then
+            print("Nessun vecchio backup trovato. Migrazione non necessaria.")
+            return
+        end
         -- si resetta il TIMED per sicurezza
         if modDataManager.isExists(pageBook.Character.TIMED_BOOK) then
             modDataManager.remove(pageBook.Character.TIMED_BOOK)
