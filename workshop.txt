@@ -1,0 +1,7 @@
+version=1
+id=3328570610
+title=Erase and Rewind Fix
+description=Thanks to Lele for this mod.
+description=just some fix and new feature
+tags=Build 41;Balance;Multiplayer;Traits
+visibility=public
