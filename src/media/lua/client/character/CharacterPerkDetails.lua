@@ -13,19 +13,19 @@ require("lib/CharacterBaseObj")
 local characterLib = require("CharacterLib")
 local characterPz = require("lib/CharacterPZ")
 local errHandler = require("lib/ErrHandler")
-local pageBook = require("book/PageBook")
+-- local pageBook = require("book/PageBook")
 local modDataManager = require("lib/ModDataManager")
 local perkFactoryPZ = require("lib/PerkFactoryPZ")
 
 
 --- **Read Character Perk Details From Hd**
 ---@return CharacterBaseObj PerkFactory.Perk perk, int level, float xp, boolean flag
-local function readCharacterPerkDetailsFromHd()
+local function readCharacterPerkDetailsFromHd(modData_name)
 
     ---@type table
     ---@return table perk, level ( int ), xp ( float )
     local characterPerkDetails =
-        modDataManager.read(pageBook.Character.PERK_DETAILS)
+        modDataManager.read(modData_name.PERK_DETAILS)
 
     -- @type CharacterBaseObj
     local CharacterObj01 = CharacterBaseObj:new()
@@ -73,27 +73,27 @@ end
 --- **Copy Character Skill**
 ---@param character IsoGameCharacter
 --- - IsoGameCharacter : zombie.characters.IsoGameCharacter
-function CharacterPerkDetails.readBook(character)
+function CharacterPerkDetails.readBook(character, modData_name)
     --- **check if mod-data perkDetails and profession are exits**
     if not character then
         errHandler.errMsg("CharacterPerkDetails.readBook(character)",
                 errHandler.err.IS_NULL_CHARACTERS)
         return nil
         --- **check if mod-data profession are exits**
-    elseif not modDataManager.isExists(pageBook.Character.PROFESSION) then
+    elseif not modDataManager.isExists(modData_name.PROFESSION) then
         errHandler.errMsg("CharacterPerkDetails.readBook(character)",
-                " mod-data " .. pageBook.Character.PROFESSION .. " is not exists")
+                " mod-data " .. modData_name.PROFESSION .. " is not exists")
         return nil
         --- **check if mod-data perkDetails are exits**
-    elseif not modDataManager.isExists(pageBook.Character.PERK_DETAILS) then
+    elseif not modDataManager.isExists(modData_name.PERK_DETAILS) then
         errHandler.errMsg("CharacterPerkDetails.readBook(character)",
-                " mod-data " .. pageBook.Character.PERK_DETAILS .. " is not exists")
+                " mod-data " .. modData_name.PERK_DETAILS .. " is not exists")
         return nil
     end
 
     -- @type CharacterBaseObj
     ---@return CharacterBaseObj PerkFactory.Perk perk, int level, float xp, boolean flag
-    local characterSkills = readCharacterPerkDetailsFromHd()
+    local characterSkills = readCharacterPerkDetailsFromHd(modData_name)
 
     deleteCharacter(character)
 
@@ -119,7 +119,7 @@ function CharacterPerkDetails.readBook(character)
 
     ---@type table
     ---@return table string ( profession )
-    local profession = modDataManager.read(pageBook.Character.PROFESSION)
+    local profession = modDataManager.read(modData_name.PROFESSION)
 
     characterPz.setProfession_PZ(character,
             profession[1])
@@ -128,10 +128,10 @@ end
 --- **Write Character Perk Details To Hd**
 ---@param character IsoGameCharacter
 --- - IsoGameCharacter : zombie.characters.IsoGameCharacter
-function CharacterPerkDetails.writeBook(character)
+function CharacterPerkDetails.writeBook(character, modData_name)
     --- **Remove perkDetails and profession from mod-data**
-    modDataManager.remove(pageBook.Character.PERK_DETAILS)
-    modDataManager.remove(pageBook.Character.PROFESSION)
+    modDataManager.remove(modData_name.PERK_DETAILS)
+    modDataManager.remove(modData_name.PROFESSION)
 
     ---@type table
     local lines = {}
@@ -152,13 +152,13 @@ function CharacterPerkDetails.writeBook(character)
     end
 
     --- **Save Character Perk Details to mod-data**
-    modDataManager.save(pageBook.Character.PERK_DETAILS, lines)
+    modDataManager.save(modData_name.PERK_DETAILS, lines)
 
     lines = {}
     table.insert(lines, characterAllSkills:getProfession())
 
     --- **Save Character Profession to mod-data**
-    modDataManager.save(pageBook.Character.PROFESSION,
+    modDataManager.save(modData_name.PROFESSION,
             lines )
 
     lines = {}

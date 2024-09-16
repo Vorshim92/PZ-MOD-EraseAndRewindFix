@@ -14,7 +14,7 @@ local characterLib = require("CharacterLib")
 local characterPz = require("lib/CharacterPZ")
 local debugDiagnostics = require("lib/DebugDiagnostics")
 local errHandler = require("lib/ErrHandler")
-local pageBook = require("book/PageBook")
+-- local pageBook = require("book/PageBook")
 local modDataManager = require("lib/ModDataManager")
 
 --- **desperate Fix, XPBoost doesn't work well**
@@ -62,8 +62,8 @@ end
 --- **Read Boost From Hd**
 ---@return table perk, int
 --- - PerkFactory.Perk : zombie.characters.skills.PerkFactory
-local function readBoostFromHd()
-    return modDataManager.read(pageBook.Character.BOOST)
+local function readBoostFromHd(modData_name)
+    return modDataManager.read(modData_name.BOOST)
 end
 
 --- **Delete Boost**
@@ -81,7 +81,7 @@ end
 --- **Create Boost**
 ---@param character IsoGameCharacter
 --- - IsoGameCharacter : zombie.characters.IsoGameCharacter
-function CharacterBoost.readBook(character)
+function CharacterBoost.readBook(character, modData_name)
     --- **Check if character is null**
     if not character then
         errHandler.errMsg("CharacterBoost.readBook(character)",
@@ -90,14 +90,14 @@ function CharacterBoost.readBook(character)
     end
 
     --- **check if mod-data boost is exits**
-    if not modDataManager.isExists(pageBook.Character.BOOST) then
+    if not modDataManager.isExists(modData_name.BOOST) then
         errHandler.errMsg("CharacterBoost.readBook(character)",
-                " mod-data " .. pageBook.Character.BOOST .. " " .. errHandler.err.IS_NULL)
+                " mod-data " .. modData_name.BOOST .. " " .. errHandler.err.IS_NULL)
         return nil
     end
 
     ---@type table - PerkFactory.Perk, int boostLevel
-    local boost = readBoostFromHd()
+    local boost = readBoostFromHd(modData_name)
 
     --- check if boost is nil
     if not boost then return nil end
@@ -115,7 +115,7 @@ end
 ---@param character IsoGameCharacter
 --- - IsoGameCharacter : zombie.characters.IsoGameCharacter
 --- - PerkFactory.Perk : zombie.characters.skills.PerkFactory
-function CharacterBoost.writeBook(character)
+function CharacterBoost.writeBook(character, modData_name)
     --- **Check if character is null**
     if not character then
         errHandler.errMsg("CharacterBoost.writeBook(character)",
@@ -123,7 +123,7 @@ function CharacterBoost.writeBook(character)
         return nil
     end
 
-    modDataManager.remove(pageBook.Character.BOOST)
+    modDataManager.remove(modData_name.BOOST)
 
     -- @type CharacterBaseObj
     local CharacterPerksBoostObj = characterLib.getPerksBoost(character)
@@ -135,7 +135,7 @@ function CharacterBoost.writeBook(character)
     end
 
     --- **Save Boost to mod-data**
-    modDataManager.save(pageBook.Character.BOOST, lines_)
+    modDataManager.save(modData_name.BOOST, lines_)
 
     lines_ = {}
 

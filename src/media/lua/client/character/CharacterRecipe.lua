@@ -13,14 +13,14 @@ require("lib/CharacterBaseObj")
 local characterLib = require("CharacterLib")
 local characterPz = require("lib/CharacterPZ")
 local errHandler = require("lib/ErrHandler")
-local pageBook = require("book/PageBook")
+-- local pageBook = require("book/PageBook")
 local modDataManager = require("lib/ModDataManager")
 
 --- **Read Recipe From Hd**
 ---@return CharacterBaseObj getRecipes table string
-local function readRecipeFromHd()
+local function readRecipeFromHd(modData_name)
     local characterKnowRecipe =
-        modDataManager.read(pageBook.Character.RECIPES)
+        modDataManager.read(modData_name.RECIPES)
 
     local CharacterObj01 = CharacterBaseObj:new()
 
@@ -50,7 +50,7 @@ end
 --- **Create Recipe**
 ---@param character IsoGameCharacter
 --- - IsoGameCharacter : zombie.characters.IsoGameCharacter
-function CharacterRecipe.readBook(character)
+function CharacterRecipe.readBook(character, modData_name)
     if not character then
         errHandler.errMsg("CharacterRecipe.readBook(character)",
                 errHandler.err.IS_NULL_CHARACTERS)
@@ -58,15 +58,15 @@ function CharacterRecipe.readBook(character)
     end
 
     --- **Check if mod-data recipes is exits**
-    if not modDataManager.isExists(pageBook.Character.RECIPES) then
+    if not modDataManager.isExists(modData_name.RECIPES) then
         errHandler.errMsg("CharacterRecipe.readBook(character)",
-                " mod-data " .. pageBook.Character.RECIPES .. " not exists")
+                " mod-data " .. modData_name.RECIPES .. " not exists")
         return nil
     end
 
     ---@type table
     ---@return CharacterBaseObj getRecipes table string
-    local recipesObj = readRecipeFromHd(character)
+    local recipesObj = readRecipeFromHd(modData_name)
 
     deleteRecipe(character)
 
@@ -80,7 +80,7 @@ end
 --- **Write Recipe To Hd**
 ---@param character IsoGameCharacter
 --- - IsoGameCharacter : zombie.characters.IsoGameCharacter
-function CharacterRecipe.writeBook(character)
+function CharacterRecipe.writeBook(character, modData_name)
     --- **Check if character is null**
     if not character then
         errHandler.errMsg("CharacterRecipe.writeBook(character)",
@@ -89,7 +89,7 @@ function CharacterRecipe.writeBook(character)
     end
 
     --- **Remove Recipes form mod-data**
-    modDataManager.remove(pageBook.Character.RECIPES)
+    modDataManager.remove(modData_name.RECIPES)
 
     -- @type CharacterBaseObj
     local knownRecipesObj =  characterLib.getKnownRecipes(character)
@@ -104,7 +104,7 @@ function CharacterRecipe.writeBook(character)
     end
 
     --- **Save Recipes to mod-data**
-    modDataManager.save(pageBook.Character.RECIPES, lines)
+    modDataManager.save(modData_name.RECIPES, lines)
 
     lines = {}
 end

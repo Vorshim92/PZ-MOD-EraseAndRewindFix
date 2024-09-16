@@ -13,7 +13,7 @@ require("lib/CharacterBaseObj")
 local characterLib = require("CharacterLib")
 local characterPz = require("lib/CharacterPZ")
 local errHandler = require("lib/ErrHandler")
-local pageBook = require("book/PageBook")
+-- local pageBook = require("book/PageBook")
 local modDataManager = require("lib/ModDataManager")
 
 
@@ -21,29 +21,29 @@ local modDataManager = require("lib/ModDataManager")
 
 ---Read Trait From Hd
 ---@return table - string
-local function readTraitFromHd()
-    return modDataManager.read(pageBook.Character.TRAITS)
+local function readTraitFromHd(modData_name)
+    return modDataManager.read(modData_name.TRAITS)
 end
 
 --- **Create Trait**
 ---@param character IsoGameCharacter
 --- - IsoGameCharacter : zombie.characters.IsoGameCharacter
-function CharacterTrait.readBook(character)
+function CharacterTrait.readBook(character, modData_name)
     --- **Check if character is null**
     if not character then
         errHandler.errMsg("CharacterTrait.readBook(character)",
                 errHandler.err.IS_NULL_CHARACTERS)
         return nil
         --- **Check if mod-data traits is exits**
-    elseif not modDataManager.isExists(pageBook.Character.TRAITS) then
+    elseif not modDataManager.isExists(modData_name.TRAITS) then
         errHandler.errMsg("CharacterTrait.readBook(character)",
-                " mod-data " .. pageBook.Character.TRAITS .. " not exists")
+                " mod-data " .. modData_name.TRAITS .. " not exists")
         return nil
     end
 
     ---@type table - string
     ---@return string
-    local traits = readTraitFromHd(character)
+    local traits = readTraitFromHd(modData_name)
 
     if not traits then
         return nil
@@ -62,7 +62,7 @@ end
 --- **Write Trait To Hd**
 ---@param character IsoGameCharacter
 --- - IsoGameCharacter : zombie.characters.IsoGameCharacter
-function CharacterTrait.writeBook(character)
+function CharacterTrait.writeBook(character, modData_name)
     --- **Check if character is null**
     if not character then
         errHandler.errMsg("CharacterTrait.writeBook(character)",
@@ -71,13 +71,13 @@ function CharacterTrait.writeBook(character)
     end
 
     --- **Remove Traits form mod-data**
-    modDataManager.remove(pageBook.Character.TRAITS)
+    modDataManager.remove(modData_name.TRAITS)
 
     ---@type CharacterBaseObj
     local trait = characterLib.getTraitsPerk(character)
 
     --- **Save Traits to mod-data**
-    modDataManager.save(pageBook.Character.TRAITS,
+    modDataManager.save(modData_name.TRAITS,
             trait:getTraits())
 end
 

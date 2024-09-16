@@ -28,7 +28,7 @@ end
 
 --- **Get Book Write Date** - Get the date in seconds when it is possible to write a book
 ---@return double seconds
-local function getBookWriteDate()
+function TimedBook.getBookWriteDate()
     --- **Set Waiting Days**
     activityCalendar.setWaitingOfDays( getMinimumDaysBeforeWriteBook() )
 
@@ -53,7 +53,7 @@ function TimedBook.readBook(character)
         return nil
     end
 
-    characterManagement.readBook(character)
+    characterManagement.readBook(character, pageBook.Character.TimedBook)
 end
 
 --- **Write Book To Hd**
@@ -79,7 +79,7 @@ function TimedBook.writeBook(character)
     if not modDataManager.isExists(
             pageBook.Character.TIMED_BOOK) then
 
-        bookWriteDateInSeconds = getBookWriteDate()
+        bookWriteDateInSeconds = TimedBook.getBookWriteDate()
         flag = true
     else
         --- **Retrieve the date when it is possible to write a book**
@@ -97,10 +97,10 @@ function TimedBook.writeBook(character)
         --- **Check if date is expected**
         if activityCalendar.isExpectedDate() then
             --- **Remove all mod data**
-            characterManagement.removeAllModData()
+            characterManagement.removeAllModData(pageBook.Character.TIMED_BOOK)
 
             --- **Book Write Date In Seconds**
-            bookWriteDateInSeconds = getBookWriteDate()
+            bookWriteDateInSeconds = TimedBook.getBookWriteDate()
             flag = true
         end
 
@@ -117,7 +117,7 @@ function TimedBook.writeBook(character)
         modDataManager.save(pageBook.Character.TIMED_BOOK, lines)
 
         --- **Write Book**
-        characterManagement.writeBook(character)
+        characterManagement.writeBook(character, pageBook.Character.TimedBook)
     end
 
     return flag

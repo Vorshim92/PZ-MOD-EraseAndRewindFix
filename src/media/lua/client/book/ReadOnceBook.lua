@@ -25,7 +25,7 @@ function ReadOnceBook.readBook(character)
         return nil
     end
 
-    characterManagement.readBook(character)
+    characterManagement.readBook(character, pageBook.Character.ReadOnceBook)
 end
 
 --- **Write Book**
@@ -47,16 +47,16 @@ function ReadOnceBook.writeBook(character)
 
 
     if flag then
-        local lines = {}
-        table.insert(lines, "true")
+        -- local lines = {}
+        -- table.insert(lines, "true")
         --- **Remove scheduled BookRead date to mod data**
         modDataManager.remove(pageBook.Character.READ_ONCE_BOOK)
 
         --- **Save scheduled BookRead date to mod data**
-        modDataManager.save(pageBook.Character.READ_ONCE_BOOK, lines)
+        modDataManager.save(pageBook.Character.READ_ONCE_BOOK)
 
         --- **Write Book**
-        characterManagement.writeBook(character)
+        characterManagement.writeBook(character, pageBook.Character.ReadOnceBook)
     end
 return flag
 end

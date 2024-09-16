@@ -13,23 +13,25 @@ local errHandler = require("lib/ErrHandler")
 local ModDataManager = {}
 
 --- **Save ModData to Harddisk**
----@param nameFile String
+---@param nameFile string
 ---@param values table
 ---@return void
 --- - ModData : zombie.world.moddata.ModData
 function ModDataManager.save(nameFile, values)
-    if not nameFile or not values then
+    if not nameFile then
         errHandler.errMsg("ModDataManager.save(nameFile, values)",
-                errHandler.err.IS_NULL .. " or values " .. errHandler.err.IS_NULL)
+                errHandler.err.IS_NULL)
         return nil
     end
 
     ModData.create(nameFile)
-    ModData.add(nameFile, values)
+    if values then
+        ModData.add(nameFile, values)
+    end
 end
 
 --- **Read ModData**
----@param nameFile String
+---@param nameFile string
 ---@return table
 --- - ModData : zombie.world.moddata.ModData
 function ModDataManager.read(nameFile)
@@ -59,7 +61,7 @@ function ModDataManager.read(nameFile)
 end
 
 --- **Is modData Exists**
----@param nameFile String
+---@param nameFile string
 ---@return boolean
 --- - ModData : zombie.world.moddata.ModData
 function ModDataManager.isExists(nameFile)
@@ -77,7 +79,7 @@ function ModDataManager.isExists(nameFile)
 end
 
 --- **Remove modData**
----@param nameFile String
+---@param nameFile string
 ---@return void
 --- - ModData : zombie.world.moddata.ModData
 function ModDataManager.remove(nameFile)

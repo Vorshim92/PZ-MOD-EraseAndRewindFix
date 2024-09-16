@@ -33,26 +33,22 @@ local patchSurvivalRewards = require("patch/survivalRewards/PatchSurvivalRewards
 
 --- **Remove all Mod Data**
 ---@return void
-function CharacterManagement.removeAllModData()
-    modDataManager.remove(pageBook.Character.BOOST)
-    modDataManager.remove(pageBook.Character.CALORIES)
-    modDataManager.remove(pageBook.Character.LIFE_TIME)
-    modDataManager.remove(pageBook.Character.MULTIPLIER)
-    modDataManager.remove(pageBook.Character.RECIPES)
-    modDataManager.remove(pageBook.Character.PERK_DETAILS)
-    modDataManager.remove(pageBook.Character.PROFESSION)
-    modDataManager.remove(pageBook.Character.READ_ONCE_BOOK)
-    modDataManager.remove(pageBook.Character.TRAITS)
-    modDataManager.remove(pageBook.Character.TIMED_BOOK)
-    modDataManager.remove(pageBook.Character.WEIGHT)
-    modDataManager.remove(pageBook.Character.KILLED_ZOMBIES)
-    if isSkillLimiter then
-        modDataManager.remove(pageBook.Character.SKILL_LIMITER)
+function CharacterManagement.removeAllModData(modData_table)
+    print("modData_table: ", modData_table)
+    --- **Remove ModData**
+    -- Rimuovi tutti i dati associati alle chiavi specifiche del libro
+    for _, key in pairs(modData_table) do
+        modDataManager.remove(key)
     end
+    if modData_table == pageBook.Character.TimedBook then
+        modDataManager.remove(pageBook.Character.TIMED_BOOK)
+    elseif modData_table == pageBook.Character.ReadOnceBook then
+        modDataManager.remove(pageBook.Character.READ_ONCE_BOOK)
+    end
+
     ------- PATCH ------------
     --- survivalRewards 2797671069
     --- https://steamcommunity.com/sharedfiles/filedetails/?id=2797671069&searchtext=2797671069
-
     if patchSurvivalRewards.isModActive() then
         patchSurvivalRewards.removeMil_kill_Reached()
     end
@@ -63,7 +59,7 @@ end
 ---@param character IsoGameCharacter
 ---@return void
 --- - IsoGameCharacter : zombie.characters.IsoGameCharacter
-function CharacterManagement.readBook(character)
+function CharacterManagement.readBook(character, modData_table)
     --- **Check if character is null**
     if not character then
         errHandler.errMsg("CharacterManagement.readBook(character)",
@@ -71,18 +67,25 @@ function CharacterManagement.readBook(character)
         return nil
     end
 
-    characterTrait.readBook(character)
+    --- **Check if modData_table is exists**
+    if not modData_table then
+        errHandler.errMsg("CharacterManagement.readBook(character)",
+                " modData_table is not exists")
+        return nil
+    end
+
+    characterTrait.readBook(character, modData_table)
     -- PATCH SKILL LIMITER
     if isSkillLimiter then
-        characterSkillLimit.readBook()
+        characterSkillLimit.readBook(modData_table)
     end
-    characterPerkDetails.readBook(character)
-    characterKilledZombies.readBook(character)
-    characterLifeTime.readBook()
-    characterNutrition.readBook()
-    characterRecipe.readBook(character)
-    characterBoost.readBook(character)
-    characterMultiplier.readBook(character)
+    characterPerkDetails.readBook(character, modData_table)
+    characterKilledZombies.readBook(character, modData_table)
+    characterLifeTime.readBook(modData_table)
+    characterNutrition.readBook(modData_table)
+    characterRecipe.readBook(character, modData_table)
+    characterBoost.readBook(character, modData_table)
+    characterMultiplier.readBook(character, modData_table)
 
     ------- PATCH ------------
     --- survivalRewards 2797671069
@@ -93,14 +96,14 @@ function CharacterManagement.readBook(character)
     end
     --------------------------
 
-    CharacterManagement.removeAllModData()
+    CharacterManagement.removeAllModData(modData_table)
 end
 
 --- **Write Book**
 ---@param character IsoGameCharacter
 ---@return void
 --- - IsoGameCharacter : zombie.characters.IsoGameCharacter
-function CharacterManagement.writeBook(character)
+function CharacterManagement.writeBook(character, modData_table)
     --- **Check if character is null**
     if not character then
         errHandler.errMsg("CharacterManagement.writeBook(character)",
@@ -108,19 +111,25 @@ function CharacterManagement.writeBook(character)
         return nil
     end
 
-    characterPerkDetails.writeBook(character)
-    characterKilledZombies.writeBook(character)
-    characterLifeTime.writeBook()
-    characterNutrition.writeBook()
-    characterTrait.writeBook(character)
+    --- **Check if modData_name is exists**
+    if not modData_table then
+        errHandler.errMsg("CharacterManagement.writeBook(character)",
+                " modData_table is not exists")
+        return nil
+    end
+    characterPerkDetails.writeBook(character, modData_table)
+    characterKilledZombies.writeBook(character, modData_table)
+    characterLifeTime.writeBook(modData_table)
+    characterNutrition.writeBook(modData_table)
+    characterTrait.writeBook(character, modData_table)
 
     -- PATCH SKILL LIMITER
     if isSkillLimiter then
-        characterSkillLimit.writeBook()
+        characterSkillLimit.writeBook(modData_table)
     end
-    characterRecipe.writeBook(character)
-    characterBoost.writeBook(character)
-    characterMultiplier.writeBook(character)
+    characterRecipe.writeBook(character, modData_table)
+    characterBoost.writeBook(character, modData_table)
+    characterMultiplier.writeBook(character, modData_table)
 
     ------- PATCH ------------
     --- survivalRewards 2797671069

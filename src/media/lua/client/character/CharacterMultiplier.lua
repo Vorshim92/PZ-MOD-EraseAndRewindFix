@@ -13,7 +13,7 @@ require("lib/CharacterBaseObj")
 local characterLib = require("CharacterLib")
 local characterPz = require("lib/CharacterPZ")
 local errHandler = require("lib/ErrHandler")
-local pageBook = require("book/PageBook")
+-- local pageBook = require("book/PageBook")
 local modDataManager = require("lib/ModDataManager")
 
 
@@ -39,8 +39,8 @@ end
 --- **Read Multiplier From Hd**
 ---@return table perk, double ( multiplier )
 --- - PerkFactory.Perk : zombie.characters.skills.PerkFactory
-local function readMultiplierFromHd()
-    return modDataManager.read(pageBook.Character.MULTIPLIER)
+local function readMultiplierFromHd(modData_name)
+    return modDataManager.read(modData_name.MULTIPLIER)
 end
 
 --- **Delete Multiplier**
@@ -60,22 +60,22 @@ end
 --- **Create Multiplier**
 ---@param character IsoGameCharacter
 --- - IsoGameCharacter : zombie.characters.IsoGameCharacter
-function CharacterMultiplier.readBook(character)
+function CharacterMultiplier.readBook(character, modData_name)
     --- **Check if character is null**
     if not character then
         errHandler.errMsg("CharacterMultiplier.readBook(character)",
                 errHandler.err.IS_NULL_CHARACTERS)
         return nil
         --- **Check if mod-data multiplier is exits**
-    elseif not modDataManager.isExists(pageBook.Character.MULTIPLIER) then
+    elseif not modDataManager.isExists(modData_name.MULTIPLIER) then
         errHandler.errMsg("CharacterMultiplier.readBook(character)",
-                " mod-data " .. pageBook.Character.MULTIPLIER .. " not exists")
+                " mod-data " .. modData_name.MULTIPLIER .. " not exists")
         return nil
     end
 
     ---@type table
     ---@return table perk, double ( multiplier )
-    local multiplier = readMultiplierFromHd()
+    local multiplier = readMultiplierFromHd(modData_name)
 
     if not multiplier then
         return nil
@@ -95,7 +95,7 @@ end
 --- **Write Trait To Hd**
 ---@param character IsoGameCharacter
 --- - IsoGameCharacter : zombie.characters.IsoGameCharacter
-function CharacterMultiplier.writeBook(character)
+function CharacterMultiplier.writeBook(character, modData_name)
     --- **Check if character is null**
     if not character then
         errHandler.errMsg("CharacterMultiplier.writeBook(character)",
@@ -104,7 +104,7 @@ function CharacterMultiplier.writeBook(character)
     end
 
     --- **Remove Multiplier form mod-data**
-    modDataManager.remove(pageBook.Character.MULTIPLIER)
+    modDataManager.remove(modData_name.MULTIPLIER)
 
     -- @type CharacterBaseObj
     local CharacterMultiplierObJ = characterLib.getMultiplier(character)
@@ -119,7 +119,7 @@ function CharacterMultiplier.writeBook(character)
     end
 
     --- **Save Multiplier to mod-data**
-    modDataManager.save(pageBook.Character.MULTIPLIER, lines_)
+    modDataManager.save(modData_name.MULTIPLIER, lines_)
 
     lines_ = {}
 end

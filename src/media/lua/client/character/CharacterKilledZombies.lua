@@ -10,29 +10,29 @@ local CharacterKilledZombies = {}
 
 local characterPz = require("lib/CharacterPZ")
 local errHandler = require("lib/ErrHandler")
-local pageBook = require("book/PageBook")
+-- local pageBook = require("book/PageBook")
 local modDataManager = require("lib/ModDataManager")
 
 --- **Read Zombies Killed From Hd**
 ---@return table int ( killed zombies )
-local function readKilledZombiesFromHd()
-    return modDataManager.read(pageBook.Character.KILLED_ZOMBIES)
+local function readKilledZombiesFromHd(modData_name)
+    return modDataManager.read(modData_name.KILLED_ZOMBIES)
 end
 
 --- **Create Zombies Kills**
 ---@param character IsoGameCharacter
 --- - IsoGameCharacter : zombie.characters.IsoGameCharacter
-function CharacterKilledZombies.readBook(character)
+function CharacterKilledZombies.readBook(character, modData_name)
     --- **Check if mod-data killedZombies is exits**
-    if not modDataManager.isExists(pageBook.Character.KILLED_ZOMBIES) then
+    if not modDataManager.isExists(modData_name.KILLED_ZOMBIES) then
         errHandler.errMsg("CharacterKilledZombies.readBook(character)",
-                " mod-data " .. pageBook.Character.KILLED_ZOMBIES .. " not exists")
+                " mod-data " .. modData_name.KILLED_ZOMBIES .. " not exists")
         return nil
     end
 
     ---@type table
     ---@return int ( killed zombies )
-    local killedZombies = readKilledZombiesFromHd()
+    local killedZombies = readKilledZombiesFromHd(modData_name)
 
      characterPz.setZombieKills_PZ(character, killedZombies[1])
 
@@ -41,7 +41,7 @@ end
 --- **Write Zombies Kills To Hd**
 ---@param character IsoGameCharacter
 --- - IsoGameCharacter : zombie.characters.IsoGameCharacter
-function CharacterKilledZombies.writeBook(character)
+function CharacterKilledZombies.writeBook(character, modData_name)
     --- **Check if character is null**
     if not character then
         errHandler.errMsg("CharacterKilledZombies.writeBook(character)",
@@ -50,14 +50,14 @@ function CharacterKilledZombies.writeBook(character)
     end
 
     --- **Remove Killed Zombies form mod-data**
-    modDataManager.remove(pageBook.Character.KILLED_ZOMBIES)
+    modDataManager.remove(modData_name.KILLED_ZOMBIES)
 
     ---@type table int ( killed zombies )
     local killedZombies = {}
     table.insert(killedZombies, characterPz.getZombieKills_PZ(character))
 
     --- **Save Killed Zombies to mod-data**
-    modDataManager.save(pageBook.Character.KILLED_ZOMBIES,
+    modDataManager.save(modData_name.KILLED_ZOMBIES,
             killedZombies)
 
 end
