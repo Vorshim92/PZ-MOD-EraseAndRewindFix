@@ -1,6 +1,4 @@
-if not isServer() then
-    return
-end
+if not isServer() then return end
 
 -- UTILS
 -- Funzione per serializzare una tabella in formato testo con indentazione
@@ -25,8 +23,18 @@ local function serializeData(tbl, indent)
             elseif type(value) == "number" or type(value) == "boolean" then
                 valueStr = tostring(value)
             elseif type(value) == "userdata" then
-                valueStr = tostring(value)
+                -- Gestione di userdata iterabile
+                print("tipo userdata: " .. value)
+                local size = value:size()
+                serialized = serialized .. indent .. keyStr .. " = {\n"
+                for i = 0, size - 1 do
+                    local element = value:get(i)
+                    serialized = serialized .. serializeData(element, indent .. "    ")
+                end
+                serialized = serialized .. indent .. "},\n"
+
             else
+                print("tipo sconosciuto: " .. type(value) .. " - " .. value)
                 valueStr = '"UnsupportedType"'
             end
             serialized = serialized .. indent .. keyStr .. " = " .. valueStr .. ",\n"
@@ -112,21 +120,22 @@ local Commands = {}
 
 function Commands.saveBackup(player, args)
     local id = player:getUsername()
-
-    print("[Commands.saveBackup] Inizio del salvataggio dei dati per ID " .. id)
-    local filepath = "/Backup/EraseBackup/PlayerBKP_" .. id .. ".txt"
+    local filepathName = ""
+    if args.name == "readOneBook" then
+        filepathName = "ROB"
+    elseif args.name == "timedBook" then
+        filepathName = "TB"
+    elseif args.name == "BKP_MOD_1" then
+        filepathName = "BKP1"
+    elseif args.name == "BKP_MOD_2" then
+        filepathName = "BKP2"
+    end
+    print("[Commands.saveBackup] Inizio del salvataggio dei dati per ID " .. id .. " - " .. filepathName)
+    local filepath = "/Backup/EraseBackup/PlayerBKP_" .. id .. "_" .. filepathName .. ".txt"
     print("[Commands.saveBackup] Percorso del file: " .. filepath)
-
-    print("[Commands.saveBackup] Elaborazione dei dati...")
-
     -- Recupera i dati dal comando
     local tableName = args.name
     local modDataTable = args.data
-
-    -- Debugging: verifica i tipi di dati
-    print("[Commands.saveBackup] args.name:", tableName)
-    print("[Commands.saveBackup] Tipo di args.name:", type(tableName))
-    print("[Commands.saveBackup] Tipo di args.data:", type(modDataTable))
 
     -- Apri il file in modalità append
     local filewriter = getFileWriter(filepath, true, true)

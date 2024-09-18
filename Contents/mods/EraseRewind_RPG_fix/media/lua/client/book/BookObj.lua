@@ -41,6 +41,16 @@ function ISReadABook:start()
     --@type Literature
     local item = self.item
 
+    if not modDataManager.isExists("readOnceBook") or not modDataManager.isExists("timedBook") then
+                
+        local translation = getText( "ContextMenu_CannotReadBook" )
+        --- **Say message**
+        getPlayer():Say(translation)
+
+        --- **Play sound**
+        getPlayer():playSound("CloseBook")
+        return
+    end
     --- **Check if item is a book**
     if not chooseBook.isBook(item) then
         ER_OVER_WRITE_ISReadABook_start(self)
@@ -62,31 +72,14 @@ function ISReadABook:perform()
     else
         --- **Check if book is correct**
         if chooseBook.isCorrectBook(item, readOnceBook_) then
-            if not modDataManager.isExists("readOnceBook") then
-                
-                local translation = getText( "ContextMenu_CannotReadBook" )
-                --- **Say message**
-                getPlayer():Say(translation)
-
-                --- **Play sound**
-                getPlayer():playSound("CloseBook")
-                return
-            end
+            
 
             --- **Load mod-data from readOnceBook - Character stats**
             readOnceBook.readBook(debugDiagnostics.characterUpdate())
 
             --- **Check if book is correct**
         elseif chooseBook.isCorrectBook(item, timedBook_) then
-            if not modDataManager.isExists("timedBook") then
-                local translation = getText( "ContextMenu_CannotReadBook" )
-                --- **Say message**
-                getPlayer():Say(translation)
-
-                 --- **Play sound**
-                 getPlayer():playSound("CloseBook")
-                 return
-             end
+            
             --- **Load mod-data from TimeBookRead - Character stats**
             timedBook.readBook(debugDiagnostics.characterUpdate())
         end

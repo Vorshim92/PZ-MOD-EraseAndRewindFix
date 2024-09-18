@@ -186,6 +186,7 @@ function CharacterLib.getMultiplier(character)
 
     for _, v in pairs(CharacterObj01:getPerkDetails()) do
         local multiplier = characterPz.getMultiplier_PZ(character, v:getPerk())
+        -- still figure out, 4x = 8. 
         v:setMultiplier(dataValidator.trunkFloatTo2Decimal(multiplier))
     end
 
@@ -210,6 +211,8 @@ function CharacterLib.getPerksBoost(character)
     for _, v in pairs(CharacterObj01:getPerkDetails()) do
         ---@type int
         local boost = characterPz.getXPBoost(character, v:getPerk())
+        -- if you have 0,5x, boost = 0;
+        -- 0,5x = 0; 1x = 1; 1,5x = 2; 2x = 3; 2,5x = 4; 3x = 5; ecc..ecc..
         v:setXPBoost(boost)
     end
 
