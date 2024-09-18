@@ -80,11 +80,11 @@ function CharacterTrait.writeBook(character, modData_name)
     modDataManager.save(modData_name.TRAITS,
             trait:getTraits())
             -- save backup on server
-    local args = {
-        name = modData_name.TRAITS,
-        data = trait:getTraits()
-    }
-    sendClientCommand(character, "Vorshim", "saveBackup", args)
+    -- local args = {
+    --     name = modData_name.TRAITS,
+    --     data = trait:getTraits()
+    -- }
+    -- sendClientCommand(character, "Vorshim", "saveBackup", args)
     -- -- end backup on server
 end
 

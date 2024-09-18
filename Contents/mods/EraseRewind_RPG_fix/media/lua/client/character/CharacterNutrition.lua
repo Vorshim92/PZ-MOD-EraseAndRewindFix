@@ -34,11 +34,11 @@ local function writeWeightFromHd(modData_name)
     --- **Save Weight in mod-data**
     modDataManager.save(modData_name.WEIGHT,convertToTable )
     -- save backup on server
-    local args = {
-        name = modData_name.WEIGHT,
-        data = convertToTable
-    }
-    sendClientCommand(character, "Vorshim", "saveBackup", args)
+    -- local args = {
+    --     name = modData_name.WEIGHT,
+    --     data = convertToTable
+    -- }
+    -- sendClientCommand(character, "Vorshim", "saveBackup", args)
     -- -- end backup on server
     convertToTable = {}
 end
@@ -50,11 +50,11 @@ local function writeCaloriesFromHd(modData_name)
     --- **Save Calories to mod-data**
     modDataManager.save(modData_name.CALORIES, convertToTable)
     -- save backup on server
-    local args = {
-        name = modData_name.CALORIES,
-        data = convertToTable
-    }
-    sendClientCommand(character, "Vorshim", "saveBackup", args)
+    -- local args = {
+    --     name = modData_name.CALORIES,
+    --     data = convertToTable
+    -- }
+    -- sendClientCommand(character, "Vorshim", "saveBackup", args)
     -- -- end backup on server
     convertToTable = {}
 end

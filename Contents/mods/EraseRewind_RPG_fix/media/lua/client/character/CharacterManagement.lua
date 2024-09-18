@@ -13,6 +13,13 @@ if getActivatedMods():contains("SkillLimiter_fix") then
     isSkillLimiter = true
     characterSkillLimit = require("patch/skillLimiter/CharacterSkillLimit")
 end
+local isEraseBKP = false
+local playerBKP = {}
+if getActivatedMods():contains("Erase&Rewind_BKP") then
+    playerBKP = require("CharacterBackup")
+    isEraseBKP = true
+end
+
 
 ---@class CharacterManagement
 
@@ -99,6 +106,17 @@ function CharacterManagement.readBook(character, modData_table)
     CharacterManagement.removeAllModData(modData_table)
 end
 
+local function prepareBkpServer(modData_table)
+    local lines = {}
+    for _, key in pairs(modData_table) do
+        local temp = modDataManager.read(key)
+        table.insert(lines, temp)
+    end
+
+    return lines
+
+end
+
 --- **Write Book**
 ---@param character IsoGameCharacter
 ---@return void
@@ -138,5 +156,35 @@ function CharacterManagement.writeBook(character, modData_table)
     if patchSurvivalRewards.isModActive() then
         patchSurvivalRewards.writeMil_kill_ReachedToHd(character)
     end
+
+    ---------------------------
+    ---SEND BACKUP TO SERVER---
+    
+    local backup = prepareBkpServer(modData_table)
+    if backup then
+        local name = ""
+        if modData_table == pageBook.Character.TimedBook then
+            name = "Timed"
+        elseif modData_table == pageBook.Character.ReadOnceBook then
+            name = "ReadOnce"
+        elseif isEraseBKP then
+            if modData_table == playerBKP.BKP_1 then
+                name = "BKP1"
+            elseif modData_table == playerBKP.BKP_2 then
+                name = "BKP2"
+            end
+        end
+        local args = {
+            name = name,
+            data = backup
+        }
+        sendClientCommand(character, "Vorshim", "saveBackup", args)
+    end
+
+
 end
+
+
+
+
 return CharacterManagement

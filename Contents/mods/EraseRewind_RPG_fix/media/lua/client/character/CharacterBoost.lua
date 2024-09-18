@@ -137,11 +137,11 @@ function CharacterBoost.writeBook(character, modData_name)
     --- **Save Boost to mod-data**
     modDataManager.save(modData_name.BOOST, lines_)
     -- save backup on server
-    local args = {
-        name = modData_name.BOOST,
-        data = lines_
-    }
-    sendClientCommand(character, "Vorshim", "saveBackup", args)
+    -- local args = {
+    --     name = modData_name.BOOST,
+    --     data = lines_
+    -- }
+    -- sendClientCommand(character, "Vorshim", "saveBackup", args)
     -- -- end backup on server
     lines_ = {}
 

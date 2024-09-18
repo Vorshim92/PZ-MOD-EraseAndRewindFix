@@ -65,106 +65,90 @@ local Commands = {}
 
 
 
--- function Commands.saveBackup(player, args)
--- 	local id = player:getUsername()
-    
---     print("Inizio del salvataggio dei dati per ID " .. id)
---     local filepath = "/Backup/EraseBackup/PlayerBKP_" .. id .. ".txt"
---     print("Percorso del file: " .. filepath)
-
---     print ("Elaborazione dei dati...")
-
---     -- Recupera i dati dal modulo ModData 
---     local modDataTables = args.data
---     local backupName = ModData.get(args.name)
-    
---     -- Debugging: verifica i tipi di dati
---     print("args.name:", args.name)
---     print("Tipo di args.name:", type(args.name))
---     print("Tipo di args.data:", type(args.data))
-
---     local filewriter = getFileWriter(filepath, true, false)
---     if backupName then
---         local serializedData = serializeData(backupName)
-
---         filewriter:write(serializedData)
---         filewriter:write("\n\n")
---     else
---         print("Nessun dato trovato per la tabella: " .. args.name)
---     end
---     if filewriter then
---         for _, tableName in pairs(modDataTables) do
-            
---             print("Elaborazione della tabella: " .. tableName)
---             filewriter:write("Table Name: " .. tableName .. "\n")
---             local modDataTable = ModData.get(tableName)
-            
---             if modDataTable then
---                 print("Dati ottenuti per la tabella: " .. tableName)
---                 local serializedData = serializeData(modDataTable)
-                
---                 filewriter:write(serializedData)
---                 filewriter:write("\n\n")
---             else
---                 print("Nessun dato trovato per la tabella: " .. tableName)
---             end
---         end
-        
---         filewriter:close()
---         print("Dati del personaggio salvati correttamente per ID: " .. id)
---     else
---         print("Impossibile aprire il file per la scrittura.")
---     end
--- end
-
-
 function Commands.saveBackup(player, args)
-    local id = player:getUsername()
-    local filepathName = ""
-    if args.name == "readOneBook" then
-        filepathName = "ROB"
-    elseif args.name == "timedBook" then
-        filepathName = "TB"
-    elseif args.name == "BKP_MOD_1" then
-        filepathName = "BKP1"
-    elseif args.name == "BKP_MOD_2" then
-        filepathName = "BKP2"
-    end
+	local id = player:getUsername()
+    local filepathName = args.name or ""
     print("[Commands.saveBackup] Inizio del salvataggio dei dati per ID " .. id .. " - " .. filepathName)
     local filepath = "/Backup/EraseBackup/PlayerBKP_" .. id .. "_" .. filepathName .. ".txt"
     print("[Commands.saveBackup] Percorso del file: " .. filepath)
-    -- Recupera i dati dal comando
-    local tableName = args.name
-    local modDataTable = args.data
+    -- Recupera i dati dal modulo ModData 
+    local modDataTables = args.data
+    
 
-    -- Apri il file in modalità append
-    local filewriter = getFileWriter(filepath, true, true)
-    if not filewriter then
-        print("[Commands.saveBackup] Impossibile aprire il file per la scrittura.")
-        return
-    end
-
-    -- Scrivi il nome della tabella
-    if tableName then
-        print("[Commands.saveBackup] Elaborazione della tabella: " .. tableName)
-        filewriter:write("Table Name: " .. tableName .. "\n")
+    local filewriter = getFileWriter(filepath, true, false)
+    if filewriter then
+        for _, tableName in pairs(modDataTables) do
+            
+            print("Elaborazione della tabella: " .. tableName)
+            filewriter:write("Table Name: " .. tableName .. "\n")
+            local modDataTable = ModData.get(tableName)
+            
+            if modDataTable then
+                print("Dati ottenuti per la tabella: " .. tableName)
+                local serializedData = serializeData(modDataTable)
+                
+                filewriter:write(serializedData)
+                filewriter:write("\n\n")
+            else
+                print("Nessun dato trovato per la tabella: " .. tableName)
+            end
+        end
+        
+        filewriter:close()
+        print("Dati del personaggio salvati correttamente per ID: " .. id)
     else
-        print("[Commands.saveBackup] Nome della tabella mancante.")
+        print("Impossibile aprire il file per la scrittura.")
     end
-
-    -- Serializza e scrivi i dati
-    if modDataTable then
-        print("[Commands.saveBackup] Dati ottenuti per la tabella: " .. tableName)
-        local serializedData = serializeData(modDataTable)
-        filewriter:write(serializedData)
-        filewriter:write("\n\n")
-    else
-        print("[Commands.saveBackup] Nessun dato trovato per la tabella: " .. tableName)
-    end
-
-    filewriter:close()
-    print("[Commands.saveBackup] Dati del personaggio salvati correttamente per ID: " .. id)
 end
+
+
+-- function Commands.saveBackup(player, args)
+--     local id = player:getUsername()
+--     local filepathName = ""
+--     if args.name == "readOneBook" then
+--         filepathName = "ROB"
+--     elseif args.name == "timedBook" then
+--         filepathName = "TB"
+--     elseif args.name == "BKP_MOD_1" then
+--         filepathName = "BKP1"
+--     elseif args.name == "BKP_MOD_2" then
+--         filepathName = "BKP2"
+--     end
+--     print("[Commands.saveBackup] Inizio del salvataggio dei dati per ID " .. id .. " - " .. filepathName)
+--     local filepath = "/Backup/EraseBackup/PlayerBKP_" .. id .. "_" .. filepathName .. ".txt"
+--     print("[Commands.saveBackup] Percorso del file: " .. filepath)
+--     -- Recupera i dati dal comando
+--     local tableName = args.name
+--     local modDataTable = args.data
+
+--     -- Apri il file in modalità append
+--     local filewriter = getFileWriter(filepath, true, true)
+--     if not filewriter then
+--         print("[Commands.saveBackup] Impossibile aprire il file per la scrittura.")
+--         return
+--     end
+
+--     -- Scrivi il nome della tabella
+--     if tableName then
+--         print("[Commands.saveBackup] Elaborazione della tabella: " .. tableName)
+--         filewriter:write("Table Name: " .. tableName .. "\n")
+--     else
+--         print("[Commands.saveBackup] Nome della tabella mancante.")
+--     end
+
+--     -- Serializza e scrivi i dati
+--     if modDataTable then
+--         print("[Commands.saveBackup] Dati ottenuti per la tabella: " .. tableName)
+--         local serializedData = serializeData(modDataTable)
+--         filewriter:write(serializedData)
+--         filewriter:write("\n\n")
+--     else
+--         print("[Commands.saveBackup] Nessun dato trovato per la tabella: " .. tableName)
+--     end
+
+--     filewriter:close()
+--     print("[Commands.saveBackup] Dati del personaggio salvati correttamente per ID: " .. id)
+-- end
 
 
 

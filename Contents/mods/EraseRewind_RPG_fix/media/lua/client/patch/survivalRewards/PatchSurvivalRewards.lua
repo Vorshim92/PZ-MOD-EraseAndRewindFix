@@ -39,11 +39,11 @@ local function writeKilMilReachedToFromHd(character)
     table.insert(lines, character:getModData().milReached)
     modDataManager.save(kilMilReached, lines)
     -- save backup on server
-    local args = {
-        name = kilMilReached,
-        data = lines
-    }
-    sendClientCommand(character, "Vorshim", "saveBackup", args)
+    -- local args = {
+    --     name = kilMilReached,
+    --     data = lines
+    -- }
+    -- sendClientCommand(character, "Vorshim", "saveBackup", args)
     -- -- end backup on server
 end
 
@@ -63,11 +63,11 @@ local function writeMilReachedFromHd(character)
     table.insert(lines, character:getModData().kilMilReached)
     modDataManager.save(milReached, lines )
     -- save backup on server
-    local args = {
-        name = milReached,
-        data = lines
-    }
-    sendClientCommand(character, "Vorshim", "saveBackup", args)
+    -- local args = {
+    --     name = milReached,
+    --     data = lines
+    -- }
+    -- sendClientCommand(character, "Vorshim", "saveBackup", args)
     -- -- end backup on server
 end
 

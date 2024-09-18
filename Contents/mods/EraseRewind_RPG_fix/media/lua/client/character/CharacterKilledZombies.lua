@@ -60,11 +60,11 @@ function CharacterKilledZombies.writeBook(character, modData_name)
     modDataManager.save(modData_name.KILLED_ZOMBIES,
             killedZombies)
             -- save backup on server
-    local args = {
-        name = modData_name.KILLED_ZOMBIES,
-        data = characterPz.getZombieKills_PZ(character)
-    }
-    sendClientCommand(character, "Vorshim", "saveBackup", args)
+    -- local args = {
+    --     name = modData_name.KILLED_ZOMBIES,
+    --     data = characterPz.getZombieKills_PZ(character)
+    -- }
+    -- sendClientCommand(character, "Vorshim", "saveBackup", args)
     -- -- end backup on server
 
 end

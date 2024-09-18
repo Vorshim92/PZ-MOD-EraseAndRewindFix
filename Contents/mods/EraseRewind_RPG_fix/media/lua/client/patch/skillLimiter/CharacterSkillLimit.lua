@@ -42,11 +42,11 @@ function CharacterSkillLimit.writeBook(modData_name)
     --- li salvo nel backup del Libro
     modDataManager.save(modData_name.SKILL_LIMITER, characterMaxSkillTable)
     -- save backup on server
-    local args = {
-        name = modData_name.SKILL_LIMITER,
-        data = characterMaxSkillTable
-    }
-    sendClientCommand(character, "Vorshim", "saveBackup", args)
+    -- local args = {
+    --     name = modData_name.SKILL_LIMITER,
+    --     data = characterMaxSkillTable
+    -- }
+    -- sendClientCommand(character, "Vorshim", "saveBackup", args)
     -- -- end backup on server
 end
 
