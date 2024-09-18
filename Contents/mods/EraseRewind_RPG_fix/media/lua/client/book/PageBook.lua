@@ -35,21 +35,9 @@ ModData.Character = {
         TRAITS = "characterTraits_Timed",
         WEIGHT = "characterWeight_Timed",
         KILLED_ZOMBIES = "characterKilledZombies_Timed",
-    },
-
-    newReadOnceBook = {
-        ["BOOST"] = {},
-        ["CALORIES"] = {},
-        ["LIFE_TIME"] = {},
-        ["MULTIPLIER"] = {},
-        ["PERK_DETAILS"] = {},
-        ["PROFESSION"] = {},
-        ["RECIPES"] = {},
-        ["TRAITS"] = {},
-        ["WEIGHT"] = {},
-        ["KILLED_ZOMBIES"] = {}
     }
-    
+
+
 }
 
 if getActivatedMods():contains("SkillLimiter_fix") then
