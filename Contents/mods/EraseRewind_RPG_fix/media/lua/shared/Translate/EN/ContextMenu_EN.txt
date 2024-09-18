@@ -3,4 +3,5 @@ ContextMenu_EN = {
     ContextMenu_TranscribeBook = "Transcribe Book",
     ContextMenu_ToEarly = "You can't transcribe this book yet.",
     ContextMenu_AlreadyWrite = "You have already transcribed this book.",
+    ContextMenu_CannotReadBook =  "You can't read this book. You haven't written it yet.",
 }

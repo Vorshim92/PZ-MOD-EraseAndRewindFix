@@ -1,6 +1,6 @@
     -- fix migration to new version
-    modDataManager = require("lib/ModDataManager")
-    pageBook = require("book/PageBook")
+    local modDataManager = require("lib/ModDataManager")
+    local pageBook = require("book/PageBook")
     -- vecchie chiavi per per i libri
     -- Vecchie chiavi per i libri
 
@@ -82,7 +82,7 @@
 
             if lines then
                 -- Aggiungi i dati alla nuova chiave
-                modDataManager.add(newKey, lines)
+                modDataManager.save(newKey, lines)
                 print("Migrato " .. oldKey .. " a " .. newKey)
             else
                 print("Nessun dato trovato per la chiave " .. oldKey)
@@ -91,6 +91,8 @@
             -- Rimuovi la vecchia chiave dopo la migrazione
             modDataManager.remove(oldKey)
             print("Rimosso vecchio backup " .. oldKey)
+
+            lines = {}
         end
     end
 end

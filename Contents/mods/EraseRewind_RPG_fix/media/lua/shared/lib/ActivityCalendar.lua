@@ -248,7 +248,7 @@ function ActivityCalendar.setWaitingOfDays(waitingDays)
         return nil
     end
 
-    expectedDateInSecond = getStarTime() + getSecondsFromDays(waitingDays)
+    expectedDateInSecond = ActivityCalendar.getStarTime() + getSecondsFromDays(waitingDays)
 end
 
 --- **Set Expected Date In Seconds**
@@ -286,7 +286,7 @@ function ActivityCalendar.isExpectedDate()
     end
 
     --- **Check if the date is correct**
-    if  getStarTime() >= ActivityCalendar.getExpectedDateInSecond() then
+    if  ActivityCalendar.getStarTime() >= ActivityCalendar.getExpectedDateInSecond() then
         return true
     end
 

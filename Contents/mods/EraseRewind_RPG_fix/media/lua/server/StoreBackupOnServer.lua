@@ -1,0 +1,159 @@
+if not isServer() then
+    return
+end
+
+-- UTILS
+-- Funzione per serializzare una tabella in formato testo con indentazione
+local function serializeData(tbl, indent)
+	indent = indent or ""
+    local serialized = ""
+    for key, value in pairs(tbl) do
+        local keyStr = tostring(key)
+        if not keyStr:match("^[_%a][_%w]*$") then
+            keyStr = string.format("[%q]", keyStr)
+        else
+            keyStr = keyStr
+        end
+        if type(value) == "table" then
+            serialized = serialized .. indent .. keyStr .. " = {\n"
+            serialized = serialized .. serializeData(value, indent .. "    ")
+            serialized = serialized .. indent .. "},\n"
+        else
+            local valueStr
+            if type(value) == "string" then
+                valueStr = string.format("%q", value)
+            elseif type(value) == "number" or type(value) == "boolean" then
+                valueStr = tostring(value)
+            elseif type(value) == "userdata" then
+                valueStr = tostring(value)
+            else
+                valueStr = '"UnsupportedType"'
+            end
+            serialized = serialized .. indent .. keyStr .. " = " .. valueStr .. ",\n"
+        end
+    end
+    return serialized
+end
+
+-- Funzione ricorsiva per contare gli elementi in una tabella
+local function countDataSize(data)
+    local size = 0
+    if type(data) == "table" then
+        for _, v in pairs(data) do
+            size = size + countDataSize(v)
+        end
+    else
+        size = size + 1
+    end
+    return size
+end
+
+
+
+--- **Store Backup On Server**
+
+
+local Commands = {}
+
+
+
+function Commands.saveBackup(player, args)
+	local id = player:getUsername()
+    
+    print("Inizio del salvataggio dei dati per ID " .. id)
+    local filepath = "/Backup/EraseBackup/PlayerBKP_" .. id .. ".txt"
+    print("Percorso del file: " .. filepath)
+
+    print ("Elaborazione dei dati...")
+
+    -- Recupera i dati dal modulo ModData 
+    local modDataTables = args.data
+    local backupName = ModData.get(args.name)
+    
+    -- Debugging: verifica i tipi di dati
+    print("args.name:", args.name)
+    print("Tipo di args.name:", type(args.name))
+    print("Tipo di args.data:", type(args.data))
+
+    local filewriter = getFileWriter(filepath, true, false)
+    if backupName then
+        local serializedData = serializeData(backupName)
+
+        filewriter:write(serializedData)
+        filewriter:write("\n\n")
+    else
+        print("Nessun dato trovato per la tabella: " .. args.name)
+    end
+    if filewriter then
+        for _, tableName in pairs(modDataTables) do
+            
+            print("Elaborazione della tabella: " .. tableName)
+            filewriter:write("Table Name: " .. tableName .. "\n")
+            local modDataTable = ModData.get(tableName)
+            
+            if modDataTable then
+                print("Dati ottenuti per la tabella: " .. tableName)
+                local serializedData = serializeData(modDataTable)
+                
+                filewriter:write(serializedData)
+                filewriter:write("\n\n")
+            else
+                print("Nessun dato trovato per la tabella: " .. tableName)
+            end
+        end
+        
+        filewriter:close()
+        print("Dati del personaggio salvati correttamente per ID: " .. id)
+    else
+        print("Impossibile aprire il file per la scrittura.")
+    end
+end
+
+
+local function ServerGlobalModData()
+    
+    print("Inizio del salvataggio dei dati per il Server Mod Data ")
+    local filepath = "/Backup/ServerGlobalModData.txt"
+    print("Percorso del file: " .. filepath)
+
+    local tableNames = ModData.getTableNames()
+    local size = tableNames:size()
+    
+
+    local filewriter = getFileWriter(filepath, true, false)
+    if filewriter then
+        for i = 0, size - 1 do
+
+      local tableName = tableNames:get(i)
+            print("Elaborazione della tabella: " .. tableName)
+            filewriter:write("Table Name: " .. tableName .. "\n")
+            local modDataTable = ModData.get(tableName)
+            
+            if modDataTable then
+                print("Dati ottenuti per la tabella: " .. tableName)
+                local serializedData = serializeData(modDataTable)
+                
+                filewriter:write(serializedData)
+                filewriter:write("\n\n")
+            else
+                print("Nessun dato trovato per la tabella: " .. tableName)
+            end
+        end
+        
+        filewriter:close()
+        print("Dati del Server Global Mod Data  salvati correttamente")
+    else
+        print("Impossibile aprire il file per la scrittura.")
+    end
+end
+
+
+
+Events.OnClientCommand.Add(function(module, command, player, args)
+	if module == 'Vorshim' and Commands[command] then
+		args = args or {}
+		Commands[command](player, args)
+	end
+end)
+
+Events.OnServerStarted.Add(ServerGlobalModData)

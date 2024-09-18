@@ -3,4 +3,5 @@ ContextMenu_IT = {
     ContextMenu_TranscribeBook = "Trascrivi libro",
     ContextMenu_ToEarly = "Non puoi ancora scrivere questo libro.",
     ContextMenu_AlreadyWrite = "Hai gia scritto questo libro.",
+    ContextMenu_CannotReadBook =  "Non puoi leggere questo libro. Non lo hai mai scritto",
 }

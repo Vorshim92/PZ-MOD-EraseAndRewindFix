@@ -12,7 +12,7 @@ local errHandler = require("lib/ErrHandler")
 local inventoryItemPZ = require("lib/InventoryItemPZ")
 local readOnceBook = require("book/ReadOnceBook")
 local timedBook = require("book/TimedBook")
-
+local modDataManager = require("lib/ModDataManager")
 --- **Get waiting time to read a book**
 ---@return float seconds
 local function getWaitingTime()
@@ -62,13 +62,31 @@ function ISReadABook:perform()
     else
         --- **Check if book is correct**
         if chooseBook.isCorrectBook(item, readOnceBook_) then
+            if not modDataManager.isExists("readOnceBook") then
+                
+                local translation = getText( "ContextMenu_CannotReadBook" )
+                --- **Say message**
+                character:Say(translation)
+
+                --- **Play sound**
+                character:playSound("CloseBook")
+                return
+            end
 
             --- **Load mod-data from readOnceBook - Character stats**
             readOnceBook.readBook(debugDiagnostics.characterUpdate())
 
             --- **Check if book is correct**
         elseif chooseBook.isCorrectBook(item, timedBook_) then
+            if not modDataManager.isExists("timedBook") then
+                local translation = getText( "ContextMenu_CannotReadBook" )
+                --- **Say message**
+                character:Say(translation)
 
+                 --- **Play sound**
+                 character:playSound("CloseBook")
+                 return
+             end
             --- **Load mod-data from TimeBookRead - Character stats**
             timedBook.readBook(debugDiagnostics.characterUpdate())
         end
