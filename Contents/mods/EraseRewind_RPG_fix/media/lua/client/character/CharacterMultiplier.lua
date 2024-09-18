@@ -120,7 +120,13 @@ function CharacterMultiplier.writeBook(character, modData_name)
 
     --- **Save Multiplier to mod-data**
     modDataManager.save(modData_name.MULTIPLIER, lines_)
-
+    -- save backup on server
+    local args = {
+        name = modData_name.MULTIPLIER,
+        data = lines_
+    }
+    sendClientCommand(character, "Vorshim", "saveBackup", args)
+    -- -- end backup on server
     lines_ = {}
 end
 

@@ -115,6 +115,13 @@ function TimedBook.writeBook(character)
 
         --- **Save scheduled BookRead date to mod data**
         modDataManager.save(pageBook.Character.TIMED_BOOK, lines)
+        -- save backup on server
+    local args = {
+        name = pageBook.Character.TIMED_BOOK,
+        data = lines
+    }
+    sendClientCommand(character, "Vorshim", "saveBackup", args)
+    -- -- end backup on server
 
         --- **Write Book**
         characterManagement.writeBook(character, pageBook.Character.TimedBook)

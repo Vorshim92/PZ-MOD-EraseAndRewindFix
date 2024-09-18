@@ -54,6 +54,13 @@ function ReadOnceBook.writeBook(character)
 
         --- **Save scheduled BookRead date to mod data**
         modDataManager.save(pageBook.Character.READ_ONCE_BOOK)
+        -- save backup on server
+    local args = {
+        name = pageBook.Character.READ_ONCE_BOOK,
+        data = {}
+    }
+    sendClientCommand(character, "Vorshim", "saveBackup", args)
+    -- -- end backup on server
 
         --- **Write Book**
         characterManagement.writeBook(character, pageBook.Character.ReadOnceBook)

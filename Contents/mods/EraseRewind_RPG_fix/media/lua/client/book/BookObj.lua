@@ -66,10 +66,10 @@ function ISReadABook:perform()
                 
                 local translation = getText( "ContextMenu_CannotReadBook" )
                 --- **Say message**
-                character:Say(translation)
+                getPlayer():Say(translation)
 
                 --- **Play sound**
-                character:playSound("CloseBook")
+                getPlayer():playSound("CloseBook")
                 return
             end
 
@@ -81,10 +81,10 @@ function ISReadABook:perform()
             if not modDataManager.isExists("timedBook") then
                 local translation = getText( "ContextMenu_CannotReadBook" )
                 --- **Say message**
-                character:Say(translation)
+                getPlayer():Say(translation)
 
                  --- **Play sound**
-                 character:playSound("CloseBook")
+                 getPlayer():playSound("CloseBook")
                  return
              end
             --- **Load mod-data from TimeBookRead - Character stats**

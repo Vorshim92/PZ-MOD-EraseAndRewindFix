@@ -153,13 +153,28 @@ function CharacterPerkDetails.writeBook(character, modData_name)
 
     --- **Save Character Perk Details to mod-data**
     modDataManager.save(modData_name.PERK_DETAILS, lines)
-
+    -- save backup on server
+    local args = {
+        name = modData_name.PERK_DETAILS,
+        data = lines
+    }
+    sendClientCommand(character, "Vorshim", "saveBackup", args)
+    -- -- end backup on server
     lines = {}
+    args = {}
     table.insert(lines, characterAllSkills:getProfession())
 
     --- **Save Character Profession to mod-data**
     modDataManager.save(modData_name.PROFESSION,
             lines )
+
+    -- save backup on server
+    args = {
+        name = modData_name.PROFESSION,
+        data = lines
+    }
+    sendClientCommand(character, "Vorshim", "saveBackup", args)
+    -- -- end backup on server
 
     lines = {}
 end

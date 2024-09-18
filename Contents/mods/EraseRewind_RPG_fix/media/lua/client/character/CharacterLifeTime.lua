@@ -45,6 +45,13 @@ function CharacterLifeTime.writeBook(modData_name)
     --- **Save Life Time to mod-data**
     modDataManager.save(modData_name.LIFE_TIME,
             hoursSurvived)
+            -- save backup on server
+    local args = {
+        name = modData_name.LIFE_TIME,
+        data = isoPlayerPZ.getHoursSurvived_PZ()
+    }
+    sendClientCommand(character, "Vorshim", "saveBackup", args)
+    -- -- end backup on server
 end
 
 return CharacterLifeTime
