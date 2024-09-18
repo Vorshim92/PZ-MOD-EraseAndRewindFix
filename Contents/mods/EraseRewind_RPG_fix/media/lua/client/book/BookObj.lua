@@ -12,7 +12,7 @@ local errHandler = require("lib/ErrHandler")
 local inventoryItemPZ = require("lib/InventoryItemPZ")
 local readOnceBook = require("book/ReadOnceBook")
 local timedBook = require("book/TimedBook")
-local modDataManager = require("lib/ModDataManager")
+-- local modDataManager = require("lib/ModDataManager")
 --- **Get waiting time to read a book**
 ---@return float seconds
 local function getWaitingTime()
@@ -121,16 +121,7 @@ function ISReadABook:new(character, item, time)
     local er_OverWrite = ER_OVER_WRITE_ISReadABook_new(self, character, item, time)
 
     if chooseBook.isBook(item) then
-        if not modDataManager.isExists("readOnceBook") or not modDataManager.isExists("timedBook") then
-                
-            local translation = getText( "ContextMenu_CannotReadBook" )
-            --- **Say message**
-            getPlayer():Say(translation)
-    
-            --- **Play sound**
-            getPlayer():playSound("CloseBook")
-            return nil
-        end
+        
         character:playSound(openBook)
 
         er_OverWrite.loopedAction = false

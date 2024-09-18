@@ -15,29 +15,34 @@ local kilMilReached = "kilMilReachedX"
 local milReached = "milReachedX"
 
 --- **Read kilMilReached From Hd
-local function readKilMilReachedFromHd()
-    return modDataManager.read(kilMilReached)
+local function readKilMilReachedFromHd(modData_table)
+    return modDataManager.read(modData_table.kilMilReached)
 end
 
 --- **Read MilReached From Hd**
-local function readMilReachedFromHd()
-    return modDataManager.read(milReached)
+local function readMilReachedFromHd(modData_table)
+    return modDataManager.read(modData_table.milReached)
 end
 
 --- **Write kilMilReached From Hd**
 ---@param character IsoGameCharacter
 --- - IsoGameCharacter : zombie.characters.IsoGameCharacter
-local function writeKilMilReachedToFromHd(character)
+local function writeKilMilReachedToFromHd(character, modData_table)
     if not character then
         errHandler.errMsg("PatchSurvivalRewards.writeKilMilReachedToFromHd(character)",
                 " character is nil")
+        return nil
+    end
+    if not modData_table then
+        errHandler.errMsg("PatchSurvivalRewards.writeKilMilReachedToFromHd(character)",
+                " modData_table is nil")
         return nil
     end
 
     ---@type table
     local lines = {}
     table.insert(lines, character:getModData().milReached)
-    modDataManager.save(kilMilReached, lines)
+    modDataManager.save(modData_table.kilMilReached, lines)
     -- save backup on server
     -- local args = {
     --     name = kilMilReached,
@@ -50,18 +55,24 @@ end
 --- **Write milReached From Hd**
 ---@param character IsoGameCharacter
 --- - IsoGameCharacter : zombie.characters.IsoGameCharacter
-local function writeMilReachedFromHd(character)
+local function writeMilReachedFromHd(character, modData_table)
     --- **Check if character is null**
     if not character then
         errHandler.errMsg("PatchSurvivalRewards.writeMilReachedFromHd(character)",
                 " character is nil")
         return nil
     end
+    
+    if not modData_table then
+        errHandler.errMsg("PatchSurvivalRewards.writeMilReachedFromHd(character)",
+                " modData_table is nil")
+        return nil
+    end
 
     ---@type table
     local lines = {}
     table.insert(lines, character:getModData().kilMilReached)
-    modDataManager.save(milReached, lines )
+    modDataManager.save(modData_table.milReached, lines )
     -- save backup on server
     -- local args = {
     --     name = milReached,
@@ -74,35 +85,35 @@ end
 --- **Create Mil_kill_Reached**
 ---@param character IsoGameCharacter
 --- - IsoGameCharacter : zombie.characters.IsoGameCharacter
-function PatchSurvivalRewards.createMil_kill_Reached(character)
+function PatchSurvivalRewards.createMil_kill_Reached(character, modData_table)
     --- **Check if character is null**
     if not character then
         errHandler.errMsg("PatchSurvivalRewards.createMil_kill_Reached(character)",
                 errHandler.err.IS_NULL_CHARACTERS)
         return nil
         --- **is Exit kilMilReached**
-    elseif not modDataManager.isExists(kilMilReached) then
+    elseif not modDataManager.isExists(modData_table.kilMilReached) then
         errHandler.errMsg("PatchSurvivalRewards.createMil_kill_Reached(character)",
                 " mod-data " .. kilMilReached .. " not exists")
         return nil
     end
 
     ---@type table
-    local kilMilReaches = readKilMilReachedFromHd()
+    local kilMilReaches = readKilMilReachedFromHd(modData_table)
 
     for _, v in pairs(kilMilReaches) do
         character:getModData().milReached = toInt(v)
     end
 
     --- **is Exit milReached**
-    if not modDataManager.isExists(milReached) then
+    if not modDataManager.isExists(modData_table.milReached) then
         errHandler.errMsg("PatchSurvivalRewards.createMil_kill_Reached(character)",
-                " mod-data " .. milReached .. " not exists")
+                " mod-data " .. modData_table.milReached .. " not exists")
         return nil
     end
 
     ---@type table
-    local milReaches = readMilReachedFromHd()
+    local milReaches = readMilReachedFromHd(modData_table)
 
     for _, v in pairs(milReaches) do
         character:getModData().kilMilReached = toInt(v)
@@ -112,26 +123,31 @@ end
 --- **Write Mil_kill_Reached**
 ---@param character IsoGameCharacter
 --- - IsoGameCharacter : zombie.characters.IsoGameCharacter
-function PatchSurvivalRewards.writeMil_kill_ReachedToHd(character)
+function PatchSurvivalRewards.writeMil_kill_ReachedToHd(character, modData_table)
     --- **Check if character is null**
     if not character then
         errHandler.errMsg("PatchSurvivalRewards.writeMil_kill_ReachedToHd(character)",
                 " character is nil")
         return nil
     end
+    if not modData_table then
+        errHandler.errMsg("PatchSurvivalRewards.writeMil_kill_ReachedToHd(character)",
+                " modData_table is nil")
+        return nil
+    end
 
     --- **Remove Mil_kill_Reached**
-    PatchSurvivalRewards.removeMil_kill_Reached()
+    PatchSurvivalRewards.removeMil_kill_Reached(modData_table)
 
     --- **Save Mil_kill_/Mil Reached to mod-data**
-    writeKilMilReachedToFromHd(character)
-    writeMilReachedFromHd(character)
+    writeKilMilReachedToFromHd(character, modData_table)
+    writeMilReachedFromHd(character, modData_table)
 end
 
 --- **Remove Mil_kill_Reached**
-function PatchSurvivalRewards.removeMil_kill_Reached()
-    modDataManager.remove(kilMilReached)
-    modDataManager.remove(milReached)
+function PatchSurvivalRewards.removeMil_kill_Reached(modData_table)
+    modDataManager.remove(modData_table.kilMilReached)
+    modDataManager.remove(modData_table.milReached)
 end
 
 --- **Is Mod Active**

@@ -57,7 +57,7 @@ function CharacterManagement.removeAllModData(modData_table)
     --- survivalRewards 2797671069
     --- https://steamcommunity.com/sharedfiles/filedetails/?id=2797671069&searchtext=2797671069
     if patchSurvivalRewards.isModActive() then
-        patchSurvivalRewards.removeMil_kill_Reached()
+        patchSurvivalRewards.removeMil_kill_Reached(modData_table)
     end
     --------------------------
 end
@@ -99,7 +99,7 @@ function CharacterManagement.readBook(character, modData_table)
     --- https://steamcommunity.com/sharedfiles/filedetails/?id=2797671069&searchtext=2797671069
 
     if patchSurvivalRewards.isModActive() then
-        patchSurvivalRewards.createMil_kill_Reached(character)
+        patchSurvivalRewards.createMil_kill_Reached(character, modData_table)
     end
     --------------------------
 
@@ -154,7 +154,7 @@ function CharacterManagement.writeBook(character, modData_table)
     --- https://steamcommunity.com/sharedfiles/filedetails/?id=2797671069&searchtext=2797671069
 
     if patchSurvivalRewards.isModActive() then
-        patchSurvivalRewards.writeMil_kill_ReachedToHd(character)
+        patchSurvivalRewards.writeMil_kill_ReachedToHd(character, modData_table)
     end
 
     ---------------------------
@@ -162,6 +162,7 @@ function CharacterManagement.writeBook(character, modData_table)
     
     local backup = prepareBkpServer(modData_table)
     if backup then
+        print("[Commands.saveBackup] Preparazione backup da inviare al server")
         local name = ""
         if modData_table == pageBook.Character.TimedBook then
             name = "Timed"
@@ -178,7 +179,10 @@ function CharacterManagement.writeBook(character, modData_table)
             name = name,
             data = backup
         }
+        print("[Commands.saveBackup] Inizio del salvataggio dei dati per PlayerBKP_" .. character:getUsername() .. "_" .. name .. ".txt")
         sendClientCommand(character, "Vorshim", "saveBackup", args)
+    else 
+        print("[Commands.saveBackup] Nessun backup da inviare al server")
     end
 
 

@@ -21,7 +21,6 @@ ModData.Character = {
         TRAITS = "characterTraits_ReadOnce",
         WEIGHT = "characterWeight_ReadOnce",
         KILLED_ZOMBIES = "characterKilledZombies_ReadOnce",
-        SKILL_LIMITER = "characterSkillLimiter_ReadOnce"
     },
 
     -- Chiavi specifiche per TimedBook
@@ -36,8 +35,19 @@ ModData.Character = {
         TRAITS = "characterTraits_Timed",
         WEIGHT = "characterWeight_Timed",
         KILLED_ZOMBIES = "characterKilledZombies_Timed",
-        SKILL_LIMITER = "characterSkillLimiter_Timed"
     }
 }
+
+if getActivatedMods():contains("SkillLimiter_fix") then
+    ModData.Character.ReadOnceBook.SKILL_LIMITER = "characterSkillLimiter_ReadOnce"
+    ModData.Character.TimedBook.SKILL_LIMITER = "characterSkillLimiter_Timed"
+end
+if getActivatedMods():contains("SurvivalRewards") then
+    ModData.Character.ReadOnceBook.kilMilReached = "characterKilMilReached_ReadOnce"
+    ModData.Character.TimedBook.kilMilReached = "characterKilMilReached_Timed"
+
+    ModData.Character.ReadOnceBook.milReached = "characterMilReached_ReadOnce"
+    ModData.Character.TimedBook.milReached = "characterMilReached_Timed"
+end
 
 return ModData
