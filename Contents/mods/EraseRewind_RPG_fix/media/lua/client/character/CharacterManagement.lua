@@ -16,7 +16,7 @@ end
 local isEraseBKP = false
 local playerBKP = {}
 if getActivatedMods():contains("Erase&Rewind_BKP") then
-    playerBKP = require("CharacterBackup")
+    playerBKP = require("CharacterPlayer")
     isEraseBKP = true
 end
 
@@ -107,14 +107,14 @@ function CharacterManagement.readBook(character, modData_table)
 end
 
 local function prepareBkpServer(modData_table)
-    local lines = {}
+    local backup = {}
     for _, key in pairs(modData_table) do
-        local temp = modDataManager.read(key)
-        table.insert(lines, temp)
+        if modDataManager.isExists(key) then
+            local temp = modDataManager.read(key)
+            backup[key] = temp  -- Associa il nome della tabella ai suoi dati
+        end
     end
-
-    return lines
-
+    return backup
 end
 
 --- **Write Book**
@@ -168,9 +168,9 @@ function CharacterManagement.writeBook(character, modData_table)
         elseif modData_table == pageBook.Character.ReadOnceBook then
             name = "ReadOnce"
         elseif isEraseBKP then
-            if modData_table == playerBKP.BKP_1 then
+            if modData_table == playerBKP.Character.BKP_1 then
                 name = "BKP1"
-            elseif modData_table == playerBKP.BKP_2 then
+            elseif modData_table == playerBKP.Character.BKP_2 then
                 name = "BKP2"
             end
         end

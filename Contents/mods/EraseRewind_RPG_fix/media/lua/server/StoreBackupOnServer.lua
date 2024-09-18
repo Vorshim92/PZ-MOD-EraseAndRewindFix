@@ -2,39 +2,41 @@ if not isServer() then return end
 
 -- UTILS
 -- Funzione per serializzare una tabella in formato testo con indentazione
+-- Funzione per serializzare una tabella in formato testo con indentazione
 local function serializeData(tbl, indent)
-	indent = indent or ""
+    indent = indent or ""
     local serialized = ""
     for key, value in pairs(tbl) do
         local keyStr = tostring(key)
         if not keyStr:match("^[_%a][_%w]*$") then
             keyStr = string.format("[%q]", keyStr)
-        else
-            keyStr = keyStr
         end
+
         if type(value) == "table" then
+            -- Serializzazione di una tabella
             serialized = serialized .. indent .. keyStr .. " = {\n"
             serialized = serialized .. serializeData(value, indent .. "    ")
             serialized = serialized .. indent .. "},\n"
+        
+        elseif type(value) == "userdata" then
+            -- Gestione di userdata iterabile
+            local size = value:size()
+            serialized = serialized .. indent .. keyStr .. " = {\n"
+            for i = 0, size - 1 do
+                local element = value:get(i)
+                -- Assicurati che ogni elemento sia una tabella o serializzabile
+                serialized = serialized .. serializeData(element, indent .. "    ")
+            end
+            serialized = serialized .. indent .. "},\n"
+        
         else
+            -- Serializzazione di valori primitivi
             local valueStr
             if type(value) == "string" then
                 valueStr = string.format("%q", value)
             elseif type(value) == "number" or type(value) == "boolean" then
                 valueStr = tostring(value)
-            elseif type(value) == "userdata" then
-                -- Gestione di userdata iterabile
-                print("tipo userdata: " .. value)
-                local size = value:size()
-                serialized = serialized .. indent .. keyStr .. " = {\n"
-                for i = 0, size - 1 do
-                    local element = value:get(i)
-                    serialized = serialized .. serializeData(element, indent .. "    ")
-                end
-                serialized = serialized .. indent .. "},\n"
-
             else
-                print("tipo sconosciuto: " .. type(value) .. " - " .. value)
                 valueStr = '"UnsupportedType"'
             end
             serialized = serialized .. indent .. keyStr .. " = " .. valueStr .. ",\n"
@@ -42,6 +44,7 @@ local function serializeData(tbl, indent)
     end
     return serialized
 end
+
 
 -- Funzione ricorsiva per contare gli elementi in una tabella
 local function countDataSize(data)
@@ -66,26 +69,25 @@ local Commands = {}
 
 
 function Commands.saveBackup(player, args)
-	local id = player:getUsername()
+    local id = player:getUsername()
     local filepathName = args.name or ""
     print("[Commands.saveBackup] Inizio del salvataggio dei dati per ID " .. id .. " - " .. filepathName)
     local filepath = "/Backup/EraseBackup/PlayerBKP_" .. id .. "_" .. filepathName .. ".txt"
     print("[Commands.saveBackup] Percorso del file: " .. filepath)
-    -- Recupera i dati dal modulo ModData 
-    local modDataTables = args.data
     
-
+    -- Recupera i dati dal comando
+    local backupTables = args.data
+    
+    -- Apri il file in modalità append
     local filewriter = getFileWriter(filepath, true, false)
     if filewriter then
-        for _, tableName in pairs(modDataTables) do
-            
-            print("Elaborazione della tabella: " .. tableName)
+        for tableName, data in pairs(backupTables) do
+            -- Scrivi il nome della tabella
             filewriter:write("Table Name: " .. tableName .. "\n")
-            local modDataTable = ModData.get(tableName)
             
-            if modDataTable then
+            if data then
                 print("Dati ottenuti per la tabella: " .. tableName)
-                local serializedData = serializeData(modDataTable)
+                local serializedData = serializeData(data)
                 
                 filewriter:write(serializedData)
                 filewriter:write("\n\n")
@@ -100,6 +102,7 @@ function Commands.saveBackup(player, args)
         print("Impossibile aprire il file per la scrittura.")
     end
 end
+
 
 
 -- function Commands.saveBackup(player, args)

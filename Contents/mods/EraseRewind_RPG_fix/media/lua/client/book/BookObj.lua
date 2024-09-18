@@ -107,16 +107,7 @@ function ISReadABook:new(character, item, time)
         return nil
     end
 
-    if not modDataManager.isExists("readOnceBook") or not modDataManager.isExists("timedBook") then
-                
-        local translation = getText( "ContextMenu_CannotReadBook" )
-        --- **Say message**
-        getPlayer():Say(translation)
-
-        --- **Play sound**
-        getPlayer():playSound("CloseBook")
-        return nil
-    end
+    
 
 
     ---@type string
@@ -130,6 +121,16 @@ function ISReadABook:new(character, item, time)
     local er_OverWrite = ER_OVER_WRITE_ISReadABook_new(self, character, item, time)
 
     if chooseBook.isBook(item) then
+        if not modDataManager.isExists("readOnceBook") or not modDataManager.isExists("timedBook") then
+                
+            local translation = getText( "ContextMenu_CannotReadBook" )
+            --- **Say message**
+            getPlayer():Say(translation)
+    
+            --- **Play sound**
+            getPlayer():playSound("CloseBook")
+            return nil
+        end
         character:playSound(openBook)
 
         er_OverWrite.loopedAction = false
