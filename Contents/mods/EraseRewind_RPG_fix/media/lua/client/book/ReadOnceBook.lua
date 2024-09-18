@@ -12,7 +12,7 @@ local characterManagement = require("character/CharacterManagement")
 local errHandler = require("lib/ErrHandler")
 local modDataManager = require("lib/ModDataManager")
 local pageBook = require("book/PageBook")
-
+local activityCalendar = require("lib/ActivityCalendar")
 --- **Read Book**
 ---@param character IsoGameCharacter
 ---@return void
@@ -47,13 +47,14 @@ function ReadOnceBook.writeBook(character)
 
 
     if flag then
-        -- local lines = {}
-        -- table.insert(lines, "true")
-        --- **Remove scheduled BookRead date to mod data**
+        local time = activityCalendar.getStarTime()
+        time = activityCalendar.fromSecondToDate(time)
+        local lines = {}
+        table.insert(lines, time)        --- **Remove scheduled BookRead date to mod data**
         modDataManager.remove(pageBook.Character.READ_ONCE_BOOK)
 
         --- **Save scheduled BookRead date to mod data**
-        modDataManager.save(pageBook.Character.READ_ONCE_BOOK)
+        modDataManager.save(pageBook.Character.READ_ONCE_BOOK, lines)
         -- save backup on server
     -- local args = {
     --     name = pageBook.Character.READ_ONCE_BOOK,
