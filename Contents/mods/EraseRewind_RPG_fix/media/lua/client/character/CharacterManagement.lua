@@ -38,6 +38,11 @@ local pageBook = require("book/PageBook")
 local modDataManager = require("lib/ModDataManager")
 local patchSurvivalRewards = require("patch/survivalRewards/PatchSurvivalRewards")
 
+local ModDataKey = "Erase_Rewind"
+
+-- temporary global table for ModData.getOrCreate
+TempData = {}
+
 --- **Remove all Mod Data**
 ---@return void
 function CharacterManagement.removeAllModData(modData_table)
@@ -47,10 +52,10 @@ function CharacterManagement.removeAllModData(modData_table)
     for _, key in pairs(modData_table) do
         modDataManager.remove(key)
     end
-    if modData_table == pageBook.Character.TimedBook then
-        modDataManager.remove(pageBook.Character.TIMED_BOOK)
-    elseif modData_table == pageBook.Character.ReadOnceBook then
-        modDataManager.remove(pageBook.Character.READ_ONCE_BOOK)
+    if modData_table == pageBook.TimedBook then
+        modDataManager.remove(pageBook.TIMED_BOOK)
+    elseif modData_table == pageBook.ReadOnceBook then
+        modDataManager.remove(pageBook.READ_ONCE_BOOK)
     end
 
     ------- PATCH ------------
@@ -119,6 +124,7 @@ end
 
 --- **Write Book**
 ---@param character IsoGameCharacter
+---@param modData_table table
 ---@return void
 --- - IsoGameCharacter : zombie.characters.IsoGameCharacter
 function CharacterManagement.writeBook(character, modData_table)
@@ -136,7 +142,7 @@ function CharacterManagement.writeBook(character, modData_table)
         return nil
     end
     
-    ModData.getOrCreate(modData_table)
+    
     characterPerkDetails.writeBook(character, modData_table)
     characterKilledZombies.writeBook(character, modData_table)
     characterLifeTime.writeBook(modData_table)
@@ -159,6 +165,12 @@ function CharacterManagement.writeBook(character, modData_table)
         patchSurvivalRewards.writeMil_kill_ReachedToHd(character, modData_table)
     end
 
+    -- TempData a questo punto è pieno di tutte le tabelle e lo ripusciamo.
+    modDataManager.save(ModDataKey, modData_table)
+
+    --reset TempData (in realtà da fare dopo l'invio al server)
+    -- TempData = {}
+
     ---------------------------
     ---SEND BACKUP TO SERVER---
     
@@ -167,14 +179,14 @@ function CharacterManagement.writeBook(character, modData_table)
     if backup then
         print("[Commands.saveBackup] Preparazione backup da inviare al server")
         local name = ""
-        if modData_table == pageBook.Character.TimedBook then
+        if modData_table == pageBook.TimedBook then
             name = "Timed"
-        elseif modData_table == pageBook.Character.ReadOnceBook then
+        elseif modData_table == pageBook.ReadOnceBook then
             name = "ReadOnce"
         elseif isEraseBKP then
-            if modData_table == playerBKP.Character.BKP_1 then
+            if modData_table == playerBKP.BKP_1 then
                 name = "BKP1"
-            elseif modData_table == playerBKP.Character.BKP_2 then
+            elseif modData_table == playerBKP.BKP_2 then
                 name = "BKP2"
             end
         end

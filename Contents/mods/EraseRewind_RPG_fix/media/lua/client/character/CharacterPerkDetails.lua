@@ -130,12 +130,12 @@ end
 --- - IsoGameCharacter : zombie.characters.IsoGameCharacter
 function CharacterPerkDetails.writeBook(character, modData_name)
     -- acquire ModData table
-    local temp = modDataManager.read(modData_name)
-    if temp then
+    
+    if modData_name then
 
     --- **Reset perkDetails and profession from mod-data**
-        temp["PERK_DETAILS"] = {}
-        temp["PROFESSION"] = {}
+        modData_name["PERK_DETAILS"] = {}
+        modData_name["PROFESSION"] = {}
         
         ---@type table
         local perkLines = {}
@@ -155,16 +155,16 @@ function CharacterPerkDetails.writeBook(character, modData_name)
             table.insert(perkLines, value)
         end
         -- Salva i perk details nella mod-data
-        table.insert(temp["PERK_DETAILS"],perkLines)
-        -- temp["PERK_DETAILS"] = perkLines -- add perkLines table
+        table.insert(modData_name["PERK_DETAILS"],perkLines)
+        -- modData_name["PERK_DETAILS"] = perkLines -- add perkLines table
 
         -- Salva la professione nella mod-data
-        temp["PROFESSION"] =  characterAllSkills:getProfession() -- add string profession
+        modData_name["PROFESSION"] =  characterAllSkills:getProfession() -- add string profession
 
 
         --forse è meglio resettare il ModData per intero prima di ricaricarlo con le nuove informazioni?
         -- modDataManager.remove(modData_name) ??
-        modDataManager.save(modData_name, temp)
+        modDataManager.save(modData_name, modData_name)
 
     else 
         print("ModData " .. modData_name .. " doesn't exists")

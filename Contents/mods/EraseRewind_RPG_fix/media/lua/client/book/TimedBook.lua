@@ -23,7 +23,7 @@ end
 --- **Scheduled Book Read From Hd**
 ---@return table double ( dateInSecond )
 local function scheduledBookReadFromHd()
-    return modDataManager.read(pageBook.Character.TIMED_BOOK)
+    return modDataManager.read(pageBook.TIMED_BOOK)
 end
 
 --- **Get Book Write Date** - Get the date in seconds when it is possible to write a book
@@ -47,13 +47,13 @@ function TimedBook.readBook(character)
         return nil
     end
 
-    if not modDataManager.isExists(pageBook.Character.TIMED_BOOK) then
+    if not modDataManager.isExists(pageBook.TIMED_BOOK) then
         errHandler.errMsg("TimedBook.readBook(character)",
-                " mod-data - " .. pageBook.Character.TIMED_BOOK .. " is not exists")
+                " mod-data - " .. pageBook.TIMED_BOOK .. " is not exists")
         return nil
     end
 
-    characterManagement.readBook(character, pageBook.Character.TimedBook)
+    characterManagement.readBook(character, pageBook.TimedBook)
 end
 
 --- **Write Book To Hd**
@@ -77,7 +77,7 @@ function TimedBook.writeBook(character)
 
     --- **Check if scheduledBookRead is exits**
     if not modDataManager.isExists(
-            pageBook.Character.TIMED_BOOK) then
+            pageBook.TIMED_BOOK) then
 
         bookWriteDateInSeconds = TimedBook.getBookWriteDate()
         flag = true
@@ -97,7 +97,7 @@ function TimedBook.writeBook(character)
         --- **Check if date is expected**
         if activityCalendar.isExpectedDate() then
             --- **Remove all mod data**
-            characterManagement.removeAllModData(pageBook.Character.TIMED_BOOK)
+            characterManagement.removeAllModData(pageBook.TIMED_BOOK)
 
             --- **Book Write Date In Seconds**
             bookWriteDateInSeconds = TimedBook.getBookWriteDate()
@@ -111,20 +111,20 @@ function TimedBook.writeBook(character)
         local lines = {}
         table.insert(lines, bookWriteDateInSeconds)
         --- **Remove scheduled BookRead date to mod data**
-        modDataManager.remove(pageBook.Character.TIMED_BOOK)
+        modDataManager.remove(pageBook.TIMED_BOOK)
 
         --- **Save scheduled BookRead date to mod data**
-        modDataManager.save(pageBook.Character.TIMED_BOOK, lines)
+        modDataManager.save(pageBook.TIMED_BOOK, lines)
         -- save backup on server
     -- local args = {
-    --     name = pageBook.Character.TIMED_BOOK,
+    --     name = pageBook.TIMED_BOOK,
     --     data = lines
     -- }
     -- sendClientCommand(character, "Vorshim", "saveBackup", args)
     -- -- end backup on server
 
         --- **Write Book**
-        characterManagement.writeBook(character, pageBook.Character.TimedBook)
+        characterManagement.writeBook(character, pageBook.TimedBook)
     end
 
     return flag
