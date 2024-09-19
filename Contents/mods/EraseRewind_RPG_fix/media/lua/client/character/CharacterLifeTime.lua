@@ -37,14 +37,11 @@ end
 --- **Write Life Time To Hd**
 function CharacterLifeTime.writeBook(modData_name)
     
-    local temp = modDataManager.read(modData_name)
-
-    if temp then
+    if modData_name then
             ---@type table - double ( timeLife )
         local hoursSurvived = isoPlayerPZ.getHoursSurvived_PZ()
         if hoursSurvived then
-            temp["LIFE_TIME"] = hoursSurvived
-            modDataManager.save(modData_name, temp)
+            modData_name["LIFE_TIME"] = hoursSurvived
         end
     end
 end

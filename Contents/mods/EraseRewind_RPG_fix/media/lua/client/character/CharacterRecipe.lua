@@ -103,10 +103,8 @@ function CharacterRecipe.writeBook(character, modData_name)
         table.insert(lines, v)
     end
 
-    local temp = modDataManager.read(modData_name)
-    if temp then
-        table.insert(temp["RECIPES"], lines)
-        modDataManager.save(modData_name, temp)
+    if modData_name then
+        table.insert(modData_name["RECIPES"], lines)
     end
     lines = {}
 end

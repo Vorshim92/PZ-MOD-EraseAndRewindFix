@@ -73,11 +73,8 @@ function CharacterTrait.writeBook(character, modData_name)
 
     ---@type CharacterBaseObj
     local trait = characterLib.getTraitsPerk(character)
-    local temp = modDataManager.read(modData_name)
-    if temp then
-        table.insert(temp,  trait:getTraits())
-    --- **Save Traits to mod-data**
-    modDataManager.save(modData_name, temp)
+    if modData_name then
+        table.insert(modData_name,  trait:getTraits())
     end
            
 end

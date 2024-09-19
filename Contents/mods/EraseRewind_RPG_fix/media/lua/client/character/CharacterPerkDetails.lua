@@ -132,11 +132,7 @@ function CharacterPerkDetails.writeBook(character, modData_name)
     -- acquire ModData table
     
     if modData_name then
-
-    --- **Reset perkDetails and profession from mod-data**
-        modData_name["PERK_DETAILS"] = {}
-        modData_name["PROFESSION"] = {}
-        
+                
         ---@type table
         local perkLines = {}
 
@@ -156,18 +152,13 @@ function CharacterPerkDetails.writeBook(character, modData_name)
         end
         -- Salva i perk details nella mod-data
         table.insert(modData_name["PERK_DETAILS"],perkLines)
-        -- modData_name["PERK_DETAILS"] = perkLines -- add perkLines table
+        -- modData_name["PERK_DETAILS"] = perkLines
 
         -- Salva la professione nella mod-data
         modData_name["PROFESSION"] =  characterAllSkills:getProfession() -- add string profession
 
-
-        --forse è meglio resettare il ModData per intero prima di ricaricarlo con le nuove informazioni?
-        -- modDataManager.remove(modData_name) ??
-        modDataManager.save(modData_name, modData_name)
-
     else 
-        print("ModData " .. modData_name .. " doesn't exists")
+        print("modData_name doesnt exists")
     end
 end
 

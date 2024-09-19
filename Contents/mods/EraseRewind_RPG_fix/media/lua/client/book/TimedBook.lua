@@ -76,9 +76,8 @@ function TimedBook.writeBook(character)
     local bookWriteDateInSeconds = 0
 
     --- **Check if scheduledBookRead is exits**
-    if not modDataManager.isExists(
-            pageBook.TIMED_BOOK) then
-
+    local temp = ModData.getOrCreate("ERASE_REWIND")
+    if temp.TIMED_BOOK == nil then 
         bookWriteDateInSeconds = TimedBook.getBookWriteDate()
         flag = true
     else
@@ -97,7 +96,7 @@ function TimedBook.writeBook(character)
         --- **Check if date is expected**
         if activityCalendar.isExpectedDate() then
             --- **Remove all mod data**
-            characterManagement.removeAllModData(pageBook.TIMED_BOOK)
+            characterManagement.removeAllModData(pageBook.TimedBook)
 
             --- **Book Write Date In Seconds**
             bookWriteDateInSeconds = TimedBook.getBookWriteDate()
@@ -114,15 +113,8 @@ function TimedBook.writeBook(character)
         modDataManager.remove(pageBook.TIMED_BOOK)
 
         --- **Save scheduled BookRead date to mod data**
-        modDataManager.save(pageBook.TIMED_BOOK, lines)
-        -- save backup on server
-    -- local args = {
-    --     name = pageBook.TIMED_BOOK,
-    --     data = lines
-    -- }
-    -- sendClientCommand(character, "Vorshim", "saveBackup", args)
-    -- -- end backup on server
-
+        temp.TIMED_BOOK = lines
+        modDataManager.save("ERASE_REWIND", temp)
         --- **Write Book**
         characterManagement.writeBook(character, pageBook.TimedBook)
     end

@@ -123,8 +123,6 @@ function CharacterBoost.writeBook(character, modData_name)
         return nil
     end
 
-    -- modDataManager.remove(modData_name.BOOST)
-
     -- @type CharacterBaseObj
     local CharacterPerksBoostObj = characterLib.getPerksBoost(character)
 
@@ -133,10 +131,8 @@ function CharacterBoost.writeBook(character, modData_name)
         -- @param BoostLevel int
         addLines(v:getPerk(), v:getXPBoost())
     end
-    local temp = modDataManager.read(modData_name)
-    if temp then
-        table.insert(temp["BOOST"], lines_)
-        modDataManager.save(modData_name, temp)
+    if modData_name then
+        table.insert(modData_name["BOOST"], lines_)
     end
 
     lines_ = {}

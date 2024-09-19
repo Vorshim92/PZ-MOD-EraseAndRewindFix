@@ -44,10 +44,9 @@ function CharacterSkillLimit.writeBook(modData_name)
     -- acquisisco i valori dal ModData di SkillLimiter
     local characterMaxSkillTable = modDataManager.read(characterMaxSkillModData)
 
-    local temp = modDataManager.read(modData_name)
-    if temp then
-        table.insert(temp["SKILL_LIMITER"],  characterMaxSkillTable)
-        modDataManager.save(modData_name, temp)
+
+    if modData_name then
+        modData_name["SKILL_LIMITER"] = characterMaxSkillTable
     end
 end
 

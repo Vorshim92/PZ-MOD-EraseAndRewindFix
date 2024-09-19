@@ -28,25 +28,18 @@ end
 
 --- **Write Weight From Hd**
 local function writeWeightFromHd(modData_name)
-    local temp = modDataManager.read(modData_name)
-    if temp then
+    if modData_name then
         local weight = isoPlayerPZ.getWeight_PZ()
-        temp["WEIGHT"] = weight
-
-        --- **Save Weight to mod-data**
-        modDataManager.save(modData_name, temp)
+        modData_name["WEIGHT"] = weight
     end
 end
 
     --- **Write Calories From Hd**
 local function writeCaloriesFromHd(modData_name)
-    local temp = modDataManager.read(modData_name)
-    if temp then
+    if modData_name then
         local calories = isoPlayerPZ.getCalories_PZ()
-        temp["CALORIES"] = calories
+        modData_name["CALORIES"] = calories
 
-        --- **Save Weight to mod-data**
-        modDataManager.save(modData_name, temp)
     end
 end
 

@@ -39,27 +39,22 @@ function ReadOnceBook.writeBook(character)
                 errHandler.err.IS_NULL_CHARACTERS)
         return nil
     end
-    local flag = true
-
-    if modDataManager.isExists(pageBook.READ_ONCE_BOOK) then
-    flag = false
+    local flag = false
+    local temp = ModData.getOrCreate("ERASE_REWIND")
+    if temp.READ_ONCE_BOOK == nil then
+        flag = true
     end
 
-
-    if flag then
+    if flag then 
         local time = activityCalendar.getStarTime()
         time = activityCalendar.fromSecondToDate(time)
         local lines = {}
         table.insert(lines, time)
-        
-
-        --- **Save scheduled BookRead date to mod data**
-        modDataManager.save(pageBook.READ_ONCE_BOOK, lines)
-
-        --- **Write Book**
-        -- first create the book table
+        temp.READ_ONCE_BOOK = lines
+        modDataManager.save("ERASE_REWIND", temp)
         characterManagement.writeBook(character, pageBook.ReadOnceBook)
     end
+
 return flag
 end
 

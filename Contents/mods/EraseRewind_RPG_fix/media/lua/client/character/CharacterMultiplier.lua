@@ -102,6 +102,11 @@ function CharacterMultiplier.writeBook(character, modData_name)
                 errHandler.err.IS_NULL_CHARACTERS)
         return nil
     end
+    if not modData_name then
+        errHandler.errMsg("CharacterMultiplier.writeBook(character)",
+                " modData_name is not exists")
+        return nil
+    end
 
     --- **Remove Multiplier form mod-data**
     -- modDataManager.remove(modData_name.MULTIPLIER)
@@ -118,10 +123,9 @@ function CharacterMultiplier.writeBook(character, modData_name)
         end
     end
 
-    local temp = modDataManager.read(modData_name)
-    if temp then
-        table.insert(temp["MULTIPLIER"], lines_)
-        modDataManager.save(modData_name, temp)
+    
+    if modData_name then
+        table.insert(modData_name["MULTIPLIER"], lines_)
     end
     lines_ = {}
 end

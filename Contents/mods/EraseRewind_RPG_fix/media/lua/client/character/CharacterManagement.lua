@@ -41,16 +41,16 @@ local patchSurvivalRewards = require("patch/survivalRewards/PatchSurvivalRewards
 local ModDataKey = "Erase_Rewind"
 
 -- temporary global table for ModData.getOrCreate
-TempData = {}
+-- TempData = {}
 
 --- **Remove all Mod Data**
 ---@return void
 function CharacterManagement.removeAllModData(modData_table)
-    print("modData_table: ", modData_table)
     --- **Remove ModData**
     -- Rimuovi tutti i dati associati alle chiavi specifiche del libro
-    for _, key in pairs(modData_table) do
-        modDataManager.remove(key)
+    local temp = ModData.getOrCreate("ERASE_REWIND")
+    if temp[modData_table] ~= nil then
+        temp[modData_table] = nil
     end
     if modData_table == pageBook.TimedBook then
         modDataManager.remove(pageBook.TIMED_BOOK)
@@ -64,6 +64,7 @@ function CharacterManagement.removeAllModData(modData_table)
     if patchSurvivalRewards.isModActive() then
         patchSurvivalRewards.removeMil_kill_Reached(modData_table)
     end
+    modDataManager.save(ModDataKey, temp)
     --------------------------
 end
 
@@ -167,7 +168,7 @@ function CharacterManagement.writeBook(character, modData_table)
 
     -- TempData a questo punto è pieno di tutte le tabelle e lo ripusciamo.
     modDataManager.save(ModDataKey, modData_table)
-
+    print("Dati salvati correttamente")
     --reset TempData (in realtà da fare dopo l'invio al server)
     -- TempData = {}
 

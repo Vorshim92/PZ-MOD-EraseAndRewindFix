@@ -42,10 +42,9 @@ local function writeKilMilReachedToFromHd(character, modData_table)
     ---@type table
     local lines = {}
     table.insert(lines, character:getModData().milReached)
-    local temp = modDataManager.read(modData_table)
-    if temp then
-        temp["kilMilReached"] = lines
-        modDataManager.save(modData_table, temp)
+    
+    if modData_table then
+        modData_table["kilMilReached"] = lines
     end
     
 end
@@ -70,10 +69,8 @@ local function writeMilReachedFromHd(character, modData_table)
     ---@type table
     local lines = {}
     table.insert(lines, character:getModData().kilMilReached)
-    local temp = modDataManager.read(modData_table)
-    if temp then
-        temp["milReached"] = lines
-        modDataManager.save(modData_table, temp)
+    if modData_table then
+        modData_table["milReached"] = lines
     end
 end
 
