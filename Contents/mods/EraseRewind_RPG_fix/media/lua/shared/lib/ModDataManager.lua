@@ -31,35 +31,25 @@ function ModDataManager.save(nameFile, values)
 end
 
 --- **Read ModData**
----@param nameFile String
+---@param nameFile string
 ---@return table
 --- - ModData : zombie.world.moddata.ModData
 function ModDataManager.read(nameFile)
     if not nameFile then
-        errHandler.errMsg("ModDataManager.read(nameFile)",
-                " nameFile " .. errHandler.err.IS_NULL)
+        errHandler.errMsg("ModDataManager.read(nameFile)", "nameFile " .. errHandler.err.IS_NULL)
         return nil
     end
 
-    local lines = {}
-    lines = ModData.get(nameFile)
+    -- Acquisisce direttamente la tabella con ModData.get
+    local modData = ModData.get(nameFile)
 
-    if not lines then
-            errHandler.errMsg("ModDataManager.read(nameFile)",
-                " lines " .. errHandler.err.IS_NULL)
+    if not modData then
+        errHandler.errMsg("ModDataManager.read(nameFile)", "modData " .. errHandler.err.IS_NULL)
         return nil
     end
 
-    ---@type table
-    local conversionTotable = {}
-
-    for _, v in pairs(lines) do
-        table.insert(conversionTotable, v)
-    end
-
-    return conversionTotable
+    return modData  -- Restituisce direttamente la tabella
 end
-
 
 --- **Is modData Exists**
 ---@param nameFile string

@@ -135,6 +135,8 @@ function CharacterManagement.writeBook(character, modData_table)
                 " modData_table is not exists")
         return nil
     end
+    
+    ModData.getOrCreate(modData_table)
     characterPerkDetails.writeBook(character, modData_table)
     characterKilledZombies.writeBook(character, modData_table)
     characterLifeTime.writeBook(modData_table)

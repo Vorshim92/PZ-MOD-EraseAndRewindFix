@@ -50,20 +50,14 @@ function ReadOnceBook.writeBook(character)
         local time = activityCalendar.getStarTime()
         time = activityCalendar.fromSecondToDate(time)
         local lines = {}
-        table.insert(lines, time)        --- **Remove scheduled BookRead date to mod data**
-        modDataManager.remove(pageBook.Character.READ_ONCE_BOOK)
+        table.insert(lines, time)
+        
 
         --- **Save scheduled BookRead date to mod data**
         modDataManager.save(pageBook.Character.READ_ONCE_BOOK, lines)
-        -- save backup on server
-    -- local args = {
-    --     name = pageBook.Character.READ_ONCE_BOOK,
-    --     data = {}
-    -- }
-    -- sendClientCommand(character, "Vorshim", "saveBackup", args)
-    -- -- end backup on server
 
         --- **Write Book**
+        -- first create the book table
         characterManagement.writeBook(character, pageBook.Character.ReadOnceBook)
     end
 return flag

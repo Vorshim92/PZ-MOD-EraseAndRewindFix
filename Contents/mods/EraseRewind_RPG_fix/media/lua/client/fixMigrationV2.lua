@@ -97,4 +97,4 @@
     end
 end
 
-Events.OnCreatePlayer.Add(migrateOldBackups)
+-- Events.OnCreatePlayer.Add(migrateOldBackups)
