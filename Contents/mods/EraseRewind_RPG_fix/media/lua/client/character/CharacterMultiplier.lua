@@ -104,7 +104,7 @@ function CharacterMultiplier.writeBook(character, modData_name)
     end
 
     --- **Remove Multiplier form mod-data**
-    modDataManager.remove(modData_name.MULTIPLIER)
+    -- modDataManager.remove(modData_name.MULTIPLIER)
 
     -- @type CharacterBaseObj
     local CharacterMultiplierObJ = characterLib.getMultiplier(character)
@@ -118,15 +118,11 @@ function CharacterMultiplier.writeBook(character, modData_name)
         end
     end
 
-    --- **Save Multiplier to mod-data**
-    modDataManager.save(modData_name.MULTIPLIER, lines_)
-    -- save backup on server
-    -- local args = {
-    --     name = modData_name.MULTIPLIER,
-    --     data = lines_
-    -- }
-    -- sendClientCommand(character, "Vorshim", "saveBackup", args)
-    -- -- end backup on server
+    local temp = modDataManager.read(modData_name)
+    if temp then
+        table.insert(temp["MULTIPLIER"], lines_)
+        modDataManager.save(modData_name, temp)
+    end
     lines_ = {}
 end
 

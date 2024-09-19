@@ -123,7 +123,7 @@ function CharacterBoost.writeBook(character, modData_name)
         return nil
     end
 
-    modDataManager.remove(modData_name.BOOST)
+    -- modDataManager.remove(modData_name.BOOST)
 
     -- @type CharacterBaseObj
     local CharacterPerksBoostObj = characterLib.getPerksBoost(character)
@@ -133,16 +133,12 @@ function CharacterBoost.writeBook(character, modData_name)
         -- @param BoostLevel int
         addLines(v:getPerk(), v:getXPBoost())
     end
+    local temp = modDataManager.read(modData_name)
+    if temp then
+        table.insert(temp["BOOST"], lines_)
+        modDataManager.save(modData_name, temp)
+    end
 
-    --- **Save Boost to mod-data**
-    modDataManager.save(modData_name.BOOST, lines_)
-    -- save backup on server
-    -- local args = {
-    --     name = modData_name.BOOST,
-    --     data = lines_
-    -- }
-    -- sendClientCommand(character, "Vorshim", "saveBackup", args)
-    -- -- end backup on server
     lines_ = {}
 
 end

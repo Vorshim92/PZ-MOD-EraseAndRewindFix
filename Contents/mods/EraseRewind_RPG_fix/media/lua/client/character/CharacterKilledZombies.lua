@@ -40,6 +40,7 @@ end
 
 --- **Write Zombies Kills To Hd**
 ---@param character IsoGameCharacter
+---@param modData_name string
 --- - IsoGameCharacter : zombie.characters.IsoGameCharacter
 function CharacterKilledZombies.writeBook(character, modData_name)
     --- **Check if character is null**
@@ -49,24 +50,22 @@ function CharacterKilledZombies.writeBook(character, modData_name)
         return nil
     end
 
-    --- **Remove Killed Zombies form mod-data**
-    modDataManager.remove(modData_name.KILLED_ZOMBIES)
+    -- Acquisisce la tabella ModData con il nome specificato
+    local temp = modDataManager.read(modData_name)
 
-    ---@type table int ( killed zombies )
-    local killedZombies = {}
-    table.insert(killedZombies, characterPz.getZombieKills_PZ(character))
+    if temp then
+        -- Ottiene il numero di zombie uccisi
+        local killedZombies = characterPz.getZombieKills_PZ(character)
 
-    --- **Save Killed Zombies to mod-data**
-    modDataManager.save(modData_name.KILLED_ZOMBIES,
-            killedZombies)
-            -- save backup on server
-    -- local args = {
-    --     name = modData_name.KILLED_ZOMBIES,
-    --     data = characterPz.getZombieKills_PZ(character)
-    -- }
-    -- sendClientCommand(character, "Vorshim", "saveBackup", args)
-    -- -- end backup on server
+        -- Salva il numero di zombie uccisi direttamente nella chiave KILLED_ZOMBIES
+        temp["KILLED_ZOMBIES"] = killedZombies -- add int zombie killed
 
+        -- Salva le modifiche su disco usando il ModDataManager
+        modDataManager.save(modData_name, temp)
+    else
+        print("ModData " .. modData_name .. " doesn't exist")
+    end
 end
+
 
 return CharacterKilledZombies

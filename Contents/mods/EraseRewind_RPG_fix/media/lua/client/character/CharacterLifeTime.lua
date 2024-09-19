@@ -36,22 +36,17 @@ end
 
 --- **Write Life Time To Hd**
 function CharacterLifeTime.writeBook(modData_name)
-    modDataManager.remove(modData_name.LIFE_TIME)
+    
+    local temp = modDataManager.read(modData_name)
 
-    ---@type table - double ( timeLife )
-    local hoursSurvived = {}
-    table.insert(hoursSurvived, isoPlayerPZ.getHoursSurvived_PZ())
-
-    --- **Save Life Time to mod-data**
-    modDataManager.save(modData_name.LIFE_TIME,
-            hoursSurvived)
-            -- save backup on server
-    -- local args = {
-    --     name = modData_name.LIFE_TIME,
-    --     data = isoPlayerPZ.getHoursSurvived_PZ()
-    -- }
-    -- sendClientCommand(character, "Vorshim", "saveBackup", args)
-    -- -- end backup on server
+    if temp then
+            ---@type table - double ( timeLife )
+        local hoursSurvived = isoPlayerPZ.getHoursSurvived_PZ()
+        if hoursSurvived then
+            temp["LIFE_TIME"] = hoursSurvived
+            modDataManager.save(modData_name, temp)
+        end
+    end
 end
 
 return CharacterLifeTime

@@ -42,14 +42,12 @@ local function writeKilMilReachedToFromHd(character, modData_table)
     ---@type table
     local lines = {}
     table.insert(lines, character:getModData().milReached)
-    modDataManager.save(modData_table.kilMilReached, lines)
-    -- save backup on server
-    -- local args = {
-    --     name = kilMilReached,
-    --     data = lines
-    -- }
-    -- sendClientCommand(character, "Vorshim", "saveBackup", args)
-    -- -- end backup on server
+    local temp = modDataManager.read(modData_table)
+    if temp then
+        temp["kilMilReached"] = lines
+        modDataManager.save(modData_table, temp)
+    end
+    
 end
 
 --- **Write milReached From Hd**
@@ -72,14 +70,11 @@ local function writeMilReachedFromHd(character, modData_table)
     ---@type table
     local lines = {}
     table.insert(lines, character:getModData().kilMilReached)
-    modDataManager.save(modData_table.milReached, lines )
-    -- save backup on server
-    -- local args = {
-    --     name = milReached,
-    --     data = lines
-    -- }
-    -- sendClientCommand(character, "Vorshim", "saveBackup", args)
-    -- -- end backup on server
+    local temp = modDataManager.read(modData_table)
+    if temp then
+        temp["milReached"] = lines
+        modDataManager.save(modData_table, temp)
+    end
 end
 
 --- **Create Mil_kill_Reached**
@@ -137,7 +132,7 @@ function PatchSurvivalRewards.writeMil_kill_ReachedToHd(character, modData_table
     end
 
     --- **Remove Mil_kill_Reached**
-    PatchSurvivalRewards.removeMil_kill_Reached(modData_table)
+    -- PatchSurvivalRewards.removeMil_kill_Reached(modData_table)
 
     --- **Save Mil_kill_/Mil Reached to mod-data**
     writeKilMilReachedToFromHd(character, modData_table)

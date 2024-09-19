@@ -89,7 +89,7 @@ function CharacterRecipe.writeBook(character, modData_name)
     end
 
     --- **Remove Recipes form mod-data**
-    modDataManager.remove(modData_name.RECIPES)
+    -- modDataManager.remove(modData_name.RECIPES)
 
     -- @type CharacterBaseObj
     local knownRecipesObj =  characterLib.getKnownRecipes(character)
@@ -103,15 +103,11 @@ function CharacterRecipe.writeBook(character, modData_name)
         table.insert(lines, v)
     end
 
-    --- **Save Recipes to mod-data**
-    modDataManager.save(modData_name.RECIPES, lines)
-    -- save backup on server
-    -- local args = {
-    --     name = modData_name.RECIPES,
-    --     data = lines
-    -- }
-    -- sendClientCommand(character, "Vorshim", "saveBackup", args)
-    -- -- end backup on server
+    local temp = modDataManager.read(modData_name)
+    if temp then
+        table.insert(temp["RECIPES"], lines)
+        modDataManager.save(modData_name, temp)
+    end
     lines = {}
 end
 

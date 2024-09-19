@@ -13,7 +13,6 @@ local isoPlayerPZ = require("lib/IsoPlayerPZ")
 -- local pageBook = require("book/PageBook")
 local modDataManager = require("lib/ModDataManager")
 
-local convertToTable = {}
 
 --- **Read Weight From Hd**
 ---@return table double
@@ -29,34 +28,26 @@ end
 
 --- **Write Weight From Hd**
 local function writeWeightFromHd(modData_name)
-    table.insert(convertToTable, isoPlayerPZ.getWeight_PZ())
+    local temp = modDataManager.read(modData_name)
+    if temp then
+        local weight = isoPlayerPZ.getWeight_PZ()
+        temp["WEIGHT"] = weight
 
-    --- **Save Weight in mod-data**
-    modDataManager.save(modData_name.WEIGHT,convertToTable )
-    -- save backup on server
-    -- local args = {
-    --     name = modData_name.WEIGHT,
-    --     data = convertToTable
-    -- }
-    -- sendClientCommand(character, "Vorshim", "saveBackup", args)
-    -- -- end backup on server
-    convertToTable = {}
+        --- **Save Weight to mod-data**
+        modDataManager.save(modData_name, temp)
+    end
 end
 
     --- **Write Calories From Hd**
 local function writeCaloriesFromHd(modData_name)
-    table.insert(convertToTable, isoPlayerPZ.getCalories_PZ())
+    local temp = modDataManager.read(modData_name)
+    if temp then
+        local calories = isoPlayerPZ.getCalories_PZ()
+        temp["CALORIES"] = calories
 
-    --- **Save Calories to mod-data**
-    modDataManager.save(modData_name.CALORIES, convertToTable)
-    -- save backup on server
-    -- local args = {
-    --     name = modData_name.CALORIES,
-    --     data = convertToTable
-    -- }
-    -- sendClientCommand(character, "Vorshim", "saveBackup", args)
-    -- -- end backup on server
-    convertToTable = {}
+        --- **Save Weight to mod-data**
+        modDataManager.save(modData_name, temp)
+    end
 end
 
 --- **Create Character Nutrition**
@@ -90,10 +81,6 @@ end
 
 --- **Write Character Nutrition**
 function CharacterNutrition.writeBook(modData_name)
-    --- **Remove Weight and Calories form mod-data**
-    modDataManager.remove(modData_name.WEIGHT)
-    modDataManager.remove(modData_name.CALORIES)
-
     writeWeightFromHd(modData_name)
     writeCaloriesFromHd(modData_name)
 end

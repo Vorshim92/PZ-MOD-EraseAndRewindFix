@@ -160,7 +160,8 @@ function CharacterManagement.writeBook(character, modData_table)
     ---------------------------
     ---SEND BACKUP TO SERVER---
     
-    local backup = prepareBkpServer(modData_table)
+    -- local backup = prepareBkpServer(modData_table)
+    local backup = false
     if backup then
         print("[Commands.saveBackup] Preparazione backup da inviare al server")
         local name = ""

@@ -37,24 +37,18 @@ end
 
 function CharacterSkillLimit.writeBook(modData_name)
     --- **Check if ModData exists**
-        modDataManager.remove(modData_name.SKILL_LIMITER)
+        -- modDataManager.remove(modData_name.SKILL_LIMITER)
         -- se non esiste non faccio niente
 
     ---@type table
     -- acquisisco i valori dal ModData di SkillLimiter
     local characterMaxSkillTable = modDataManager.read(characterMaxSkillModData)
 
-
-    --- **Write ModData**
-    --- li salvo nel backup del Libro
-    modDataManager.save(modData_name.SKILL_LIMITER, characterMaxSkillTable)
-    -- save backup on server
-    -- local args = {
-    --     name = modData_name.SKILL_LIMITER,
-    --     data = characterMaxSkillTable
-    -- }
-    -- sendClientCommand(character, "Vorshim", "saveBackup", args)
-    -- -- end backup on server
+    local temp = modDataManager.read(modData_name)
+    if temp then
+        table.insert(temp["SKILL_LIMITER"],  characterMaxSkillTable)
+        modDataManager.save(modData_name, temp)
+    end
 end
 
 return CharacterSkillLimit

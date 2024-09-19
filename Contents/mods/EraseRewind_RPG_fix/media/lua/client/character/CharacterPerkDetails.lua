@@ -129,54 +129,46 @@ end
 ---@param character IsoGameCharacter
 --- - IsoGameCharacter : zombie.characters.IsoGameCharacter
 function CharacterPerkDetails.writeBook(character, modData_name)
-    --- **Remove perkDetails and profession from mod-data**
-    modDataManager.remove(modData_name.PERK_DETAILS)
-    modDataManager.remove(modData_name.PROFESSION)
+    -- acquire ModData table
+    local temp = modDataManager.read(modData_name)
+    if temp then
 
-    ---@type table
-    local lines = {}
+    --- **Reset perkDetails and profession from mod-data**
+        temp["PERK_DETAILS"] = {}
+        temp["PROFESSION"] = {}
+        
+        ---@type table
+        local perkLines = {}
 
-    -- @type CharacterBaseObj
-    local characterAllSkills = characterLib.getAllPerks(character)
+        -- @type CharacterBaseObj
+        local characterAllSkills = characterLib.getAllPerks(character)
 
-    -- Format value1-value2-value3
-    -- @param perk PerkFactory.Perk
-    -- @param level int
-    -- @param xp float
-    for _, v in pairs(characterAllSkills:getPerkDetails()) do
-        local value = ( v.perk:getName() .. "-" ..
-                tostring(v:getCurrentLevel())  .. "-" ..
-                tostring(v:getXp()) )
+        -- Format value1-value2-value3
+        -- @param perk PerkFactory.Perk
+        -- @param level int
+        -- @param xp float
+        for _, v in pairs(characterAllSkills:getPerkDetails()) do
+            local value = ( v.perk:getName() .. "-" ..
+                    tostring(v:getCurrentLevel())  .. "-" ..
+                    tostring(v:getXp()) )
 
-        table.insert(lines, value)
+            table.insert(perkLines, value)
+        end
+        -- Salva i perk details nella mod-data
+        table.insert(temp["PERK_DETAILS"],perkLines)
+        -- temp["PERK_DETAILS"] = perkLines -- add perkLines table
+
+        -- Salva la professione nella mod-data
+        temp["PROFESSION"] =  characterAllSkills:getProfession() -- add string profession
+
+
+        --forse è meglio resettare il ModData per intero prima di ricaricarlo con le nuove informazioni?
+        -- modDataManager.remove(modData_name) ??
+        modDataManager.save(modData_name, temp)
+
+    else 
+        print("ModData " .. modData_name .. " doesn't exists")
     end
-
-    --- **Save Character Perk Details to mod-data**
-    modDataManager.save(modData_name.PERK_DETAILS, lines)
-    -- save backup on server
-    -- local args = {
-    --     name = modData_name.PERK_DETAILS,
-    --     data = lines
-    -- }
-    -- sendClientCommand(character, "Vorshim", "saveBackup", args)
-    -- -- end backup on server
-    lines = {}
-    -- args = {}
-    table.insert(lines, characterAllSkills:getProfession())
-
-    --- **Save Character Profession to mod-data**
-    modDataManager.save(modData_name.PROFESSION,
-            lines )
-
-    -- save backup on server
-    -- args = {
-    --     name = modData_name.PROFESSION,
-    --     data = lines
-    -- }
-    -- sendClientCommand(character, "Vorshim", "saveBackup", args)
-    -- -- end backup on server
-
-    lines = {}
 end
 
 return CharacterPerkDetails
