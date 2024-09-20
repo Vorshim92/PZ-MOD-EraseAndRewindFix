@@ -42,7 +42,7 @@ end
 --- - IsoGameCharacter : zombie.characters.IsoGameCharacter
 function TimedBook.readBook(character)
     if not character then
-        errHandler.errMsg("TimedBook.readBook(character)",
+        errHandler.errMseg("TimedBook.readBook(character)",
                 errHandler.err.IS_NULL_CHARACTER)
         return nil
     end
@@ -82,13 +82,13 @@ function TimedBook.writeBook(character)
         flag = true
     else
         --- **Retrieve the date when it is possible to write a book**
-        ---@type table - double
-        local scheduledBookRead = scheduledBookReadFromHd()
+        ---@type double - double
+        local scheduledBookRead = temp.TIMED_BOOK
 
         --- check if scheduledBookRead is nil
         if not scheduledBookRead then return nil end
 
-        bookWriteDateInSeconds = scheduledBookRead[1]
+        bookWriteDateInSeconds = scheduledBookRead
 
         -- **Set scheduled writeBook**
         activityCalendar.setExpectedDateInSecond(bookWriteDateInSeconds)
@@ -96,7 +96,7 @@ function TimedBook.writeBook(character)
         --- **Check if date is expected**
         if activityCalendar.isExpectedDate() then
             --- **Remove all mod data**
-            characterManagement.removeAllModData(pageBook.TimedBook)
+            temp.TIMED_BOOK = nil
 
             --- **Book Write Date In Seconds**
             bookWriteDateInSeconds = TimedBook.getBookWriteDate()
