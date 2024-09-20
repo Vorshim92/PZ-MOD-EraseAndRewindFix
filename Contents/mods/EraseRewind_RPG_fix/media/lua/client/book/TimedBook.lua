@@ -107,13 +107,9 @@ function TimedBook.writeBook(character)
 
     --- **Check if I can write the book**
     if flag then
-        local lines = {}
-        table.insert(lines, bookWriteDateInSeconds)
-        --- **Remove scheduled BookRead date to mod data**
-        modDataManager.remove(pageBook.TIMED_BOOK)
-
+        
         --- **Save scheduled BookRead date to mod data**
-        temp.TIMED_BOOK = lines
+        temp.TIMED_BOOK = bookWriteDateInSeconds
         modDataManager.save("Erase_Rewind", temp)
         --- **Write Book**
         characterManagement.writeBook(character, pageBook.TimedBook, "TimedBook")
