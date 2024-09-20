@@ -125,7 +125,7 @@ function CharacterMultiplier.writeBook(character, modData_name)
 
     
     if modData_name then
-        table.insert(modData_name["MULTIPLIER"], lines_)
+        modData_name["MULTIPLIER"] = lines_
     end
     lines_ = {}
 end

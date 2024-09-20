@@ -48,7 +48,7 @@ local ModDataKey = "Erase_Rewind"
 function CharacterManagement.removeAllModData(modData_table)
     --- **Remove ModData**
     -- Rimuovi tutti i dati associati alle chiavi specifiche del libro
-    local temp = ModData.getOrCreate("Erase_Rewind")
+    local temp = modDataManager.read("Erase_Rewind")
     if temp[modData_table] ~= nil then
         temp[modData_table] = nil
     end
@@ -144,6 +144,7 @@ function CharacterManagement.writeBook(character, modData_table)
     end
     
     
+    
     characterPerkDetails.writeBook(character, modData_table)
     characterKilledZombies.writeBook(character, modData_table)
     characterLifeTime.writeBook(modData_table)
@@ -165,9 +166,10 @@ function CharacterManagement.writeBook(character, modData_table)
     if patchSurvivalRewards.isModActive() then
         patchSurvivalRewards.writeMil_kill_ReachedToHd(character, modData_table)
     end
-
-    -- TempData a questo punto è pieno di tutte le tabelle e lo ripusciamo.
-    modDataManager.save(ModDataKey, modData_table)
+        -- TempData a questo punto è pieno di tutte le tabelle e lo ripusciamo.ù
+    local temp = modDataManager.read(ModDataKey)
+    temp[modData_table] = modData_table
+    modDataManager.save(ModDataKey, temp)
     print("Dati salvati correttamente")
     --reset TempData (in realtà da fare dopo l'invio al server)
     -- TempData = {}

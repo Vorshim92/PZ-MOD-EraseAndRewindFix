@@ -24,7 +24,6 @@ function ModDataManager.save(nameFile, values)
         return nil
     end
 
-    ModData.create(nameFile)
     if values then
         ModData.add(nameFile, values)
     end
@@ -41,7 +40,7 @@ function ModDataManager.read(nameFile)
     end
 
     -- Acquisisce direttamente la tabella con ModData.get
-    local modData = ModData.get(nameFile)
+    local modData = ModData.getOrCreate(nameFile)
 
     if not modData then
         errHandler.errMsg("ModDataManager.read(nameFile)", "modData " .. errHandler.err.IS_NULL)

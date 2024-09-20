@@ -132,7 +132,7 @@ function CharacterBoost.writeBook(character, modData_name)
         addLines(v:getPerk(), v:getXPBoost())
     end
     if modData_name then
-        table.insert(modData_name["BOOST"], lines_)
+        modData_name["BOOST"] = lines_
     end
 
     lines_ = {}

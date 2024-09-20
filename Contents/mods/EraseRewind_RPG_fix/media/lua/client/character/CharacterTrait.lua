@@ -74,7 +74,7 @@ function CharacterTrait.writeBook(character, modData_name)
     ---@type CharacterBaseObj
     local trait = characterLib.getTraitsPerk(character)
     if modData_name then
-        table.insert(modData_name,  trait:getTraits())
+        modData_name["TRAITS"] = trait:getTraits()
     end
            
 end

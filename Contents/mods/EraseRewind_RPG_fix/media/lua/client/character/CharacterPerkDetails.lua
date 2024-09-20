@@ -151,7 +151,7 @@ function CharacterPerkDetails.writeBook(character, modData_name)
             table.insert(perkLines, value)
         end
         -- Salva i perk details nella mod-data
-        table.insert(modData_name["PERK_DETAILS"],perkLines)
+        modData_name["PERK_DETAILS"] = perkLines
         -- modData_name["PERK_DETAILS"] = perkLines
 
         -- Salva la professione nella mod-data

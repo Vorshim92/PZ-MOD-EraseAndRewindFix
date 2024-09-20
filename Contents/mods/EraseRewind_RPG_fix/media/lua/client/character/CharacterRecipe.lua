@@ -104,7 +104,7 @@ function CharacterRecipe.writeBook(character, modData_name)
     end
 
     if modData_name then
-        table.insert(modData_name["RECIPES"], lines)
+        modData_name["RECIPES"] = lines
     end
     lines = {}
 end

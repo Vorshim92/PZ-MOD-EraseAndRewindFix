@@ -76,7 +76,7 @@ function TimedBook.writeBook(character)
     local bookWriteDateInSeconds = 0
 
     --- **Check if scheduledBookRead is exits**
-    local temp = ModData.getOrCreate("Erase_Rewind")
+    local temp = modDataManager.read("Erase_Rewind")
     if temp.TIMED_BOOK == nil then 
         bookWriteDateInSeconds = TimedBook.getBookWriteDate()
         flag = true
