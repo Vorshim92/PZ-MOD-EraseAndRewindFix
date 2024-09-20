@@ -16,7 +16,7 @@ local modDataManager = require("lib/ModDataManager")
 --- **Read Zombies Killed From Hd**
 ---@return table int ( killed zombies )
 local function readKilledZombiesFromHd(modData_name)
-    return modDataManager.read(modData_name.KILLED_ZOMBIES)
+    return modDataManager.readOrCreate(modData_name.KILLED_ZOMBIES)
 end
 
 --- **Create Zombies Kills**
@@ -51,7 +51,7 @@ function CharacterKilledZombies.writeBook(character, modData_name)
     end
 
     -- Acquisisce la tabella ModData con il nome specificato
-    -- local temp = modDataManager.read(modData_name)
+    -- local temp = modDataManager.readOrCreate(modData_name)
 
     if modData_name then
         -- Ottiene il numero di zombie uccisi

@@ -78,7 +78,7 @@
 
         if modDataManager.isExists(oldKey) then
             -- Leggi i dati dalla vecchia chiave
-            local lines = modDataManager.read(oldKey)
+            local lines = modDataManager.readOrCreate(oldKey)
 
             if lines then
                 -- Aggiungi i dati alla nuova chiave

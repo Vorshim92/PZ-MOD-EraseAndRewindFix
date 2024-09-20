@@ -22,7 +22,7 @@ local modDataManager = require("lib/ModDataManager")
 ---Read Trait From Hd
 ---@return table - string
 local function readTraitFromHd(modData_name)
-    return modDataManager.read(modData_name.TRAITS)
+    return modDataManager.readOrCreate(modData_name.TRAITS)
 end
 
 --- **Create Trait**

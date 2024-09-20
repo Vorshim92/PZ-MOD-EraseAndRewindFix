@@ -20,7 +20,7 @@ local modDataManager = require("lib/ModDataManager")
 ---@return CharacterBaseObj getRecipes table string
 local function readRecipeFromHd(modData_name)
     local characterKnowRecipe =
-        modDataManager.read(modData_name.RECIPES)
+        modDataManager.readOrCreate(modData_name.RECIPES)
 
     local CharacterObj01 = CharacterBaseObj:new()
 

@@ -40,7 +40,7 @@ end
 ---@return table perk, double ( multiplier )
 --- - PerkFactory.Perk : zombie.characters.skills.PerkFactory
 local function readMultiplierFromHd(modData_name)
-    return modDataManager.read(modData_name.MULTIPLIER)
+    return modDataManager.readOrCreate(modData_name.MULTIPLIER)
 end
 
 --- **Delete Multiplier**

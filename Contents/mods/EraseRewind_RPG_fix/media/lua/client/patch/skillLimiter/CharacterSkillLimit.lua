@@ -15,7 +15,7 @@ function CharacterSkillLimit.readBook(modData_name)
         
         ---@type table
         -- leggo il backup del libro
-        local characterMaxSkillTable = modDataManager.read(modData_name.SKILL_LIMITER)
+        local characterMaxSkillTable = modDataManager.readOrCreate(modData_name.SKILL_LIMITER)
 
         -- salvo il backup dal libro nel modData di SkillLimiter
         modDataManager.save(characterMaxSkillModData, characterMaxSkillTable)
@@ -23,7 +23,7 @@ function CharacterSkillLimit.readBook(modData_name)
         SkillLimiter.initCharacter()
         
     else 
-        local characterMaxSkillTable = modDataManager.read(modData_name.SKILL_LIMITER)
+        local characterMaxSkillTable = modDataManager.readOrCreate(modData_name.SKILL_LIMITER)
 
         -- salvo il backup dal libro nel modData di SkillLimiter
         modDataManager.save(characterMaxSkillModData, characterMaxSkillTable)
@@ -42,7 +42,7 @@ function CharacterSkillLimit.writeBook(modData_name)
 
     ---@type table
     -- acquisisco i valori dal ModData di SkillLimiter
-    local characterMaxSkillTable = modDataManager.read(characterMaxSkillModData)
+    local characterMaxSkillTable = modDataManager.readOrCreate(characterMaxSkillModData)
 
 
     if modData_name then

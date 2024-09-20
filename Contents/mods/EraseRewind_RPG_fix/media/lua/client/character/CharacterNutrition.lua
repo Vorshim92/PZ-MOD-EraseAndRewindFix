@@ -17,13 +17,13 @@ local modDataManager = require("lib/ModDataManager")
 --- **Read Weight From Hd**
 ---@return table double
 local function readWeightFromHd(modData_name)
-    return modDataManager.read(modData_name.WEIGHT)
+    return modDataManager.readOrCreate(modData_name.WEIGHT)
 end
 
 --- **Read Calories From Hd**
 ---@return table float
 local function readCaloriesFromHd(modData_name)
-    return modDataManager.read(modData_name.CALORIES)
+    return modDataManager.readOrCreate(modData_name.CALORIES)
 end
 
 --- **Write Weight From Hd**

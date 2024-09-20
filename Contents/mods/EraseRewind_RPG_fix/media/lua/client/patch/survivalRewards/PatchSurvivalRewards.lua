@@ -16,12 +16,12 @@ local milReached = "milReachedX"
 
 --- **Read kilMilReached From Hd
 local function readKilMilReachedFromHd(modData_table)
-    return modDataManager.read(modData_table.kilMilReached)
+    return modDataManager.readOrCreate(modData_table.kilMilReached)
 end
 
 --- **Read MilReached From Hd**
 local function readMilReachedFromHd(modData_table)
-    return modDataManager.read(modData_table.milReached)
+    return modDataManager.readOrCreate(modData_table.milReached)
 end
 
 --- **Write kilMilReached From Hd**

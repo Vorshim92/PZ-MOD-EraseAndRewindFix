@@ -25,7 +25,7 @@ local function readCharacterPerkDetailsFromHd(modData_name)
     ---@type table
     ---@return table perk, level ( int ), xp ( float )
     local characterPerkDetails =
-        modDataManager.read(modData_name.PERK_DETAILS)
+        modDataManager.readOrCreate(modData_name.PERK_DETAILS)
 
     -- @type CharacterBaseObj
     local CharacterObj01 = CharacterBaseObj:new()
@@ -119,7 +119,7 @@ function CharacterPerkDetails.readBook(character, modData_name)
 
     ---@type table
     ---@return table string ( profession )
-    local profession = modDataManager.read(modData_name.PROFESSION)
+    local profession = modDataManager.readOrCreate(modData_name.PROFESSION)
 
     characterPz.setProfession_PZ(character,
             profession[1])

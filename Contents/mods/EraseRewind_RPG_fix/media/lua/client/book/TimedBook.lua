@@ -23,7 +23,7 @@ end
 --- **Scheduled Book Read From Hd**
 ---@return table double ( dateInSecond )
 local function scheduledBookReadFromHd()
-    return modDataManager.read(pageBook.TIMED_BOOK)
+    return modDataManager.readOrCreate(pageBook.TIMED_BOOK)
 end
 
 --- **Get Book Write Date** - Get the date in seconds when it is possible to write a book
@@ -76,7 +76,7 @@ function TimedBook.writeBook(character)
     local bookWriteDateInSeconds = 0
 
     --- **Check if scheduledBookRead is exits**
-    local temp = modDataManager.read("Erase_Rewind")
+    local temp = modDataManager.readOrCreate("Erase_Rewind")
     if temp.TIMED_BOOK == nil then 
         bookWriteDateInSeconds = TimedBook.getBookWriteDate()
         flag = true

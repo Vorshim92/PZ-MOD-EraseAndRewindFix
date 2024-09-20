@@ -16,7 +16,7 @@ local modDataManager = require("lib/ModDataManager")
 --- **Read Life Time From Hd**
 ---@return table double ( timeLife )
 local function readLifeTimeFromHd(modData_name)
-    return modDataManager.read(modData_name.LIFE_TIME)
+    return modDataManager.readOrCreate(modData_name.LIFE_TIME)
 end
 
 --- **Create Life Time**

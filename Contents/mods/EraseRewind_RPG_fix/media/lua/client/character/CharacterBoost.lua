@@ -63,7 +63,7 @@ end
 ---@return table perk, int
 --- - PerkFactory.Perk : zombie.characters.skills.PerkFactory
 local function readBoostFromHd(modData_name)
-    return modDataManager.read(modData_name.BOOST)
+    return modDataManager.readOrCreate(modData_name.BOOST)
 end
 
 --- **Delete Boost**
