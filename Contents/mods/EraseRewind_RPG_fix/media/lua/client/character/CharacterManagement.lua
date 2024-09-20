@@ -183,27 +183,11 @@ function CharacterManagement.writeBook(character, modData_table, modData_name)
     ---SEND BACKUP TO SERVER---
     
     -- local backup = prepareBkpServer(modData_table)
-    local backup = false
+    local backup = {name = temp[modData_name], data = temp[modData_table]}
     if backup then
-        print("[Commands.saveBackup] Preparazione backup da inviare al server")
-        local name = ""
-        if modData_table == pageBook.TimedBook then
-            name = "Timed"
-        elseif modData_table == pageBook.ReadOnceBook then
-            name = "ReadOnce"
-        elseif isEraseBKP then
-            if modData_table == playerBKP.BKP_1 then
-                name = "BKP1"
-            elseif modData_table == playerBKP.BKP_2 then
-                name = "BKP2"
-            end
-        end
-        local args = {
-            name = name,
-            data = backup
-        }
+        
         print("[Commands.saveBackup] Inizio del salvataggio dei dati per PlayerBKP_" .. character:getUsername() .. "_" .. name .. ".txt")
-        sendClientCommand(character, "Vorshim", "saveBackup", args)
+        sendClientCommand(character, "Vorshim", "saveBackup", backup)
     else 
         print("[Commands.saveBackup] Nessun backup da inviare al server")
     end
