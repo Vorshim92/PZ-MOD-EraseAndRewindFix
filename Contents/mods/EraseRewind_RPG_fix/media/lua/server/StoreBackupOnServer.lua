@@ -45,15 +45,27 @@ if not isServer() then return end
 --     return serialized
 -- end
 
-local function vorshimSerial (tbl, indent)
+local function vorshimSerial(tbl, indent)
     indent = indent or ""
     local serialized = ""
+    
+    if type(tbl) ~= "table" then
+        -- Se non è una tabella, serializza come stringa o altro tipo
+        if type(tbl) == "string" then
+            return string.format("%q", tbl)
+        elseif type(tbl) == "number" or type(tbl) == "boolean" then
+            return tostring(tbl)
+        elseif type(tbl) == "userdata" then
+            return tostring(tbl)
+            else
+            return '"UnsupportedType"'
+        end
+    end
+
     for key, value in pairs(tbl) do
         local keyStr = tostring(key)
         if not keyStr:match("^[_%a][_%w]*$") then
             keyStr = string.format("[%q]", keyStr)
-        else
-            keyStr = keyStr
         end
         if type(value) == "table" then
             serialized = serialized .. indent .. keyStr .. " = {\n"
@@ -77,6 +89,7 @@ local function vorshimSerial (tbl, indent)
 end
 
 
+
 -- Funzione ricorsiva per contare gli elementi in una tabella
 local function countDataSize(data)
     local size = 0
@@ -92,16 +105,9 @@ end
 
 -- Funzione per sostituire o aggiungere una sezione nel file di backup
 local function replaceOrAddSection(content, sectionName, serializedSection)
-    local pattern
-    if serializedSection:find("{\n") then
-        -- Se la sezione è una tabella
-        pattern = sectionName .. " = {%s*.-%},\n"
-    else
-        -- Se la sezione è un singolo valore
-        pattern = sectionName .. " = [^\n]*,\n"
-    end
-
-    if content:match(sectionName .. " = ") then
+    -- Pattern per trovare la sezione esistente
+    local pattern = sectionName .. " = %b{},?\n"
+    if content:match(sectionName .. " = {") then
         -- Sostituisci la sezione esistente
         local newContent, count = content:gsub(pattern, serializedSection)
         if count > 0 then
@@ -119,49 +125,86 @@ local function replaceOrAddSection(content, sectionName, serializedSection)
     end
 end
 
+local function createIncrementalBackup(filepath)
+    -- Crea una copia del file di backup esistente con un timestamp
+    local filereader = getFileReader(filepath, false)
+    if filereader then
+        local content = {}
+        local line = filereader:readLine()
+        while line ~= nil do
+            table.insert(content, line)
+            line = filereader:readLine()
+        end
+        filereader:close()
+
+        if content and #content > 0 then
+            local backupCopyPath = filepath .. ".temp"
+            local contentString = table.concat(content, "\n")
+
+            local filewriter = getFileWriter(backupCopyPath, true, false)
+            if filewriter then
+                filewriter:write(contentString)
+                filewriter:close()
+                print("Backup incrementale creato: " .. backupCopyPath)
+            else
+                print("Impossibile creare il backup incrementale.")
+            end
+        else
+            print("Nessun file di backup esistente da copiare.")
+        end
+    else
+        print("Nessun file di backup esistente da copiare.")
+    end
+end
+
+
+
+
 -- Funzione per aggiornare il file di backup
-local function updateBackupFile(filepath, sectionName, newData)
+local function updateBackupFile(filepath, sectionName, data)
+    -- Crea un backup incrementale prima di modificare il file
+    createIncrementalBackup(filepath)
+
     -- Leggi il contenuto esistente del file
-    local file = io.open(filepath, "r")
-    local content = ""
-    if file then
-        content = file:read("*all")
-        file:close()
+    local filereader = getFileReader(filepath, false)
+    local content = {}
+    
+    if filereader then
+        local line = filereader:readLine()
+        while line ~= nil do
+            table.insert(content, line)
+            line = filereader:readLine()
+        end
+        filereader:close()
     else
         print("Impossibile aprire il file per la lettura. Verrà creato un nuovo file.")
     end
 
-    -- Se il file è vuoto, aggiungi "Table Name: Erase_Rewind\n"
-    if content == "" then
-        content = "Table Name: Erase_Rewind\n\n"
-    end
-
     -- Serializza i nuovi dati
-    local serializedSection
-    if type(newData) == "table" then
-        serializedSection = sectionName .. " = {\n" .. vorshimSerial(newData, "    ") .. "},\n"
+    local serializedData
+    if type(data) == "table" then
+        serializedData = sectionName .. " = {\n" .. vorshimSerial(data) .. "},\n"
     else
-        -- Supponiamo sia una stringa o un numero
-        if type(newData) == "string" then
-            serializedSection = sectionName .. " = " .. string.format("%q", newData) .. ",\n"
-        else
-            serializedSection = sectionName .. " = " .. tostring(newData) .. ",\n"
-        end
+        -- Supponendo che `data` sia una stringa, numero o booleano per BKP_MOD_1
+        serializedData = sectionName .. " = " .. vorshimSerial(data) .. ",\n"
     end
-
+    if content and #content > 0 then
+    local contentString = table.concat(content, "\n")
     -- Sostituisci o aggiungi la sezione
-    content = replaceOrAddSection(content, sectionName, serializedSection)
+    content = replaceOrAddSection(contentString, sectionName, serializedData)
+    end
 
     -- Scrivi il contenuto aggiornato nel file
-    local fileWriter = io.open(filepath, "w")
-    if fileWriter then
-        fileWriter:write(content)
-        fileWriter:close()
+    local filewriter = getFileWriter(filepath, false, false) -- 'false' per non appendere e 'false' per non creare se non esiste
+    if filewriter then
+        filewriter:write(content)
+        filewriter:close()
         print("File di backup aggiornato correttamente.")
     else
         print("Impossibile aprire il file per la scrittura.")
     end
 end
+
 
 
 --- **Store Backup On Server**
@@ -295,7 +338,7 @@ local function ServerGlobalModData()
             
             if modDataTable then
                 print("Dati ottenuti per la tabella: " .. tableName)
-                local serializedData = serializeData(modDataTable)
+                local serializedData = vorshimSerial(modDataTable)
                 
                 filewriter:write(serializedData)
                 filewriter:write("\n\n")
