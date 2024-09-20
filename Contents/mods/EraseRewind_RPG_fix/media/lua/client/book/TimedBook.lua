@@ -76,7 +76,7 @@ function TimedBook.writeBook(character)
     local bookWriteDateInSeconds = 0
 
     --- **Check if scheduledBookRead is exits**
-    local temp = ModData.getOrCreate("ERASE_REWIND")
+    local temp = ModData.getOrCreate("Erase_Rewind")
     if temp.TIMED_BOOK == nil then 
         bookWriteDateInSeconds = TimedBook.getBookWriteDate()
         flag = true
@@ -114,7 +114,7 @@ function TimedBook.writeBook(character)
 
         --- **Save scheduled BookRead date to mod data**
         temp.TIMED_BOOK = lines
-        modDataManager.save("ERASE_REWIND", temp)
+        modDataManager.save("Erase_Rewind", temp)
         --- **Write Book**
         characterManagement.writeBook(character, pageBook.TimedBook)
     end

@@ -48,7 +48,7 @@ local ModDataKey = "Erase_Rewind"
 function CharacterManagement.removeAllModData(modData_table)
     --- **Remove ModData**
     -- Rimuovi tutti i dati associati alle chiavi specifiche del libro
-    local temp = ModData.getOrCreate("ERASE_REWIND")
+    local temp = ModData.getOrCreate("Erase_Rewind")
     if temp[modData_table] ~= nil then
         temp[modData_table] = nil
     end

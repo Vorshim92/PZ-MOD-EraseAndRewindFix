@@ -40,7 +40,7 @@ function ReadOnceBook.writeBook(character)
         return nil
     end
     local flag = false
-    local temp = ModData.getOrCreate("ERASE_REWIND")
+    local temp = ModData.getOrCreate("Erase_Rewind")
     if temp.READ_ONCE_BOOK == nil then
         flag = true
     end
@@ -51,7 +51,7 @@ function ReadOnceBook.writeBook(character)
         local lines = {}
         table.insert(lines, time)
         temp.READ_ONCE_BOOK = lines
-        modDataManager.save("ERASE_REWIND", temp)
+        modDataManager.save("Erase_Rewind", temp)
         characterManagement.writeBook(character, pageBook.ReadOnceBook)
     end
 
