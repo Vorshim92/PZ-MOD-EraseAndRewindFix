@@ -47,11 +47,10 @@ function ReadOnceBook.writeBook(character)
 
     if flag then 
         local time = activityCalendar.getStarTime()
-        time = activityCalendar.fromSecondToDate(time)
-        local lines = {}
-        table.insert(lines, time)
-        temp.READ_ONCE_BOOK = lines
+        local timeString = activityCalendar.fromSecondToDate(time)
+        temp.READ_ONCE_BOOK = timeString
         modDataManager.save("Erase_Rewind", temp)
+        --- **Write Book**
         characterManagement.writeBook(character, pageBook.ReadOnceBook, "ReadOnceBook")
     end
 

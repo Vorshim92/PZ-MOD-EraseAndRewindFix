@@ -90,8 +90,37 @@ local function countDataSize(data)
     return size
 end
 
--- Funzione per aggiornare una specifica tabella nel file di backup
-local function updateBackupFile(filepath, tableName, newData)
+-- Funzione per sostituire o aggiungere una sezione nel file di backup
+local function replaceOrAddSection(content, sectionName, serializedSection)
+    local pattern
+    if serializedSection:find("{\n") then
+        -- Se la sezione è una tabella
+        pattern = sectionName .. " = {%s*.-%},\n"
+    else
+        -- Se la sezione è un singolo valore
+        pattern = sectionName .. " = [^\n]*,\n"
+    end
+
+    if content:match(sectionName .. " = ") then
+        -- Sostituisci la sezione esistente
+        local newContent, count = content:gsub(pattern, serializedSection)
+        if count > 0 then
+            print("Sezione " .. sectionName .. " aggiornata nel file di backup.")
+            return newContent
+        else
+            -- Se non riesce a sostituire, aggiungi la sezione
+            print("Sezione " .. sectionName .. " non trovata completamente. Aggiunta al file.")
+            return content .. serializedSection
+        end
+    else
+        -- Aggiungi la sezione se non esiste
+        print("Sezione " .. sectionName .. " non esiste. Aggiunta al file.")
+        return content .. serializedSection
+    end
+end
+
+-- Funzione per aggiornare il file di backup
+local function updateBackupFile(filepath, sectionName, newData)
     -- Leggi il contenuto esistente del file
     local file = io.open(filepath, "r")
     local content = ""
@@ -102,29 +131,26 @@ local function updateBackupFile(filepath, tableName, newData)
         print("Impossibile aprire il file per la lettura. Verrà creato un nuovo file.")
     end
 
-    -- Serializza i nuovi dati
-    local serializedData = vorshimSerial(newData)
-    local tableSection = tableName .. " = {\n" .. serializedData .. "},\n"
-
-    -- Verifica se la tabella esiste già nel file
-    local pattern = tableName .. " = {%b{}}"
-    if content:match(tableName .. " = {") then
-        -- Trova la posizione di inizio e fine della tabella esistente
-        local start_pos, end_pos = content:find(tableName .. " = {.-},\n", 1, true)
-        if start_pos and end_pos then
-            -- Sostituisci la sezione esistente con i nuovi dati
-            content = content:sub(1, start_pos - 1) .. tableSection .. content:sub(end_pos + 1)
-            print("Tabella " .. tableName .. " aggiornata nel file di backup.")
-        else
-            -- Se non riesce a trovare il pattern completo, aggiungi la nuova sezione
-            content = content .. tableSection
-            print("Tabella " .. tableName .. " aggiunta al file di backup.")
-        end
-    else
-        -- Aggiungi la nuova sezione al contenuto
-        content = content .. "Table Name: " .. tableName .. "\n" .. tableSection .. "\n"
-        print("Tabella " .. tableName .. " aggiunta al file di backup.")
+    -- Se il file è vuoto, aggiungi "Table Name: Erase_Rewind\n"
+    if content == "" then
+        content = "Table Name: Erase_Rewind\n\n"
     end
+
+    -- Serializza i nuovi dati
+    local serializedSection
+    if type(newData) == "table" then
+        serializedSection = sectionName .. " = {\n" .. vorshimSerial(newData, "    ") .. "},\n"
+    else
+        -- Supponiamo sia una stringa o un numero
+        if type(newData) == "string" then
+            serializedSection = sectionName .. " = " .. string.format("%q", newData) .. ",\n"
+        else
+            serializedSection = sectionName .. " = " .. tostring(newData) .. ",\n"
+        end
+    end
+
+    -- Sostituisci o aggiungi la sezione
+    content = replaceOrAddSection(content, sectionName, serializedSection)
 
     -- Scrivi il contenuto aggiornato nel file
     local fileWriter = io.open(filepath, "w")
@@ -149,13 +175,16 @@ function Commands.saveBackup(player, args)
     print("[Commands.saveBackup] Percorso del file: " .. filepath)
     
     -- Recupera i dati dal comando
-    local backupTables = args.data
-    local tableName = args.name
-        -- Aggiorna il file di backup con la tabella specifica
-        updateBackupFile(filepath, tableName, backupTables)
+    local backupData = args -- { BKP_MOD_1 = "timestamp", BKP_1 = { ... } }
+    
+    for sectionName, data in pairs(backupData) do
+        -- Aggiorna ogni sezione nel file di backup
+        updateBackupFile(filepath, sectionName, data)
+    end
 
     print("Dati del personaggio salvati correttamente per ID: " .. id)
 end
+
 
 
 
