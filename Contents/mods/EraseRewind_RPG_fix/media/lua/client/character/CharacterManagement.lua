@@ -128,7 +128,7 @@ end
 ---@param modData_table table
 ---@return void
 --- - IsoGameCharacter : zombie.characters.IsoGameCharacter
-function CharacterManagement.writeBook(character, modData_table)
+function CharacterManagement.writeBook(character, modData_table, modData_name)
     --- **Check if character is null**
     if not character then
         errHandler.errMsg("CharacterManagement.writeBook(character)",
@@ -141,6 +141,11 @@ function CharacterManagement.writeBook(character, modData_table)
         errHandler.errMsg("CharacterManagement.writeBook(character)",
                 " modData_table is not exists")
         return nil
+    end
+
+    if not modData_name then
+        errHandler.errMsg("CharacterManagement.writeBook(character)",
+                " modData_name is not exists")
     end
     
     
@@ -168,7 +173,7 @@ function CharacterManagement.writeBook(character, modData_table)
     end
         -- TempData a questo punto è pieno di tutte le tabelle e lo ripusciamo.ù
     local temp = modDataManager.read(ModDataKey)
-    temp[modData_table] = modData_table
+    temp[modData_name] = modData_table
     modDataManager.save(ModDataKey, temp)
     print("Dati salvati correttamente")
     --reset TempData (in realtà da fare dopo l'invio al server)

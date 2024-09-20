@@ -116,7 +116,7 @@ function TimedBook.writeBook(character)
         temp.TIMED_BOOK = lines
         modDataManager.save("Erase_Rewind", temp)
         --- **Write Book**
-        characterManagement.writeBook(character, pageBook.TimedBook)
+        characterManagement.writeBook(character, pageBook.TimedBook, "TimedBook")
     end
 
     return flag

@@ -52,7 +52,7 @@ function ReadOnceBook.writeBook(character)
         table.insert(lines, time)
         temp.READ_ONCE_BOOK = lines
         modDataManager.save("Erase_Rewind", temp)
-        characterManagement.writeBook(character, pageBook.ReadOnceBook)
+        characterManagement.writeBook(character, pageBook.ReadOnceBook, "ReadOnceBook")
     end
 
 return flag
