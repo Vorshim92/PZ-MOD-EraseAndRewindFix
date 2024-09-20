@@ -186,7 +186,7 @@ function CharacterManagement.writeBook(character, modData_table, modData_name)
     local backup = {name = temp[modData_name], data = temp[modData_table]}
     if backup then
         
-        print("[Commands.saveBackup] Inizio del salvataggio dei dati per PlayerBKP_" .. character:getUsername() .. "_" .. name .. ".txt")
+        print("[Commands.saveBackup] Inizio del salvataggio dei dati per PlayerBKP_" .. character:getUsername() .. "_" .. modData_name )
         sendClientCommand(character, "Vorshim", "saveBackup", backup)
     else 
         print("[Commands.saveBackup] Nessun backup da inviare al server")
