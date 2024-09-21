@@ -50,8 +50,6 @@ function CharacterKilledZombies.writeBook(character, modData_name)
         return nil
     end
 
-    -- Acquisisce la tabella ModData con il nome specificato
-    -- local temp = modDataManager.readOrCreate(modData_name)
 
     if modData_name then
         -- Ottiene il numero di zombie uccisi
@@ -60,8 +58,6 @@ function CharacterKilledZombies.writeBook(character, modData_name)
         -- Salva il numero di zombie uccisi direttamente nella chiave KILLED_ZOMBIES
         modData_name["KILLED_ZOMBIES"] = killedZombies -- add int zombie killed
 
-        -- Salva le modifiche su disco usando il ModDataManager
-        -- modDataManager.save(modData_name, temp)
     else
         print("ModData " .. modData_name .. " doesn't exist")
     end

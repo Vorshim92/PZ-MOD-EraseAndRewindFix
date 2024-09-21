@@ -8,7 +8,7 @@ local modDataManager = require("lib/ModDataManager")
 
 
 function CharacterSkillLimit.readBook(modData_name)
-    if  modDataManager.isExists(characterMaxSkillModData) then
+    if  getPlayer():getModData().SkillLimiter then
     --- **Check if ModData exists**
         --- **Remove ModData SkillLimiter per preparare il restore col libro**
         modDataManager.remove(characterMaxSkillModData)
@@ -35,18 +35,18 @@ function CharacterSkillLimit.readBook(modData_name)
 end
 
 
-function CharacterSkillLimit.writeBook(modData_name)
+function CharacterSkillLimit.writeBook(modData_table)
     --- **Check if ModData exists**
-        -- modDataManager.remove(modData_name.SKILL_LIMITER)
+        -- modDataManager.remove(modData_table.SKILL_LIMITER)
         -- se non esiste non faccio niente
 
     ---@type table
     -- acquisisco i valori dal ModData di SkillLimiter
-    local characterMaxSkillTable = modDataManager.readOrCreate(characterMaxSkillModData)
-
-
-    if modData_name then
-        modData_name["SKILL_LIMITER"] = characterMaxSkillTable
+    if modData_table then
+        if getPlayer():getModData().SkillLimiter then
+            local characterMaxSkillTable = getPlayer():getModData().SkillLimiter
+            modData_table["SKILL_LIMITER"] = characterMaxSkillTable
+        end
     end
 end
 
