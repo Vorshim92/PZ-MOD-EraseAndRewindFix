@@ -33,9 +33,9 @@ end
 ---@param nameFile string
 ---@return table
 --- - ModData : zombie.world.moddata.ModData
-function modDataManager.readOrCreate(nameFile)
+function ModDataManager.readOrCreate(nameFile)
     if not nameFile then
-        errHandler.errMsg("modDataManager.readOrCreate(nameFile)", "nameFile " .. errHandler.err.IS_NULL)
+        errHandler.errMsg("ModDataManager.readOrCreate(nameFile)", "nameFile " .. errHandler.err.IS_NULL)
         return nil
     end
 
@@ -43,7 +43,7 @@ function modDataManager.readOrCreate(nameFile)
     local modData = ModData.getOrCreate(nameFile)
 
     if not modData then
-        errHandler.errMsg("modDataManager.readOrCreate(nameFile)", "modData " .. errHandler.err.IS_NULL)
+        errHandler.errMsg("ModDataManager.readOrCreate(nameFile)", "modData " .. errHandler.err.IS_NULL)
         return nil
     end
 
@@ -98,7 +98,7 @@ function ModDataManager.displayAllTable()
         print("Name table - " .. v)
 
         ---@type table
-        local reads = modDataManager.readOrCreate(v)
+        local reads = ModDataManager.readOrCreate(v)
         for _, v2 in pairs(reads) do
             -- TODO : CharacterBoost mostra solo tabelle e non i valori
             print("Value of Moddata - " .. tostring(v2))
