@@ -1,6 +1,6 @@
 -- PATCH SKILL LIMITER
 local CharacterSkillLimit = {}
-local SkillLimiter = require("SkillLimiter") or {}
+local SkillLimiter = require("SkillLimiter_fix") or {}
 ---@type string
 local characterMaxSkillModData = "characterMaxSkill"
 local modDataManager = require("lib/ModDataManager")
@@ -8,7 +8,7 @@ local modDataManager = require("lib/ModDataManager")
 
 
 function CharacterSkillLimit.readBook(modData_name)
-    if  getPlayer():getModData().SkillLimiter then
+    if  getPlayer():getModData().skillLimiter then
     --- **Check if ModData exists**
         --- **Remove ModData SkillLimiter per preparare il restore col libro**
         modDataManager.remove(characterMaxSkillModData)
@@ -43,8 +43,8 @@ function CharacterSkillLimit.writeBook(modData_table)
     ---@type table
     -- acquisisco i valori dal ModData di SkillLimiter
     if modData_table then
-        if getPlayer():getModData().SkillLimiter then
-            local characterMaxSkillTable = getPlayer():getModData().SkillLimiter
+        if getPlayer():getModData().skillLimiter then
+            local characterMaxSkillTable = getPlayer():getModData().skillLimiter
             modData_table["SKILL_LIMITER"] = characterMaxSkillTable
         end
     end

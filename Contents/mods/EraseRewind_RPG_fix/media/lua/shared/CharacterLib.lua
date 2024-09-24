@@ -144,24 +144,20 @@ function CharacterLib.getAllPerks(character)
     local CharacterObj01 = CharacterBaseObj:new()
 
     for i = 0, Perks.getMaxIndex() - 1 do
-
+        
         ---@type PerkFactory.Perks
         local perk = perkFactoryPZ.getPerk_PZ(Perks.fromIndex(i))
+        if perk:getParent():getName() ~= "None" then
 
-        ---@type int
-        local level = characterPz.getPerkLevel_PZ(character, perk) 
+            ---@type int
+            local level = characterPz.getPerkLevel_PZ(character, perk)
 
-        ---@type double
-        local xp = characterPz.getXp(character, perk)
+            ---@type double
+            local xp = characterPz.getXp(character, perk)
 
-        -- piccolo fix per evitare numeri negativi
-        local actualXp = xp - ISSkillProgressBar.getPreviousXpLvl(perk, level)
-        if actualXp < 0 then
-            xp = xp + -actualXp
+            -- Add to objects
+            CharacterObj01:addPerkDetails(perk, level, xp)
         end
-
-        -- Add to objects
-        CharacterObj01:addPerkDetails(perk, level, xp)
     end
 
     CharacterObj01:setProfession(characterPz.getProfession_PZ(character))

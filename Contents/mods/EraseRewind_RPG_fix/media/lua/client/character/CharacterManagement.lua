@@ -16,7 +16,6 @@ end
 local isEraseBKP = false
 local playerBKP = {}
 if getActivatedMods():contains("Erase&Rewind_BKP") then
-    playerBKP = require("CharacterPlayer")
     isEraseBKP = true
 end
 
@@ -48,7 +47,7 @@ local ModDataKey = "Erase_Rewind"
 function CharacterManagement.removeAllModData(modData_table)
     --- **Remove ModData**
     -- Rimuovi tutti i dati associati alle chiavi specifiche del libro
-    local temp = modDataManager.readOrCreate("Erase_Rewind")
+    local temp = modDataManager.readOrCreate(ModDataKey)
     if temp[modData_table] ~= nil then
         temp[modData_table] = nil
     end
@@ -198,8 +197,8 @@ function CharacterManagement.writeBook(character, modData_table, modData_name)
     end
         
     local backup = {}
-    backup[timeName] = temp[timeName]    -- BKP_MOD_1 o simili
-    backup[modData_name] = modData_table -- BKP_1 o simili
+    backup[timeName] = temp[timeName]    -- BKP_MOD_1, BKP_MOD_2, READ_ONCE_BOOK, TIMED_BOOK
+    backup[modData_name] = modData_table -- BKP_1, BKP_2, ReadOnceBook, TimedBook
 
     if backup then
         sendClientCommand(getPlayer(), "Vorshim", "saveBackup", backup)

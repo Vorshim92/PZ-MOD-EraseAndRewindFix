@@ -144,11 +144,14 @@ function CharacterPerkDetails.writeBook(character, modData_name)
         -- @param level int
         -- @param xp float
         for _, v in pairs(characterAllSkills:getPerkDetails()) do
-            local value = ( v.perk:getName() .. "-" ..
-                    tostring(v:getCurrentLevel())  .. "-" ..
-                    tostring(v:getXp()) )
+            local value = {
+                        perk = v:getPerk():getId(),
+                        currentLevel = v:getCurrentLevel(),
+                        xp = v:getXp()
+                    }
 
             table.insert(perkLines, value)
+            value = {}
         end
         -- Salva i perk details nella mod-data
         modData_name["PERK_DETAILS"] = perkLines

@@ -119,7 +119,7 @@ function CharacterMultiplier.writeBook(character, modData_name)
     -- @param multiplier float
     for _, v in pairs(CharacterMultiplierObJ:getPerkDetails()) do
         if v:getMultiplier() >= 0.0 then
-            addLine(v:getPerk(), v:getMultiplier())
+            addLine(v:getPerk():getId(), v:getMultiplier())
         end
     end
 

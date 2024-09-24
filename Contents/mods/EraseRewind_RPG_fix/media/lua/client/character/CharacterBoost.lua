@@ -129,7 +129,7 @@ function CharacterBoost.writeBook(character, modData_name)
     for _, v in pairs(CharacterPerksBoostObj:getPerkDetails()) do 
         -- @param PerkFactory.Perk
         -- @param BoostLevel int
-        addLines(v:getPerk(), v:getXPBoost())
+        addLines(v:getPerk():getId(), v:getXPBoost())
     end
     if modData_name then
         modData_name["BOOST"] = lines_
