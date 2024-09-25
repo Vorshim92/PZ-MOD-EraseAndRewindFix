@@ -52,8 +52,13 @@ function TimedBook.readBook(character)
                 " mod-data - " .. pageBook.TIMED_BOOK .. " is not exists")
         return nil
     end
+    RequestBackupData("TimedBook")
 
-    characterManagement.readBook(character, pageBook.TimedBook)
+    -- local temp = modDataManager.readOrCreate("Erase_Rewind")
+
+    -- if temp["TimedBook"] ~= nil then
+    -- characterManagement.readBook(character, temp["TimedBook"])
+    -- end
 end
 
 --- **Write Book To Hd**

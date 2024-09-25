@@ -103,6 +103,70 @@ function Commands.saveBackup(player, args)
 
     print("Character data saved successfully for ID: " .. id)
 end
+
+function Commands.requestData(player, args)
+    local id = player:getUsername()
+    local filepath = "/Backup/EraseBackup/PlayerBKP_" .. id .. ".json"
+    print("[Commands.requestData] Player ID: " .. id)
+    print("[Commands.requestData] File path: " .. filepath)
+
+    -- Read the JSON backup file
+    local content = ""
+    local filereader = getFileReader(filepath, false)
+    if filereader then
+        local line = filereader:readLine()
+        while line ~= nil do
+            content = content .. line .. "\n"
+            line = filereader:readLine()
+        end
+        filereader:close()
+    else
+        print("Unable to open file for reading.")
+        -- Send an error back to the client
+        sendServerCommand(player, "Vorshim", "restoreBackupError", { message = "Backup file not found." })
+        return
+    end
+
+    -- Parse the JSON data
+    local backupData = {}
+    if content ~= "" then
+        local success, parsedData = pcall(function()
+            return json.decode(content)
+        end)
+        if success and parsedData then
+            backupData = parsedData
+        else
+            print("Error parsing JSON.")
+            -- Send an error back to the client
+            sendServerCommand(player, "Vorshim", "restoreBackupError", { message = "Error parsing backup data." })
+            return
+        end
+    end
+
+    -- Extract the requested table
+    local requestedTableName = args.tableName
+    if not requestedTableName then
+        print("No table name specified.")
+        -- Send an error back to the client
+        sendServerCommand(player, "Vorshim", "restoreBackupError", { message = "No table name specified." })
+        return
+    end
+
+    local requestedData = backupData[requestedTableName]
+    if not requestedData then
+        print("Requested table '" .. requestedTableName .. "' not found in backup data.")
+        -- Send an error back to the client
+        sendServerCommand(player, "Vorshim", "restoreBackupError", { message = "Requested table not found." })
+        return
+    end
+
+    -- Send the requested data back to the client
+    sendServerCommand(player, "Vorshim", "restoreBackup", { tableName = requestedTableName, data = requestedData })
+
+    print("Requested data for table '" .. requestedTableName .. "' sent to client.")
+end
+
+
 Events.OnClientCommand.Add(function(module, command, player, args)
 	if module == 'Vorshim' and Commands[command] then
 		args = args or {}

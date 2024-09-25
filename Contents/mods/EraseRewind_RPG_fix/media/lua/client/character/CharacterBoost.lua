@@ -81,7 +81,7 @@ end
 --- **Create Boost**
 ---@param character IsoGameCharacter
 --- - IsoGameCharacter : zombie.characters.IsoGameCharacter
-function CharacterBoost.readBook(character, modData_name)
+function CharacterBoost.readBook(character, modData_Table)
     --- **Check if character is null**
     if not character then
         errHandler.errMsg("CharacterBoost.readBook(character)",
@@ -90,14 +90,14 @@ function CharacterBoost.readBook(character, modData_name)
     end
 
     --- **check if mod-data boost is exits**
-    if not modDataManager.isExists(modData_name.BOOST) then
+    if not modData_Table["BOOST"] then
         errHandler.errMsg("CharacterBoost.readBook(character)",
-                " mod-data " .. modData_name.BOOST .. " " .. errHandler.err.IS_NULL)
+                " mod-data BOOST " .. errHandler.err.IS_NULL)
         return nil
     end
 
     ---@type table - PerkFactory.Perk, int boostLevel
-    local boost = readBoostFromHd(modData_name)
+    local boost = modData_Table["BOOST"]
 
     --- check if boost is nil
     if not boost then return nil end
@@ -106,7 +106,8 @@ function CharacterBoost.readBook(character, modData_name)
 
     -- **Set Boost**
     for _, v in pairs(boost) do
-        characterPz.setXPBoost(character, v.perk, v.xpBoost)
+        -- local perk = perkFactoryPZ.getPerkByName_PZ(v:getPerk())
+        characterPz.setXPBoost(character, Perks[v.perk], v.xpBoost)
         -- desperateFix(character, v.perk, v.xpBoost)
     end
 end

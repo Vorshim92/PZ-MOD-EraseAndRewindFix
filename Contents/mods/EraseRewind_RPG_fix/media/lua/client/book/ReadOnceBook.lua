@@ -25,7 +25,14 @@ function ReadOnceBook.readBook(character)
         return nil
     end
 
-    characterManagement.readBook(character, pageBook.ReadOnceBook)
+    RequestBackupData("ReadOnceBook")
+
+    -- local temp = modDataManager.readOrCreate("Erase_Rewind")
+
+    -- if temp["ReadOnceBook"] ~= nil then
+    -- characterManagement.readBook(character, temp["ReadOnceBook"])
+    -- end
+
 end
 
 --- **Write Book**

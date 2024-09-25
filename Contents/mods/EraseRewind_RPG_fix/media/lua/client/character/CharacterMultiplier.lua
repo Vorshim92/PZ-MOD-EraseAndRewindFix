@@ -60,26 +60,22 @@ end
 --- **Create Multiplier**
 ---@param character IsoGameCharacter
 --- - IsoGameCharacter : zombie.characters.IsoGameCharacter
-function CharacterMultiplier.readBook(character, modData_name)
+function CharacterMultiplier.readBook(character, modData_Table)
     --- **Check if character is null**
     if not character then
         errHandler.errMsg("CharacterMultiplier.readBook(character)",
                 errHandler.err.IS_NULL_CHARACTERS)
         return nil
         --- **Check if mod-data multiplier is exits**
-    elseif not modDataManager.isExists(modData_name.MULTIPLIER) then
+    elseif not modData_Table["MULTIPLIER"] then
         errHandler.errMsg("CharacterMultiplier.readBook(character)",
-                " mod-data " .. modData_name.MULTIPLIER .. " not exists")
+                " mod-data MULTIPLIER not exists")
         return nil
     end
 
     ---@type table
     ---@return table perk, double ( multiplier )
-    local multiplier = readMultiplierFromHd(modData_name)
-
-    if not multiplier then
-        return nil
-    end
+    local multiplier = modData_Table["MULTIPLIER"]
 
     deleteMultiplier(character)
 
@@ -87,7 +83,8 @@ function CharacterMultiplier.readBook(character, modData_name)
     -- @param perk PerkFactory.Perk
     -- @param multiplier float
     for _, v in pairs(multiplier) do
-        characterPz.addXpMultiplier_PZ(character, v.perk, v.multiplier,
+        -- local perk = perkFactoryPZ.getPerkByName_PZ(v:getPerk())
+        characterPz.addXpMultiplier_PZ(character, Perks[v.perk], v.multiplier,
             characterPz.EnumNumbers.ONE, characterPz.EnumNumbers.ONE)
     end
 end

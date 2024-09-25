@@ -22,19 +22,19 @@ end
 --- **Create Zombies Kills**
 ---@param character IsoGameCharacter
 --- - IsoGameCharacter : zombie.characters.IsoGameCharacter
-function CharacterKilledZombies.readBook(character, modData_name)
+function CharacterKilledZombies.readBook(character, modData_Table)
     --- **Check if mod-data killedZombies is exits**
-    if not modDataManager.isExists(modData_name.KILLED_ZOMBIES) then
+    if not modData_Table["KILLED_ZOMBIES"] then
         errHandler.errMsg("CharacterKilledZombies.readBook(character)",
-                " mod-data " .. modData_name.KILLED_ZOMBIES .. " not exists")
+                " mod-data killedZombies not exists")
         return nil
     end
 
     ---@type table
     ---@return int ( killed zombies )
-    local killedZombies = readKilledZombiesFromHd(modData_name)
+    local killedZombies = modData_Table["KILLED_ZOMBIES"]
 
-     characterPz.setZombieKills_PZ(character, killedZombies[1])
+     characterPz.setZombieKills_PZ(character, killedZombies)
 
 end
 

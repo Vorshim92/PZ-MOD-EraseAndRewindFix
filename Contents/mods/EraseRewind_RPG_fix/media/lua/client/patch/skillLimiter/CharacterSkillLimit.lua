@@ -1,32 +1,31 @@
 -- PATCH SKILL LIMITER
 local CharacterSkillLimit = {}
-local SkillLimiter = require("SkillLimiter_fix") or {}
+local SkillLimiter = require("SkillLimiter") or {}
 ---@type string
-local characterMaxSkillModData = "characterMaxSkill"
 local modDataManager = require("lib/ModDataManager")
 -- local pageBook = require("book/PageBook")
 
 
-function CharacterSkillLimit.readBook(modData_name)
-    if  getPlayer():getModData().skillLimiter then
+function CharacterSkillLimit.readBook(modData_Table)
+    if getPlayer():getModData().skillLimiter then
     --- **Check if ModData exists**
         --- **Remove ModData SkillLimiter per preparare il restore col libro**
-        modDataManager.remove(characterMaxSkillModData)
+        getPlayer():getModData().skillLimiter = nil 
         
         ---@type table
         -- leggo il backup del libro
-        local characterMaxSkillTable = modDataManager.readOrCreate(modData_name.SKILL_LIMITER)
+        local characterMaxSkillTable = modData_Table["SKILL_LIMITER"]
 
         -- salvo il backup dal libro nel modData di SkillLimiter
-        modDataManager.save(characterMaxSkillModData, characterMaxSkillTable)
+        getPlayer():getModData().skillLimiter = characterMaxSkillTable
         -- e reinizializzo SkillLimiter con i nuovi dati
         SkillLimiter.initCharacter()
         
     else 
-        local characterMaxSkillTable = modDataManager.readOrCreate(modData_name.SKILL_LIMITER)
+        local characterMaxSkillTable = modData_Table["SKILL_LIMITER"]
 
         -- salvo il backup dal libro nel modData di SkillLimiter
-        modDataManager.save(characterMaxSkillModData, characterMaxSkillTable)
+        getPlayer():getModData().skillLimiter = characterMaxSkillTable
         -- e reinizializzo SkillLimiter con i nuovi dati
         SkillLimiter.initCharacter()
 

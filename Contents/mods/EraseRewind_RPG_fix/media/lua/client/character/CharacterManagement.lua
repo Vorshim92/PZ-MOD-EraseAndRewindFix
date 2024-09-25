@@ -39,8 +39,10 @@ local patchSurvivalRewards = require("patch/survivalRewards/PatchSurvivalRewards
 
 local ModDataKey = "Erase_Rewind"
 
--- temporary global table for ModData.getOrCreate
--- TempData = {}
+-- Function to request backup data from the server
+function RequestBackupData(tableName)
+    sendClientCommand(getPlayer(),"Vorshim", "requestData", { tableName = tableName })
+end
 
 --- **Remove all Mod Data**
 ---@return void
@@ -57,15 +59,12 @@ function CharacterManagement.removeAllModData(modData_table)
         modDataManager.remove(pageBook.READ_ONCE_BOOK)
     end
 
-    ------- PATCH ------------
-    --- survivalRewards 2797671069
-    --- https://steamcommunity.com/sharedfiles/filedetails/?id=2797671069&searchtext=2797671069
-    if patchSurvivalRewards.isModActive() then
-        patchSurvivalRewards.removeMil_kill_Reached(modData_table)
-    end
     modDataManager.save(ModDataKey, temp)
     --------------------------
 end
+
+
+
 
 --- **Read Book**
 ---@param character IsoGameCharacter
@@ -108,7 +107,7 @@ function CharacterManagement.readBook(character, modData_table)
     end
     --------------------------
 
-    CharacterManagement.removeAllModData(modData_table)
+    -- CharacterManagement.removeAllModData(modData_table)
 end
 
 local function prepareBkpServer(modData_table)
@@ -170,14 +169,10 @@ function CharacterManagement.writeBook(character, modData_table, modData_name)
     if patchSurvivalRewards.isModActive() then
         patchSurvivalRewards.writeMil_kill_ReachedToHd(character, modData_table)
     end
-        -- TempData a questo punto è pieno di tutte le tabelle e lo ripusciamo.ù
+
     local temp = modDataManager.readOrCreate(ModDataKey)
     temp[modData_name] = modData_table
-    modDataManager.save(ModDataKey, temp)
-    print("Dati salvati correttamente")
-    --reset TempData (in realtà da fare dopo l'invio al server)
-    -- TempData = {}
-
+    
     ---------------------------
     ---SEND BACKUP TO SERVER---
     
@@ -195,19 +190,21 @@ function CharacterManagement.writeBook(character, modData_table, modData_name)
             timeName = "BKP_MOD_2"
         end
     end
-        
-    local backup = {}
-    backup[timeName] = temp[timeName]    -- BKP_MOD_1, BKP_MOD_2, READ_ONCE_BOOK, TIMED_BOOK
-    backup[modData_name] = modData_table -- BKP_1, BKP_2, ReadOnceBook, TimedBook
-
-    if backup then
+    
+    if isClient() then
+        local backup = {}
+        backup[timeName] = temp[timeName]    -- BKP_MOD_1, BKP_MOD_2, READ_ONCE_BOOK, TIMED_BOOK
+        backup[modData_name] = modData_table -- BKP_1, BKP_2, ReadOnceBook, TimedBook
         sendClientCommand(getPlayer(), "Vorshim", "saveBackup", backup)
-        print("[Commands.saveBackup] Backup per PlayerBKP_" .. character:getUsername() .. "_" .. modData_name .. " inviato con successo!")
-    else 
+        print("[Commands.saveBackup] Backup per PlayerBKP_" .. character:getUsername() .. "_" .. modData_name .. "  inviato con successo!")
+        temp[modData_name] = nil
+        temp[timeName] = nil
+    else
         print("[Commands.saveBackup] Nessun backup da inviare al server")
     end
-
-
+    modDataManager.save(ModDataKey, temp)
+    print("Dati salvati correttamente")
+    
 end
 
 

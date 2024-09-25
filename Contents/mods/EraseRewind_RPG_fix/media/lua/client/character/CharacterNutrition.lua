@@ -44,32 +44,32 @@ local function writeCaloriesFromHd(modData_name)
 end
 
 --- **Create Character Nutrition**
-function CharacterNutrition.readBook(modData_name)
+function CharacterNutrition.readBook(modData_Table)
     --- **Check if mod-data weight is exits**
-    if not modDataManager.isExists(modData_name.WEIGHT) then
+    if not modData_Table["WEIGHT"] then
         errHandler.errMsg("CharacterNutrition.readBook()",
-                " mod-data " .. modData_name.WEIGHT .. " not exists")
+                " mod-data WEIGHT not exists")
         return nil
     end
 
     ---@type table
     ---@return table double ( weight )
-    local weight = readWeightFromHd(modData_name)
+    -- local weight = readWeightFromHd(modData_name)
 
-    isoPlayerPZ.setWeight_PZ(weight[1])
+    isoPlayerPZ.setWeight_PZ(modData_Table["WEIGHT"])
 
     --- **Check if mod-data calories is exits**
-    if not modDataManager.isExists(modData_name.CALORIES) then
+    if not modData_Table["CALORIES"] then
         errHandler.errMsg("CharacterNutrition.readBook()",
-                " mod-data " .. modData_name.CALORIES .. " not exists")
+                " mod-data CALORIES not exists")
         return nil
     end
 
     ---@type table
     ---@return table float ( calories )
-    local calories = readCaloriesFromHd(modData_name)
+    -- local calories = readCaloriesFromHd(modData_name)
 
-    isoPlayerPZ.setCalories_PZ(calories[1])
+    isoPlayerPZ.setCalories_PZ(modData_Table["CALORIES"])
 end
 
 --- **Write Character Nutrition**

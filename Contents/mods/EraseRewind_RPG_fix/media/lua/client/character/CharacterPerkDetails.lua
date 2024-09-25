@@ -20,33 +20,29 @@ local perkFactoryPZ = require("lib/PerkFactoryPZ")
 
 --- **Read Character Perk Details From Hd**
 ---@return CharacterBaseObj PerkFactory.Perk perk, int level, float xp, boolean flag
-local function readCharacterPerkDetailsFromHd(modData_name)
+local function readCharacterPerkDetailsFromHd(backupTable)
 
     ---@type table
     ---@return table perk, level ( int ), xp ( float )
-    local characterPerkDetails =
-        modDataManager.readOrCreate(modData_name.PERK_DETAILS)
+    -- local characterPerkDetails = backupTable["PERK_DETAILS"]
 
     -- @type CharacterBaseObj
     local CharacterObj01 = CharacterBaseObj:new()
 
     ---@type table
-    local lines_ = {}
 
-    for _, v in pairs(characterPerkDetails) do
-        -- Format value1-value2-value3
-        for s in v:gmatch("[^\r-]+") do
-            table.insert(lines_, s)
-        end
+    for perkId, perkDetail in pairs(backupTable) do
+    
+    local PerkDetailsObj01 = PerkDetailsObj:new()
+    --- **Set Perk**
+    PerkDetailsObj01:setPerk(Perks[perkId])
+    --- **Set Current Level**
+    PerkDetailsObj01:setCurrentLevel(perkDetail.currentLevel)
+    --- **Set Xp**
+    PerkDetailsObj01:setXp(perkDetail.xp)
+    --- **Save Perk Details**
+    CharacterObj01:savePerkDetails(PerkDetailsObj01)
 
-        -- @param perk PerkFactory.Perk
-        -- @param level int
-        -- @param xp float
-        CharacterObj01:addPerkDetails(perkFactoryPZ.getPerkByName_PZ(lines_[1]),
-                tonumber(lines_[2]),
-                tonumber(lines_[3]) + 0.0)
-
-        lines_ = {}
     end
 
     return CharacterObj01
@@ -73,27 +69,27 @@ end
 --- **Copy Character Skill**
 ---@param character IsoGameCharacter
 --- - IsoGameCharacter : zombie.characters.IsoGameCharacter
-function CharacterPerkDetails.readBook(character, modData_name)
+function CharacterPerkDetails.readBook(character, modData_Table)
     --- **check if mod-data perkDetails and profession are exits**
     if not character then
         errHandler.errMsg("CharacterPerkDetails.readBook(character)",
                 errHandler.err.IS_NULL_CHARACTERS)
         return nil
         --- **check if mod-data profession are exits**
-    elseif not modDataManager.isExists(modData_name.PROFESSION) then
+    elseif not modData_Table["PROFESSION"] then
         errHandler.errMsg("CharacterPerkDetails.readBook(character)",
-                " mod-data " .. modData_name.PROFESSION .. " is not exists")
+                " mod-data Profession is not exists")
         return nil
         --- **check if mod-data perkDetails are exits**
-    elseif not modDataManager.isExists(modData_name.PERK_DETAILS) then
+    elseif not modData_Table["PERK_DETAILS"] then
         errHandler.errMsg("CharacterPerkDetails.readBook(character)",
-                " mod-data " .. modData_name.PERK_DETAILS .. " is not exists")
+                " mod-data PerkDetails is not exists")
         return nil
     end
 
     -- @type CharacterBaseObj
     ---@return CharacterBaseObj PerkFactory.Perk perk, int level, float xp, boolean flag
-    local characterSkills = readCharacterPerkDetailsFromHd(modData_name)
+    local characterSkills = readCharacterPerkDetailsFromHd(modData_Table["PERK_DETAILS"])
 
     deleteCharacter(character)
 
@@ -119,10 +115,9 @@ function CharacterPerkDetails.readBook(character, modData_name)
 
     ---@type table
     ---@return table string ( profession )
-    local profession = modDataManager.readOrCreate(modData_name.PROFESSION)
+    local profession = modData_Table["PROFESSION"]
 
-    characterPz.setProfession_PZ(character,
-            profession[1])
+    characterPz.setProfession_PZ(character, profession)
 end
 
 --- **Write Character Perk Details To Hd**
@@ -143,15 +138,13 @@ function CharacterPerkDetails.writeBook(character, modData_name)
         -- @param perk PerkFactory.Perk
         -- @param level int
         -- @param xp float
+        
         for _, v in pairs(characterAllSkills:getPerkDetails()) do
-            local value = {
-                        perk = v:getPerk():getId(),
+            perkLines[v:getPerk():getId()] = {
                         currentLevel = v:getCurrentLevel(),
-                        xp = v:getXp()
-                    }
-
-            table.insert(perkLines, value)
-            value = {}
+                        xp = v:getXp()}
+            -- print(v:getPerk() .. " " .. v:getPerk():getName() .. " " .. v:getPerk():getId())
+            -- Cooking, "Cucinare", "Cooking" 
         end
         -- Salva i perk details nella mod-data
         modData_name["PERK_DETAILS"] = perkLines

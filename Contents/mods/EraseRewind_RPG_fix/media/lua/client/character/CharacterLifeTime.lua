@@ -20,18 +20,18 @@ local function readLifeTimeFromHd(modData_name)
 end
 
 --- **Create Life Time**
-function CharacterLifeTime.readBook(modData_name)
-    if not modDataManager.isExists(modData_name.LIFE_TIME) then
+function CharacterLifeTime.readBook(modData_Table)
+    if not modData_Table["LIFE_TIME"] then
         errHandler.errMsg("CharacterLifeTime.readBook()",
-                " mod-data " .. modData_name.LIFE_TIME .. " not exists")
+                " mod-data LIFE_TIME not exists")
         return nil
     end
 
     ---@type table
     ---@return table - double ( timeLife )
-    local lifeTime = readLifeTimeFromHd(modData_name)
+    -- local lifeTime = readLifeTimeFromHd(modData_name)
 
-     isoPlayerPZ.setHoursSurvived_PZ(lifeTime[1])
+     isoPlayerPZ.setHoursSurvived_PZ(modData_Table["LIFE_TIME"])
 end
 
 --- **Write Life Time To Hd**

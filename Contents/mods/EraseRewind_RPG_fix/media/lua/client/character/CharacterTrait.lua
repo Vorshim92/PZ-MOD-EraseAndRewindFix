@@ -28,29 +28,34 @@ end
 --- **Create Trait**
 ---@param character IsoGameCharacter
 --- - IsoGameCharacter : zombie.characters.IsoGameCharacter
-function CharacterTrait.readBook(character, modData_name)
+function CharacterTrait.readBook(character, modData_Table)
     --- **Check if character is null**
     if not character then
         errHandler.errMsg("CharacterTrait.readBook(character)",
                 errHandler.err.IS_NULL_CHARACTERS)
         return nil
         --- **Check if mod-data traits is exits**
-    elseif not modDataManager.isExists(modData_name.TRAITS) then
+    elseif not modData_Table["TRAITS"] then
         errHandler.errMsg("CharacterTrait.readBook(character)",
-                " mod-data " .. modData_name.TRAITS .. " not exists")
+                " mod-data not exists")
         return nil
     end
 
     ---@type table - string
     ---@return string
-    local traits = readTraitFromHd(modData_name)
+    -- local traits = readTraitFromHd(modData_Table)
 
-    if not traits then
-        return nil
-    end
+    -- if not traits then
+    --     return nil
+    -- end
+
+
+
+    local traits = modData_Table["TRAITS"]
 
     --- **Delete Traits**
     characterPz.removeAllTraits_PZ(character)
+    
 
     for _, v in pairs(traits) do
         -- @param character IsoGameCharacter

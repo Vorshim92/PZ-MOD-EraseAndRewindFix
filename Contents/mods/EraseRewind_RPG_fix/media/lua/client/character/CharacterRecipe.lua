@@ -18,9 +18,8 @@ local modDataManager = require("lib/ModDataManager")
 
 --- **Read Recipe From Hd**
 ---@return CharacterBaseObj getRecipes table string
-local function readRecipeFromHd(modData_name)
-    local characterKnowRecipe =
-        modDataManager.readOrCreate(modData_name.RECIPES)
+local function readRecipeFromHd(modData_TableRecipes)
+    local characterKnowRecipe = modData_TableRecipes
 
     local CharacterObj01 = CharacterBaseObj:new()
 
@@ -50,7 +49,7 @@ end
 --- **Create Recipe**
 ---@param character IsoGameCharacter
 --- - IsoGameCharacter : zombie.characters.IsoGameCharacter
-function CharacterRecipe.readBook(character, modData_name)
+function CharacterRecipe.readBook(character, modData_Table)
     if not character then
         errHandler.errMsg("CharacterRecipe.readBook(character)",
                 errHandler.err.IS_NULL_CHARACTERS)
@@ -58,15 +57,15 @@ function CharacterRecipe.readBook(character, modData_name)
     end
 
     --- **Check if mod-data recipes is exits**
-    if not modDataManager.isExists(modData_name.RECIPES) then
+    if not modData_Table["RECIPES"] then
         errHandler.errMsg("CharacterRecipe.readBook(character)",
-                " mod-data " .. modData_name.RECIPES .. " not exists")
+                " mod-data RECIPES  not exists")
         return nil
     end
 
     ---@type table
     ---@return CharacterBaseObj getRecipes table string
-    local recipesObj = readRecipeFromHd(modData_name)
+    local recipesObj = readRecipeFromHd(modData_Table["RECIPES"])
 
     deleteRecipe(character)
 

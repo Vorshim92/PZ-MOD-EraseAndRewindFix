@@ -39,13 +39,8 @@ local function writeKilMilReachedToFromHd(character, modData_table)
         return nil
     end
 
-    ---@type table
-    local lines = {}
-    table.insert(lines, character:getModData().milReached)
     
-    if modData_table then
-        modData_table["kilMilReached"] = lines
-    end
+    modData_table["kilMilReached"] = character:getModData().milReached
     
 end
 
@@ -67,11 +62,8 @@ local function writeMilReachedFromHd(character, modData_table)
     end
 
     ---@type table
-    local lines = {}
-    table.insert(lines, character:getModData().kilMilReached)
-    if modData_table then
-        modData_table["milReached"] = lines
-    end
+    
+        modData_table["milReached"] = character:getModData().kilMilReached
 end
 
 --- **Create Mil_kill_Reached**
@@ -84,32 +76,29 @@ function PatchSurvivalRewards.createMil_kill_Reached(character, modData_table)
                 errHandler.err.IS_NULL_CHARACTERS)
         return nil
         --- **is Exit kilMilReached**
-    elseif not modDataManager.isExists(modData_table.kilMilReached) then
+    elseif not modData_table["kilMilReached"] then
         errHandler.errMsg("PatchSurvivalRewards.createMil_kill_Reached(character)",
-                " mod-data " .. kilMilReached .. " not exists")
+                " mod-data kilMilReached not exists")
         return nil
     end
 
     ---@type table
-    local kilMilReaches = readKilMilReachedFromHd(modData_table)
+    local kilMilReaches = modData_table["kilMilReached"]
 
-    for _, v in pairs(kilMilReaches) do
-        character:getModData().milReached = toInt(v)
-    end
+   
+    character:getModData().milReached = kilMilReaches
 
     --- **is Exit milReached**
-    if not modDataManager.isExists(modData_table.milReached) then
+    if not modData_table["milReached"] then
         errHandler.errMsg("PatchSurvivalRewards.createMil_kill_Reached(character)",
-                " mod-data " .. modData_table.milReached .. " not exists")
+                " mod-data milReached not exists")
         return nil
     end
 
     ---@type table
-    local milReaches = readMilReachedFromHd(modData_table)
+    local milReaches = modData_table["milReached"]
 
-    for _, v in pairs(milReaches) do
-        character:getModData().kilMilReached = toInt(v)
-    end
+        character:getModData().kilMilReached = milReaches
 end
 
 --- **Write Mil_kill_Reached**
