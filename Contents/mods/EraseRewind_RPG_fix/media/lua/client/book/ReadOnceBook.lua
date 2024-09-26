@@ -46,12 +46,12 @@ function ReadOnceBook.writeBook(character)
                 errHandler.err.IS_NULL_CHARACTERS)
         return nil
     end
+
     local flag = false
     local temp = modDataManager.readOrCreate("Erase_Rewind")
     if temp.READ_ONCE_BOOK == nil then
         flag = true
     end
-
     if flag then 
         local time = activityCalendar.getStarTime()
         local timeString = activityCalendar.fromSecondToDate(time)
@@ -60,7 +60,6 @@ function ReadOnceBook.writeBook(character)
         --- **Write Book**
         characterManagement.writeBook(character, pageBook.ReadOnceBook, "ReadOnceBook")
     end
-
 return flag
 end
 

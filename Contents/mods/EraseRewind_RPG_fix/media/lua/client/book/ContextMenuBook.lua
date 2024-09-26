@@ -38,19 +38,33 @@ local function onSavePlayer(item, character)
     local flag01 = false
 
     if chooseBook.isCorrectBook(item, "ReadOnceBook") then
-        --- **Check if the book can be write mod-data**
-        if readOnceBook.writeBook(character, item) then
-            flag01 = true
-        else
-            translation = getText("ContextMenu_AlreadyWrite")
-        end
+            --- **Check if the book can be write mod-data**
+            if isClient() then
+                sendClientCommand(character, "Vorshim", "checkWriteBook", {bookType = "READ_ONCE_BOOK"})
+                character:Say("Checking book on Server")
+                return
+            end
+            if readOnceBook.writeBook(character) then
+                flag01 = true
+            else
+                translation = getText("ContextMenu_AlreadyWrite")
+                flag01 = false
+            end
     elseif chooseBook.isCorrectBook(item, "TimedBook") then
+        if isClient() then
+            sendClientCommand(character, "Vorshim", "checkWriteBook", {bookType = "TIMED_BOOK"})
+            character:Say("Checking book on Server")
+            return
+        end
         --- **Write mod-data - Write book**
         if timedBook.writeBook(character) then
             flag01 = true
         else
             --- **You can't transcribe this book yet**
-            translation = getText( "ContextMenu_ToEarly")
+            local expectedDateInSecond =  activityCalendar.getExpectedDateInSecond()
+            local expectedDate = activityCalendar.fromSecondToDate(expectedDateInSecond)
+            local extra = " - " .. tostring(expectedDate)
+            translation = (getText( "ContextMenu_ToEarly") .. extra)
             flag01 = false
         end
     end
@@ -110,6 +124,7 @@ local function addSaveContext(character, context, items)
         --- **If a book create a context menu**
         if chooseBook.isBook(item)  then
             context:addOption(translation, item, onSavePlayer, character)
+            break
         end
     end
 end

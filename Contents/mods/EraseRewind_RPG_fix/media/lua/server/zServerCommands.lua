@@ -1,7 +1,7 @@
 if not isServer() then return end
 
 local json = require("dkjson")
-
+-- UTILS
 -- Function to create an incremental backup of the file
 local function createIncrementalBackup(filepath)
     -- Create a backup copy of the existing backup file with a .temp extension
@@ -32,10 +32,6 @@ local function createIncrementalBackup(filepath)
         print("No existing backup file to copy.")
     end
 end
-
-
-
-
 
 -- Function to update the backup file
 local function updateBackupFile(filepath, newData)
@@ -88,6 +84,8 @@ end
 
 
 
+-- COMANDI
+
 local Commands = {}
 
 -- Command handler for saving the backup
@@ -104,6 +102,7 @@ function Commands.saveBackup(player, args)
     print("Character data saved successfully for ID: " .. id)
 end
 
+-- Command handler for requesting backup data
 function Commands.requestData(player, args)
     local id = player:getUsername()
     local filepath = "/Backup/EraseBackup/PlayerBKP_" .. id .. ".json"
@@ -165,6 +164,70 @@ function Commands.requestData(player, args)
 
     print("Requested data for table '" .. requestedTableName .. "' sent to client.")
 end
+
+
+function Commands.checkWriteBook(player, args)
+    local id = player:getUsername()
+    local filepath = "/Backup/EraseBackup/PlayerBKP_" .. id .. ".json"
+    local bookType = args.bookType
+
+    -- Read the JSON backup file
+    local content = ""
+    local filereader = getFileReader(filepath, false)
+    if filereader then
+        local line = filereader:readLine()
+        while line ~= nil do
+            content = content .. line .. "\n"
+            line = filereader:readLine()
+        end
+        filereader:close()
+    end
+
+    -- Parse the JSON data
+    local backupData = {}
+    if content ~= "" then
+        local success, parsedData = pcall(function()
+            return json.decode(content)
+        end)
+        if success and parsedData then
+            backupData = parsedData
+        else
+            backupData = {}
+        end
+    end
+
+    -- Check if the book can be transcribed
+    local canTranscribe = false
+    local message = nil
+
+    
+    if not backupData[bookType] then
+        -- The player hasn't transcribed this book yet
+        canTranscribe = true
+        -- Update the backup data
+        backupData[bookType] = os.date("%c") -- Store the current date/time
+        -- Save the updated data
+        local serializedData = json.encode(backupData, { indent = true })
+        local filewriter = getFileWriter(filepath, false, false)
+        if filewriter then
+            filewriter:write(serializedData)
+            filewriter:close()
+        end
+    else
+        -- The player has already transcribed this book
+        message = getText("ContextMenu_AlreadyWrite")
+    end
+ 
+
+    -- Send the response back to the client
+    sendServerCommand(player, "Vorshim", "attemptTranscribeBookResponse", {
+        success = canTranscribe,
+        message = message,
+        bookType = bookType
+    })
+end
+
+
 
 
 Events.OnClientCommand.Add(function(module, command, player, args)

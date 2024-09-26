@@ -197,8 +197,8 @@ function CharacterManagement.writeBook(character, modData_table, modData_name)
         backup[modData_name] = modData_table -- BKP_1, BKP_2, ReadOnceBook, TimedBook
         sendClientCommand(getPlayer(), "Vorshim", "saveBackup", backup)
         print("[Commands.saveBackup] Backup per PlayerBKP_" .. character:getUsername() .. "_" .. modData_name .. "  inviato con successo!")
-        temp[modData_name] = nil
-        temp[timeName] = nil
+        -- poiché client (modalità multiplayer) non vogliamo che il client abbia una versione in locale
+        modDataManager.remove(ModDataKey)
     else
         print("[Commands.saveBackup] Nessun backup da inviare al server")
     end
