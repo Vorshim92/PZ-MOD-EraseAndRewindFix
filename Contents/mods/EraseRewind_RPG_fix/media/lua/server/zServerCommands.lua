@@ -1,4 +1,5 @@
 if not isServer() then return end
+local activityCalendar = require("lib/ActivityCalendar")
 
 local json = require("dkjson")
 -- UTILS
@@ -91,7 +92,7 @@ local Commands = {}
 -- Command handler for saving the backup
 function Commands.saveBackup(player, args)
     local id = player:getUsername()
-    print("[Commands.saveBackup] Starting data save for ID " .. id)
+    print("[Commands.saveBackup] Starting book backup for ID " .. id)
     local filepath = "/Backup/EraseBackup/PlayerBKP_" .. id .. ".json"
     print("[Commands.saveBackup] File path: " .. filepath)
     
@@ -100,6 +101,61 @@ function Commands.saveBackup(player, args)
     updateBackupFile(filepath, args)
 
     print("Character data saved successfully for ID: " .. id)
+end
+
+function Commands.checkReadingBook(player, args)
+    local id = player:getUsername()
+    local filepath = "/Backup/EraseBackup/PlayerBKP_" .. id .. ".json"
+    local bookType = args.bookType
+
+    -- Read the JSON backup file
+    local content = ""
+    local filereader = getFileReader(filepath, false)
+    if filereader then
+        local line = filereader:readLine()
+        while line ~= nil do
+            content = content .. line .. "\n"
+            line = filereader:readLine()
+        end
+        filereader:close()
+    end
+
+    -- Parse the JSON data
+    local backupData = {}
+    if content ~= "" then
+        local success, parsedData = pcall(function()
+            return json.decode(content)
+        end)
+        if success and parsedData then
+            backupData = parsedData
+        else
+            backupData = {}
+        end
+    end
+
+    -- Check if the book can be transcribed
+    local canRead = false
+    local message = nil
+    if not backupData[bookType] then
+        -- The player hasn't transcribed this book yet
+        canRead = false
+        message = "NON PUOI LEGGERE"
+    else
+        -- The player has already transcribed this book
+        canRead = true
+        message = "PUOI LEGGERE"
+    end
+
+    -- Send the response back to the client
+    sendServerCommand(player, "Vorshim", "attemptReadingBookResponse", {
+        success = canRead,
+        message = message,
+        bookType = bookType,
+        bookItem = args.bookItem
+    })
+
+    print("[Commands.checkReadBook] Player ID: " .. id .. " - Book Type: " .. bookType .. " - Can Read: " .. tostring(canRead))
+
 end
 
 -- Command handler for requesting backup data
@@ -161,8 +217,23 @@ function Commands.requestData(player, args)
 
     -- Send the requested data back to the client
     sendServerCommand(player, "Vorshim", "restoreBackup", { tableName = requestedTableName, data = requestedData })
-
     print("Requested data for table '" .. requestedTableName .. "' sent to client.")
+    backupData[requestedTableName] = nil
+    if requestedTableName == "TimedBook" then
+        backupData["TIMED_BOOK"] = nil
+    elseif requestedTableName == "ReadOnceBook" then
+        backupData["READ_ONCE_BOOK"] = nil
+    end
+
+    -- Save the updated data
+    local serializedData = json.encode(backupData, { indent = true })
+    local filewriter = getFileWriter(filepath, false, false)
+    if filewriter then
+        filewriter:write(serializedData)
+        filewriter:close()
+    end
+    print("Requested data for table '" .. requestedTableName .. "' eliminated from backup after restore.")
+    -- maybe the client can send another request only after the restore from client is give success. just to avoid delete before the restoreEnd
 end
 
 
@@ -206,6 +277,44 @@ function Commands.checkWriteBook(player, args)
         canTranscribe = true
         -- Update the backup data
         backupData[bookType] = os.date("%c") -- Store the current date/time
+
+        if bookType == "TIMED_BOOK" then
+             --- **Book Write Date In Seconds**
+             activityCalendar.setWaitingOfDays(SandboxVars.EraseRewindRPG.SetDays)
+             local bookWriteDateInSeconds = activityCalendar.getExpectedDateInSecond()
+             backupData[bookType] = bookWriteDateInSeconds
+        end
+
+        -- Save the updated data
+        
+    elseif bookType == "TIMED_BOOK" and backupData[bookType] then
+        ---@type boolean
+        canTranscribe = false
+
+        --- **Book Write Date In Seconds**
+        ---@type int
+        local bookWriteDateInSeconds = 0
+        --- **Retrieve the date when it is possible to write a book**
+        ---@type table - double
+
+        bookWriteDateInSeconds = backupData[bookType]
+
+        -- **Set scheduled writeBook**
+        activityCalendar.setExpectedDateInSecond(bookWriteDateInSeconds)
+
+        --- **Check if date is expected**
+        if activityCalendar.isExpectedDate() then
+            --- **Remove all mod data**
+            backupData[bookType] = nil
+
+            --- **Book Write Date In Seconds**
+            activityCalendar.setWaitingOfDays(SandboxVars.EraseRewindRPG.SetDays)
+            bookWriteDateInSeconds = activityCalendar.getExpectedDateInSecond()
+            backupData[bookType] = bookWriteDateInSeconds
+            canTranscribe = true
+        end
+    end
+    if canTranscribe then
         -- Save the updated data
         local serializedData = json.encode(backupData, { indent = true })
         local filewriter = getFileWriter(filepath, false, false)

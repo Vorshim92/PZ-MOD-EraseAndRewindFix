@@ -12,10 +12,12 @@ function Commands.restoreBackup(module, command, args)
     local data = args.data
 
     if tableName and data then
-        print("Received backup data for table: " .. tableName)
+        print("Received backup data for: " .. tableName)
         characterManagement.readBook(getPlayer(), data)
         print("Backup data restored for table: " .. tableName)
-        getPlayer():Say("Backup data restored for table: " .. tableName)
+        getPlayer():Say("Backup data restored for: " .. tableName)
+        -- Play closing sound
+        getPlayer():playSound("CloseBook")
     else
         print("Invalid data received from server.")
     end
@@ -50,6 +52,34 @@ function Commands.attemptTranscribeBookResponse(module, command, args)
 
     -- Play closing sound
     player:playSound("CloseBook")
+end
+
+
+function Commands.attemptReadingBookResponse(module, command, args)
+    local success = args.success
+    local message = args.message
+    local bookType = args.bookType
+    local player = getPlayer()
+    if success then
+        player:playSound("OpenBook")
+        -- Proceed with writing the book locally
+        if bookType == "READ_ONCE_BOOK" then
+            -- sendClientCommand(player,"Vorshim", "requestData", { tableName = "ReadOnceBook" })
+            characterManagement.requestBackupData("ReadOnceBook")
+        elseif bookType == "TIMED_BOOK" then
+            -- sendClientCommand(player,"Vorshim", "requestData", { tableName = "TimedBook" })
+
+            characterManagement.requestBackupData("TimedBook")
+        end
+        player:Say(getText("EUREKA!!!"))
+        player:getInventory():Remove(args.bookItem);
+    else
+        -- Inform the player that they cannot transcribe
+        player:Say(message or getText("ContextMenu_CannotReadBook"))
+    end
+
+    
+
 end
 
 

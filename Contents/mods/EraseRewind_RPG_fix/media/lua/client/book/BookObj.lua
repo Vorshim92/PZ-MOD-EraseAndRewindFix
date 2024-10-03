@@ -23,114 +23,168 @@ local function getWaitingTime()
     return maxTime
 end
 
----@type ISReadABook
---- - ISReadABook : TimedActions.ISBaseTimedAction
-local ER_OVER_WRITE_ISReadABook_start = ISReadABook.start
+-- ---@type ISReadABook
+-- --- - ISReadABook : TimedActions.ISBaseTimedAction
+-- local ER_OVER_WRITE_ISReadABook_start = ISReadABook.start
 
----@type ISReadABook
---- - ISReadABook : TimedActions.ISBaseTimedAction
-local ER_OVER_WRITE_ISReadABook_perform = ISReadABook.perform
+-- ---@type ISReadABook
+-- --- - ISReadABook : TimedActions.ISBaseTimedAction
+-- local ER_OVER_WRITE_ISReadABook_perform = ISReadABook.perform
 
----@type ISReadABook
---- - ISReadABook : TimedActions.ISBaseTimedAction
-local ER_OVER_WRITE_ISReadABook_new = ISReadABook.new
+-- ---@type ISReadABook
+-- --- - ISReadABook : TimedActions.ISBaseTimedAction
+-- local ER_OVER_WRITE_ISReadABook_new = ISReadABook.new
 
---- **Action Start**
----@return void
-function ISReadABook:start()
-    --@type Literature
-    local item = self.item
+-- --- **Action Start**
+-- ---@return void
+-- function ISReadABook:start()
+--     --@type Literature
+--     local item = self.item
 
-    --- **Check if item is a book**
-    if not chooseBook.isBook(item) then
-        ER_OVER_WRITE_ISReadABook_start(self)
-    end
-end
+--     --- **Check if item is a book**
+--     if not chooseBook.isBook(item) then
+--         ER_OVER_WRITE_ISReadABook_start(self)
+--     end
+-- end
 
---- **Action End**
----@return void
-function ISReadABook:perform()
-    ---@type Literature | InventoryItem
-    local item = self.item
-    ---@type string
-    local readOnceBook_ = "ReadOnceBook"
-    ---@type string
-    local timedBook_ = "TimedBook"
+-- --- **Action End**
+-- ---@return void
+-- function ISReadABook:perform()
+--     ---@type Literature | InventoryItem
+--     local item = self.item
+--     ---@type string
+--     local readOnceBook_ = "ReadOnceBook"
+--     ---@type string
+--     local timedBook_ = "TimedBook"
 
-    if not chooseBook.isBook(item) then
-        ER_OVER_WRITE_ISReadABook_perform(self)
-    else
-        --- **Check if book is correct**
-        if chooseBook.isCorrectBook(item, readOnceBook_) then
+--     if not chooseBook.isBook(item) then
+--         ER_OVER_WRITE_ISReadABook_perform(self)
+--     else
+--         --- **Check if book is correct**
+--         if chooseBook.isCorrectBook(item, readOnceBook_) then
             
 
-            --- **Load mod-data from readOnceBook - Character stats**
-            readOnceBook.readBook(debugDiagnostics.characterUpdate())
+--             --- **Load mod-data from readOnceBook - Character stats**
+--             readOnceBook.readBook(debugDiagnostics.characterUpdate())
 
-            --- **Check if book is correct**
-        elseif chooseBook.isCorrectBook(item, timedBook_) then
+--             --- **Check if book is correct**
+--         elseif chooseBook.isCorrectBook(item, timedBook_) then
             
-            --- **Load mod-data from TimeBookRead - Character stats**
-            timedBook.readBook(debugDiagnostics.characterUpdate())
-        end
+--             --- **Load mod-data from TimeBookRead - Character stats**
+--             timedBook.readBook(debugDiagnostics.characterUpdate())
+--         end
 
-        --- **Update all the characteristics of the character**
-        ---@type IsoGameCharacter
-        local character = debugDiagnostics.characterUpdate()
+--         --- **Update all the characteristics of the character**
+--         ---@type IsoGameCharacter
+--         local character = debugDiagnostics.characterUpdate()
 
-        --- **Remove item**
-        inventoryItemPZ.removeItem(character, item)
+--         --- **Remove item**
+--         inventoryItemPZ.removeItem(character, item)
 
-    end
+--     end
 
-    ISBaseTimedAction.perform(self)
-end
+--     ISBaseTimedAction.perform(self)
+-- end
 
---- **Action Init**
----@param character IsoGameCharacter
----@param item InventoryItem
----@param time float
----@return ISReadABook
---- - IsoGameCharacter : zombie.characters.IsoGameCharacter
---- - InventoryItem : zombie.inventory.InventoryItem
-function ISReadABook:new(character, item, time)
-    if not character then
-        errHandler.errMsg("ISReadABook:new(character, item, time)",
-                errHandler.err.IS_NULL_CHARACTERS)
-        return nil
-    end
+-- --- **Action Init**
+-- ---@param character IsoGameCharacter
+-- ---@param item InventoryItem
+-- ---@param time float
+-- ---@return ISReadABook
+-- --- - IsoGameCharacter : zombie.characters.IsoGameCharacter
+-- --- - InventoryItem : zombie.inventory.InventoryItem
+-- function ISReadABook:new(character, item, time)
+--     if not character then
+--         errHandler.errMsg("ISReadABook:new(character, item, time)",
+--                 errHandler.err.IS_NULL_CHARACTERS)
+--         return nil
+--     end
 
-    --- **Check if item is null**
-    if not item then
-        errHandler.errMsg("ISReadABook:new(character, item, time)",
-                "item " .. errHandler.err.IS_NULL)
-        return nil
-    end
+--     --- **Check if item is null**
+--     if not item then
+--         errHandler.errMsg("ISReadABook:new(character, item, time)",
+--                 "item " .. errHandler.err.IS_NULL)
+--         return nil
+--     end
 
     
 
 
-    ---@type string
-    local openBook = "OpenBook"
+--     ---@type string
+--     local openBook = "OpenBook"
 
-    ---@type string
-    local closeBook = "CloseBook"
+--     ---@type string
+--     local closeBook = "CloseBook"
 
-    --- **Create a new instance of ISReadABook**
-    ---@type ISReadABook
-    local er_OverWrite = ER_OVER_WRITE_ISReadABook_new(self, character, item, time)
+--     --- **Create a new instance of ISReadABook**
+--     ---@type ISReadABook
+--     local er_OverWrite = ER_OVER_WRITE_ISReadABook_new(self, character, item, time)
 
-    if chooseBook.isBook(item) then
+--     if chooseBook.isBook(item) then
         
-        character:playSound(openBook)
+--         character:playSound(openBook)
 
-        er_OverWrite.loopedAction = false
-        er_OverWrite.useProgressBar = false
-        er_OverWrite.maxTime = getWaitingTime()
+--         er_OverWrite.loopedAction = false
+--         er_OverWrite.useProgressBar = false
+--         er_OverWrite.maxTime = getWaitingTime()
 
-        er_OverWrite.stopOnWalk = false
-        character:playSound(closeBook)
+--         er_OverWrite.stopOnWalk = false
+--         character:playSound(closeBook)
+--     end
+
+--     return er_OverWrite
+-- end
+
+
+
+-- da fixare, manda due volte la richiesta
+-- local oldISReadABook_isValid = ISReadABook.isValid
+-- function ISReadABook:isValid()
+--     if not chooseBook.isBook(self.item) then
+--         return oldISReadABook_isValid(self)
+--     else
+--         if isClient() then
+--             if chooseBook.isCorrectBook(self.item, "ReadOnceBook") then
+--                 sendClientCommand(self.character, "Vorshim", "checkReadingBook", {bookType = "READ_ONCE_BOOK"})
+--             elseif chooseBook.isCorrectBook(self.item, "TimedBook") then
+--                 sendClientCommand(self.character, "Vorshim", "checkReadingBook", {bookType = "TIMED_BOOK"})
+--             end
+--             self.character:Say("Checking reading book on Server")
+--             return false
+--         else
+--             return false
+--         end
+--     end
+-- end
+
+local ISReadABook_start = ISReadABook.start
+    function ISReadABook:start()
+        ISReadABook_start(self);
+
+        if isClient() then
+            if chooseBook.isCorrectBook(self.item, "ReadOnceBook") then
+                sendClientCommand(self.character, "Vorshim", "checkReadingBook", {bookType = "READ_ONCE_BOOK", bookItem = self.item})
+            elseif chooseBook.isCorrectBook(self.item, "TimedBook") then
+                sendClientCommand(self.character, "Vorshim", "checkReadingBook", {bookType = "TIMED_BOOK", bookItem = self.item})
+            end
+            self:stop();
+            self:forceStop()
+            self.character:Say("Checking reading book on Server")
+            return;
+        else
+            return;
+        end
     end
 
-    return er_OverWrite
-end
+-- local oldISReadABook_new = ISReadABook.new
+-- function ISReadABook:new(character, item, time)
+--      oldISReadABook_new(self, character, item, time)
+
+--      if chooseBook.isBook(item) then
+--         self.maxTime = getWaitingTime()
+--         self.forceProgressBar = true;
+--         if character:isTimedActionInstant() then
+--             self.maxTime = 1;
+--         end
+--     end
+-- end

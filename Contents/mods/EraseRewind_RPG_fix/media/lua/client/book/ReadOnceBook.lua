@@ -25,7 +25,7 @@ function ReadOnceBook.readBook(character)
         return nil
     end
 
-    RequestBackupData("ReadOnceBook")
+    characterManagement.requestBackupData("ReadOnceBook")
 
     -- local temp = modDataManager.readOrCreate("Erase_Rewind")
 

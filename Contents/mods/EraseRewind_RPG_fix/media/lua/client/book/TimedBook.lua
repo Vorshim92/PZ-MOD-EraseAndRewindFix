@@ -47,12 +47,8 @@ function TimedBook.readBook(character)
         return nil
     end
 
-    if not modDataManager.isExists(pageBook.TIMED_BOOK) then
-        errHandler.errMsg("TimedBook.readBook(character)",
-                " mod-data - " .. pageBook.TIMED_BOOK .. " is not exists")
-        return nil
-    end
-    RequestBackupData("TimedBook")
+
+    characterManagement.requestBackupData("TimedBook")
 
     -- local temp = modDataManager.readOrCreate("Erase_Rewind")
 

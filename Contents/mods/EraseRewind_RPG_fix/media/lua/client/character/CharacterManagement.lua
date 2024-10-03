@@ -40,7 +40,7 @@ local patchSurvivalRewards = require("patch/survivalRewards/PatchSurvivalRewards
 local ModDataKey = "Erase_Rewind"
 
 -- Function to request backup data from the server
-function RequestBackupData(tableName)
+function CharacterManagement.requestBackupData(tableName)
     sendClientCommand(getPlayer(),"Vorshim", "requestData", { tableName = tableName })
 end
 
@@ -110,16 +110,6 @@ function CharacterManagement.readBook(character, modData_table)
     -- CharacterManagement.removeAllModData(modData_table)
 end
 
-local function prepareBkpServer(modData_table)
-    local backup = {}
-    for _, key in pairs(modData_table) do
-        if modDataManager.isExists(key) then
-            local temp = modDataManager.readOrCreate(key)
-            backup[key] = temp  -- Associa il nome della tabella ai suoi dati
-        end
-    end
-    return backup
-end
 
 --- **Write Book**
 ---@param character IsoGameCharacter
@@ -201,9 +191,9 @@ function CharacterManagement.writeBook(character, modData_table, modData_name)
         modDataManager.remove(ModDataKey)
     else
         print("[Commands.saveBackup] Nessun backup da inviare al server")
+        modDataManager.save(ModDataKey, temp)
+        print("Dati salvati correttamente in locale")
     end
-    modDataManager.save(ModDataKey, temp)
-    print("Dati salvati correttamente")
     
 end
 
