@@ -31,7 +31,7 @@ end
 
 --- **Read ModData**
 ---@param nameFile string
----@return table
+---@return table | nil
 --- - ModData : zombie.world.moddata.ModData
 function ModDataManager.readOrCreate(nameFile)
     if not nameFile then
@@ -39,8 +39,28 @@ function ModDataManager.readOrCreate(nameFile)
         return nil
     end
 
-    -- Acquisisce direttamente la tabella con ModData.get
+    -- Acquisisce direttamente la tabella e se non esiste la crea
     local modData = ModData.getOrCreate(nameFile)
+
+    if not modData then
+        errHandler.errMsg("ModDataManager.readOrCreate(nameFile)", "modData " .. errHandler.err.IS_NULL)
+        return nil
+    end
+
+    return modData  -- Restituisce direttamente la tabella
+end
+
+--- **Read ModData**
+---@param nameFile string
+---@return table | nil
+function ModDataManager.read(nameFile)
+    if not nameFile then
+        errHandler.errMsg("ModDataManager.readOrCreate(nameFile)", "nameFile " .. errHandler.err.IS_NULL)
+        return nil
+    end
+
+    -- Acquisisce direttamente la tabella con ModData.get
+    local modData = ModData.get(nameFile)
 
     if not modData then
         errHandler.errMsg("ModDataManager.readOrCreate(nameFile)", "modData " .. errHandler.err.IS_NULL)

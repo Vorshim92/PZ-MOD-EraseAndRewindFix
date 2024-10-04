@@ -38,7 +38,8 @@ end
 local function updateBackupFile(filepath, newData)
     -- Create an incremental backup before modifying the file
     createIncrementalBackup(filepath)
-
+    local bookType = newData.bookType
+    local backup = newData.backup
     -- Read existing data from the file
     local content = ""
     local filereader = getFileReader(filepath, false)
@@ -65,8 +66,11 @@ local function updateBackupFile(filepath, newData)
     end
 
     -- Update existing data with new data
-    for key, value in pairs(newData) do
+    for key, value in pairs(backup) do
         existingData[key] = value
+    end
+    if not existingData[bookType] then
+        existingData[bookType] = os.date("%c")
     end
 
     -- Serialize updated data to JSON
@@ -92,7 +96,7 @@ local Commands = {}
 -- Command handler for saving the backup
 function Commands.saveBackup(player, args)
     local id = player:getUsername()
-    print("[Commands.saveBackup] Starting book backup for ID " .. id)
+    print("[Commands.saveBackup] Starting book backup for ID " .. id .. " for book type " .. args.bookType)
     local filepath = "/Backup/EraseBackup/PlayerBKP_" .. id .. ".json"
     print("[Commands.saveBackup] File path: " .. filepath)
     
@@ -151,7 +155,7 @@ function Commands.checkReadingBook(player, args)
         success = canRead,
         message = message,
         bookType = bookType,
-        bookItem = args.bookItem
+        bookItemType = args.bookItemType
     })
 
     print("[Commands.checkReadBook] Player ID: " .. id .. " - Book Type: " .. bookType .. " - Can Read: " .. tostring(canRead))
@@ -270,6 +274,7 @@ function Commands.checkWriteBook(player, args)
     -- Check if the book can be transcribed
     local canTranscribe = false
     local message = nil
+    local extra = nil
 
     
     if not backupData[bookType] then
@@ -283,6 +288,8 @@ function Commands.checkWriteBook(player, args)
              activityCalendar.setWaitingOfDays(SandboxVars.EraseRewindRPG.SetDays)
              local bookWriteDateInSeconds = activityCalendar.getExpectedDateInSecond()
              backupData[bookType] = bookWriteDateInSeconds
+             local expectedDate = activityCalendar.fromSecondToDate(bookWriteDateInSeconds)
+             extra = " - " .. expectedDate
         end
 
         -- Save the updated data
@@ -312,6 +319,16 @@ function Commands.checkWriteBook(player, args)
             bookWriteDateInSeconds = activityCalendar.getExpectedDateInSecond()
             backupData[bookType] = bookWriteDateInSeconds
             canTranscribe = true
+            local expectedDate = activityCalendar.fromSecondToDate(bookWriteDateInSeconds)
+            extra = " - " .. tostring(expectedDate)
+        else
+            --logica per restituire la data in cui sarà possibile ritrascriverlo
+            --- **You can't transcribe this book yet**
+            local expectedDate = activityCalendar.fromSecondToDate(bookWriteDateInSeconds)
+            extra = " - " .. tostring(expectedDate)
+            local translation = (getText( "ContextMenu_ToEarly") .. extra)
+            canTranscribe = false
+            message = translation
         end
     end
     if canTranscribe then
@@ -324,7 +341,7 @@ function Commands.checkWriteBook(player, args)
         end
     else
         -- The player has already transcribed this book
-        message = getText("ContextMenu_AlreadyWrite")
+        message = message or getText("ContextMenu_AlreadyWrite")
     end
  
 
@@ -332,7 +349,9 @@ function Commands.checkWriteBook(player, args)
     sendServerCommand(player, "Vorshim", "attemptTranscribeBookResponse", {
         success = canTranscribe,
         message = message,
-        bookType = bookType
+        bookType = bookType,
+        item = args.item,
+        extra = extra
     })
 end
 

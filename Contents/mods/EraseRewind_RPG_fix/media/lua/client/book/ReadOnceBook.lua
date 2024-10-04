@@ -46,6 +46,8 @@ function ReadOnceBook.writeBook(character)
                 errHandler.err.IS_NULL_CHARACTERS)
         return nil
     end
+    -- NON SERVE PIU PER IL CLIENT/MULTIPLAYER
+    --DA RISCRIVERE LEGGERMENTE PER IL SINGLEPLAYER.
 
     local flag = false
     local temp = modDataManager.readOrCreate("Erase_Rewind")

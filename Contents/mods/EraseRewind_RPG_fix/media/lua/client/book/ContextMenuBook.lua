@@ -40,7 +40,7 @@ local function onSavePlayer(item, character)
     if chooseBook.isCorrectBook(item, "ReadOnceBook") then
             --- **Check if the book can be write mod-data**
             if isClient() then
-                sendClientCommand(character, "Vorshim", "checkWriteBook", {bookType = "READ_ONCE_BOOK"})
+                sendClientCommand(character, "Vorshim", "checkWriteBook", {bookType = "READ_ONCE_BOOK", item = item})
                 character:Say("Checking book on Server")
                 return
             end
@@ -52,7 +52,7 @@ local function onSavePlayer(item, character)
             end
     elseif chooseBook.isCorrectBook(item, "TimedBook") then
         if isClient() then
-            sendClientCommand(character, "Vorshim", "checkWriteBook", {bookType = "TIMED_BOOK"})
+            sendClientCommand(character, "Vorshim", "checkWriteBook", {bookType = "TIMED_BOOK", item = item})
             character:Say("Checking book on Server")
             return
         end

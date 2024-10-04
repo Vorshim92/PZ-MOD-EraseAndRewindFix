@@ -6,22 +6,22 @@
 
 require "TimedActions/ISReadABook"
 
-local debugDiagnostics = require("lib/DebugDiagnostics")
+-- local debugDiagnostics = require("lib/DebugDiagnostics")
 local chooseBook = require("book/ChooseBook")
-local errHandler = require("lib/ErrHandler")
-local inventoryItemPZ = require("lib/InventoryItemPZ")
-local readOnceBook = require("book/ReadOnceBook")
-local timedBook = require("book/TimedBook")
+-- local errHandler = require("lib/ErrHandler")
+-- local inventoryItemPZ = require("lib/InventoryItemPZ")
+-- local readOnceBook = require("book/ReadOnceBook")
+-- local timedBook = require("book/TimedBook")
 -- local modDataManager = require("lib/ModDataManager")
 --- **Get waiting time to read a book**
----@return float seconds
-local function getWaitingTime()
-    ---@type number
-    local maxTime = SandboxVars.EraseRewindRPG.SetTimeOfReadBook
-    --- **convert to seconds, maxTime 1 * 46 = about 1 second**
-    maxTime = maxTime * 46
-    return maxTime
-end
+-- ---@return float seconds
+-- local function getWaitingTime()
+--     ---@type number
+--     local maxTime = SandboxVars.EraseRewindRPG.SetTimeOfReadBook
+--     --- **convert to seconds, maxTime 1 * 46 = about 1 second**
+--     maxTime = maxTime * 46
+--     return maxTime
+-- end
 
 -- ---@type ISReadABook
 -- --- - ISReadABook : TimedActions.ISBaseTimedAction
@@ -163,13 +163,14 @@ local ISReadABook_start = ISReadABook.start
 
         if isClient() then
             if chooseBook.isCorrectBook(self.item, "ReadOnceBook") then
-                sendClientCommand(self.character, "Vorshim", "checkReadingBook", {bookType = "READ_ONCE_BOOK", bookItem = self.item})
+                sendClientCommand(self.character, "Vorshim", "checkReadingBook", {bookType = "READ_ONCE_BOOK", bookItemType = self.item:getFullType()})
             elseif chooseBook.isCorrectBook(self.item, "TimedBook") then
-                sendClientCommand(self.character, "Vorshim", "checkReadingBook", {bookType = "TIMED_BOOK", bookItem = self.item})
+                sendClientCommand(self.character, "Vorshim", "checkReadingBook", {bookType = "TIMED_BOOK", bookItemType = self.item:getFullType()})
             end
             self:stop();
             self:forceStop()
             self.character:Say("Checking reading book on Server")
+            self.character:playSound("OpenBook")
             return;
         else
             return;

@@ -167,25 +167,24 @@ function CharacterManagement.writeBook(character, modData_table, modData_name)
     ---SEND BACKUP TO SERVER---
     
     -- local backup = prepareBkpServer(modData_table)
-    local timeName = ""
+    local bookType = ""
     if modData_name == "ReadOnceBook" then
-        timeName = "READ_ONCE_BOOK"
+        bookType = "READ_ONCE_BOOK"
     elseif modData_name == "TimedBook" then
-        timeName = "TIMED_BOOK"
+        bookType = "TIMED_BOOK"
     end
     if isEraseBKP then
         if modData_name == "BKP_1" then
-            timeName = "BKP_MOD_1"
+            bookType = "BKP_MOD_1"
         elseif modData_name == "BKP_2" then
-            timeName = "BKP_MOD_2"
+            bookType = "BKP_MOD_2"
         end
     end
     
     if isClient() then
         local backup = {}
-        backup[timeName] = temp[timeName]    -- BKP_MOD_1, BKP_MOD_2, READ_ONCE_BOOK, TIMED_BOOK
         backup[modData_name] = modData_table -- BKP_1, BKP_2, ReadOnceBook, TimedBook
-        sendClientCommand(getPlayer(), "Vorshim", "saveBackup", backup)
+        sendClientCommand(getPlayer(), "Vorshim", "saveBackup", { backup = backup, bookType = bookType })
         print("[Commands.saveBackup] Backup per PlayerBKP_" .. character:getUsername() .. "_" .. modData_name .. "  inviato con successo!")
         -- poiché client (modalità multiplayer) non vogliamo che il client abbia una versione in locale
         modDataManager.remove(ModDataKey)

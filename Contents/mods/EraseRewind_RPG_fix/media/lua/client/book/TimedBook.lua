@@ -62,6 +62,9 @@ end
 ---@return boolean
 --- - IsoGameCharacter : zombie.characters.IsoGameCharacter
 function TimedBook.writeBook(character)
+        -- NON SERVE PIU PER IL CLIENT/MULTIPLAYER
+    --DA RISCRIVERE LEGGERMENTE PER IL SINGLEPLAYER.
+
     --- **Check if character is nil**
     if not character then
         errHandler.errMsg("TimedBook.writeBook(character)",
