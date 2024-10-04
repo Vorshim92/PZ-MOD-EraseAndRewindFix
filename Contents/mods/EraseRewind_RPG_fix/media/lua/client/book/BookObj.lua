@@ -158,24 +158,26 @@ local chooseBook = require("book/ChooseBook")
 -- end
 
 local ISReadABook_start = ISReadABook.start
-    function ISReadABook:start()
-        ISReadABook_start(self);
-
-        if isClient() then
-            if chooseBook.isCorrectBook(self.item, "ReadOnceBook") then
-                sendClientCommand(self.character, "Vorshim", "checkReadingBook", {bookType = "READ_ONCE_BOOK", bookItemType = self.item:getFullType()})
-            elseif chooseBook.isCorrectBook(self.item, "TimedBook") then
-                sendClientCommand(self.character, "Vorshim", "checkReadingBook", {bookType = "TIMED_BOOK", bookItemType = self.item:getFullType()})
-            end
-            self:stop();
-            self:forceStop()
-            self.character:Say("Checking reading book on Server")
-            self.character:playSound("OpenBook")
-            return;
-        else
-            return;
-        end
+function ISReadABook:start()
+    ISReadABook_start(self);
+    if isClient() then
+       if chooseBook.isCorrectBook(self.item, "ReadOnceBook") then
+           sendClientCommand(self.character, "Vorshim", "checkReadingBook", {bookType = "READ_ONCE_BOOK", bookItemType = self.item:getFullType()})
+           self:stop()
+           self:forceStop()
+           self.character:Say("Checking reading book on Server")
+           self.character:playSound("OpenBook")
+           return
+       elseif chooseBook.isCorrectBook(self.item, "TimedBook") then
+           sendClientCommand(self.character, "Vorshim", "checkReadingBook", {bookType = "TIMED_BOOK", bookItemType = self.item:getFullType()})
+           self:stop()
+           self:forceStop()
+           self.character:Say("Checking reading book on Server")
+           self.character:playSound("OpenBook")
+           return
+       end
     end
+ end
 
 -- local oldISReadABook_new = ISReadABook.new
 -- function ISReadABook:new(character, item, time)
