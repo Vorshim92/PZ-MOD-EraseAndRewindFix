@@ -41,7 +41,7 @@
         -- per eventuali errori nel vecchiop backup poiché veniva salvato il perk come userdata che non veniva salvata effettivamente e quindi "perk" nella tabella potrebbe non esistere, ma essendo indicizzata e avendo un ordine prestabilito per ora hardcodiamo il tutto.
         local skills = {
             "None",
-            "Agilità",
+            "Agilit" .. string.char(224),
             "Cucinare",
             "Melee",
             "Artigianato",
@@ -52,7 +52,7 @@
             "Corsa",
             "Passo leggero",
             "Destrezza",
-            "Furtività",
+            "Furtivit" .. string.char(224),
             "Carpenteria",
             "Mira",
             "Ricarica",
