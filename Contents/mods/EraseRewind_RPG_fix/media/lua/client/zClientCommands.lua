@@ -37,7 +37,7 @@ function Commands.attemptTranscribeBookResponse(module, command, args)
     local bookType = args.bookType
     local item = args.item
     local player = getPlayer()
-    local extra = ""
+    local extra = args.extra or ""
 
     if success then
         -- Proceed with writing the book locally
@@ -45,17 +45,16 @@ function Commands.attemptTranscribeBookResponse(module, command, args)
             characterManagement.writeBook(player, pageBook.ReadOnceBook, "ReadOnceBook")
         elseif bookType == "TIMED_BOOK" then
             characterManagement.writeBook(player, pageBook.TimedBook, "TimedBook")
-            extra = args.extra
-            print(extra)
         end
-        player:Say(getText("ContextMenu_WrittenBook"))
-
-        --- extract name of the book "ReadOnceBook" or "TimedBook"
-        local type = item:getName():match("^[^ -]* - [^ -]*")
-        type:sub(1, type:find(" ") - 1)
-        --- **Set name of the book**
-        local itemInventory = player:getInventory():getFirstTypeRecurse(item:getType())
-        itemInventory:setName(type .. " - " .. player:getFullName() .. extra)
+        player:Say(message or getText("ContextMenu_WrittenBook"))
+        if item then
+            --- extract name of the book "ReadOnceBook" or "TimedBook"
+            local type = item:getName():match("^[^ -]* - [^ -]*")
+            type:sub(1, type:find(" ") - 1)
+            --- **Set name of the book**
+            local itemInventory = player:getInventory():getFirstTypeRecurse(item:getType())
+            itemInventory:setName(type .. " - " .. player:getFullName() .. extra)
+        end
     else
         -- Inform the player that they cannot transcribe
         player:Say(message or getText("ContextMenu_AlreadyWrite"))
