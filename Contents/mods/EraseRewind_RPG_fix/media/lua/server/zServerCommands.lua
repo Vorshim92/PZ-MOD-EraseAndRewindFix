@@ -3,18 +3,25 @@ local activityCalendar = require("lib/ActivityCalendar")
 
 local json = require("dkjson")
 -- UTILS
+
+local function getContent(filereader)
+		local temp = {};
+		local line = filereader:readLine();
+		while line ~= nil do
+			table.insert(temp, line);
+			line = filereader:readLine();
+		end
+		filereader:close();
+        local content = table.concat(temp, "\n");
+        return content;
+end
+
 -- Function to create an incremental backup of the file
 local function createIncrementalBackup(filepath)
     -- Create a backup copy of the existing backup file with a .temp extension
     local filereader = getFileReader(filepath, false)
     if filereader then
-        local content = ""
-        local line = filereader:readLine()
-        while line ~= nil do
-            content = content .. line .. "\n"
-            line = filereader:readLine()
-        end
-        filereader:close()
+        local content = getContent(filereader) or ""
 
         if content ~= "" then
             local backupCopyPath = filepath .. ".temp"
@@ -41,15 +48,10 @@ local function updateBackupFile(filepath, newData)
     local bookType = newData.bookType
     local backup = newData.backup
     -- Read existing data from the file
-    local content = ""
     local filereader = getFileReader(filepath, false)
+    local content = ""
     if filereader then
-        local line = filereader:readLine()
-        while line ~= nil do
-            content = content .. line .. "\n"
-            line = filereader:readLine()
-        end
-        filereader:close()
+        content = getContent(filereader) or ""
     else
         print("Unable to open file for reading. A new file will be created.")
     end
@@ -75,8 +77,6 @@ local function updateBackupFile(filepath, newData)
             activityCalendar.setWaitingOfDays(SandboxVars.EraseRewindRPG.SetDays)
             local bookWriteDateInSeconds = activityCalendar.getExpectedDateInSecond()
             existingData[bookType] = bookWriteDateInSeconds
-            local expectedDate = activityCalendar.fromSecondToDate(bookWriteDateInSeconds)
-            extra = " - " .. expectedDate
         else
         existingData[bookType] = os.date("%c")
         end
@@ -125,12 +125,7 @@ function Commands.checkReadingBook(player, args)
     local content = ""
     local filereader = getFileReader(filepath, false)
     if filereader then
-        local line = filereader:readLine()
-        while line ~= nil do
-            content = content .. line .. "\n"
-            line = filereader:readLine()
-        end
-        filereader:close()
+        content = getContent(filereader) or ""
     end
 
     -- Parse the JSON data
@@ -182,12 +177,7 @@ function Commands.requestData(player, args)
     local content = ""
     local filereader = getFileReader(filepath, false)
     if filereader then
-        local line = filereader:readLine()
-        while line ~= nil do
-            content = content .. line .. "\n"
-            line = filereader:readLine()
-        end
-        filereader:close()
+        content = getContent(filereader) or ""
     else
         print("Unable to open file for reading.")
         -- Send an error back to the client
@@ -259,12 +249,7 @@ function Commands.checkWriteBook(player, args)
     local content = ""
     local filereader = getFileReader(filepath, false)
     if filereader then
-        local line = filereader:readLine()
-        while line ~= nil do
-            content = content .. line .. "\n"
-            line = filereader:readLine()
-        end
-        filereader:close()
+        content = getContent(filereader) or ""
     end
 
     -- Parse the JSON data
