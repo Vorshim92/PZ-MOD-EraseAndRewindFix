@@ -77,9 +77,11 @@ local function updateBackupFile(filepath, newData)
             activityCalendar.setWaitingOfDays(SandboxVars.EraseRewindRPG.SetDays)
             local bookWriteDateInSeconds = activityCalendar.getExpectedDateInSecond()
             existingData[bookType] = bookWriteDateInSeconds
-        else
-        existingData[bookType] = os.date("%c")
+        else 
+            existingData[bookType] = os.date("%c") -- Store the current date/time
         end
+    elseif existingData[bookType] and bookType ~= "TIMED_BOOK" then
+        existingData[bookType] = os.date("%c") -- if exists overwrite with new date/time
     end
 
     -- Serialize updated data to JSON
