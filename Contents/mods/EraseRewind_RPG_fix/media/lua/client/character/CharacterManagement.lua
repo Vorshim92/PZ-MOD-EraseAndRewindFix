@@ -91,6 +91,14 @@ function CharacterManagement.readBook(character, modData_table)
         characterSkillLimit.readBook(modData_table)
     end
     characterPerkDetails.readBook(character, modData_table)
+    ------- PATCH ------------
+    --- survivalRewards 2797671069
+    --- https://steamcommunity.com/sharedfiles/filedetails/?id=2797671069&searchtext=2797671069
+    --- put this beofre restore killedzombies and lifetime
+
+    if patchSurvivalRewards.isModActive() then
+        patchSurvivalRewards.createMil_kill_Reached(character, modData_table)
+    end
     characterKilledZombies.readBook(character, modData_table)
     characterLifeTime.readBook(modData_table)
     characterNutrition.readBook(modData_table)
@@ -98,13 +106,7 @@ function CharacterManagement.readBook(character, modData_table)
     characterBoost.readBook(character, modData_table)
     characterMultiplier.readBook(character, modData_table)
 
-    ------- PATCH ------------
-    --- survivalRewards 2797671069
-    --- https://steamcommunity.com/sharedfiles/filedetails/?id=2797671069&searchtext=2797671069
-
-    if patchSurvivalRewards.isModActive() then
-        patchSurvivalRewards.createMil_kill_Reached(character, modData_table)
-    end
+    
     --------------------------
 
     -- CharacterManagement.removeAllModData(modData_table)
