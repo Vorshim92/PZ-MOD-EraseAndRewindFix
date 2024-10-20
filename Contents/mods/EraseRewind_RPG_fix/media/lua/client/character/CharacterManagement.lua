@@ -7,17 +7,13 @@
 --- LAST UPDATE 05-09-2023
 
 -- PATCH SKILL LIMITER
-local isSkillLimiter = false
+local isSkillLimiter = getActivatedMods():contains("SkillLimiter_fix")
 local characterSkillLimit = {}
-if getActivatedMods():contains("SkillLimiter_fix") then
-    isSkillLimiter = true
+if isSkillLimiter then
     characterSkillLimit = require("patch/skillLimiter/CharacterSkillLimit")
 end
-local isEraseBKP = false
-local playerBKP = {}
-if getActivatedMods():contains("Erase&Rewind_BKP") then
-    isEraseBKP = true
-end
+
+local isEraseBKP = getActivatedMods():contains("Erase&Rewind_BKP")
 
 
 ---@class CharacterManagement
