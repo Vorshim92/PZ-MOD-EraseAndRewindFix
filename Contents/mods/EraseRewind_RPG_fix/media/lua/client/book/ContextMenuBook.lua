@@ -41,7 +41,7 @@ local function onSavePlayer(item, character)
             --- **Check if the book can be write mod-data**
             if isClient() then
                 sendClientCommand(character, "Vorshim", "checkWriteBook", {bookType = "READ_ONCE_BOOK", item = item})
-                character:Say("Checking book on Server")
+                character:Say(getText("UI_CheckingWriteBook"))
                 return
             end
             if readOnceBook.writeBook(character) then
@@ -53,7 +53,7 @@ local function onSavePlayer(item, character)
     elseif chooseBook.isCorrectBook(item, "TimedBook") then
         if isClient() then
             sendClientCommand(character, "Vorshim", "checkWriteBook", {bookType = "TIMED_BOOK", item = item})
-            character:Say("Checking book on Server")
+            character:Say(getText("UI_CheckingWriteBook"))
             return
         end
         --- **Write mod-data - Write book**
@@ -63,7 +63,7 @@ local function onSavePlayer(item, character)
             --- **You can't transcribe this book yet**
             local expectedDateInSecond =  activityCalendar.getExpectedDateInSecond()
             local expectedDate = activityCalendar.fromSecondToDate(expectedDateInSecond)
-            local extra = " - " .. tostring(expectedDate)
+            local extra = ": " .. tostring(expectedDate)
             translation = (getText( "ContextMenu_ToEarly") .. extra)
             flag01 = false
         end
@@ -96,19 +96,18 @@ local function onSavePlayer(item, character)
 end
 
 --- **Write book**
----@param character IsoGameCharacter
+---@param playerNum number
 ---@param context ISInventoryPaneContextMenu
 ---@param items InventoryItem
 ---@return void
---- - IsoGameCharacter : zombie.characters.IsoGameCharacter
 --- - ISInventoryPaneContextMenu : zombie.ui.ISInventoryPaneContextMenu
 --- - InventoryItem : zombie.inventory.InventoryItem
-local function addSaveContext(character, context, items)
+local function addSaveContext(playerNum, context, items)
     --- **Translate to selected language**
     translation = getText("ContextMenu_TranscribeBook")
 
-    --- **Update all the characteristics of the character**
-    character = debugDiagnostics.characterUpdate()
+    --- **Update all the characteristics of the playerNum**
+    local player = getSpecificPlayer(playerNum)
 
     local item
 
@@ -123,7 +122,7 @@ local function addSaveContext(character, context, items)
 
         --- **If a book create a context menu**
         if chooseBook.isBook(item)  then
-            context:addOption(translation, item, onSavePlayer, character)
+            context:addOption(translation, item, onSavePlayer, player)
             break
         end
     end

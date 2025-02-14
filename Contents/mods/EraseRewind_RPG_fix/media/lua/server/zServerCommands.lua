@@ -149,11 +149,10 @@ function Commands.checkReadingBook(player, args)
     if not backupData[bookType] then
         -- The player hasn't transcribed this book yet
         canRead = false
-        message = "NON PUOI LEGGERE"
+        message = getText("UI_TranscribeBook_NotTranscribed")
     else
         -- The player has already transcribed this book
         canRead = true
-        message = "PUOI LEGGERE"
     end
 
     -- Send the response back to the client
@@ -287,8 +286,11 @@ function Commands.checkWriteBook(player, args)
              local expectedDate = activityCalendar.fromSecondToDate(bookWriteDateInSeconds)
              extra = " - " .. expectedDate
         end
+        if bookType == "READ_ONCE_BOOK" then
+            local expectedDate = backupData[bookType]
+            extra = " - " .. expectedDate
+       end
 
-        -- Save the updated data
         
     elseif bookType == "TIMED_BOOK" and backupData[bookType] then
         ---@type boolean
@@ -321,11 +323,18 @@ function Commands.checkWriteBook(player, args)
             --logica per restituire la data in cui sarà possibile ritrascriverlo
             --- **You can't transcribe this book yet**
             local expectedDate = activityCalendar.fromSecondToDate(bookWriteDateInSeconds)
-            extra = " - " .. tostring(expectedDate)
+            extra = ": " .. tostring(expectedDate)
             local translation = (getText( "ContextMenu_ToEarly") .. extra)
             canTranscribe = false
             message = translation
         end
+    elseif bookType == "READ_ONCE_BOOK" and backupData[bookType] then
+        ---@type boolean
+        canTranscribe = false
+
+        extra = ": " .. backupData[bookType]
+        local translation = (getText( "ContextMenu_AlreadyTranscribed") .. extra)
+        message = translation
     end
     if canTranscribe then
         -- Save the updated data

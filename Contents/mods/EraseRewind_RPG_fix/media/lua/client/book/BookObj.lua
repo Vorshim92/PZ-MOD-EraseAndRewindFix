@@ -165,14 +165,14 @@ function ISReadABook:start()
            sendClientCommand(self.character, "Vorshim", "checkReadingBook", {bookType = "READ_ONCE_BOOK", bookItemType = self.item:getFullType()})
            self:stop()
            self:forceStop()
-           self.character:Say("Checking reading book on Server")
+           self.character:Say(getText("UI_CheckingReadBook"))
            self.character:playSound("OpenBook")
            return
        elseif chooseBook.isCorrectBook(self.item, "TimedBook") then
            sendClientCommand(self.character, "Vorshim", "checkReadingBook", {bookType = "TIMED_BOOK", bookItemType = self.item:getFullType()})
            self:stop()
            self:forceStop()
-           self.character:Say("Checking reading book on Server")
+           self.character:Say(getText("UI_CheckingReadBook"))
            self.character:playSound("OpenBook")
            return
        end

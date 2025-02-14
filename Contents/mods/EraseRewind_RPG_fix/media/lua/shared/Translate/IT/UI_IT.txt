@@ -1,0 +1,6 @@
+UI_IT = {
+    UI_TranscribeBook_NotTranscribed = "Non ancora transcritto",
+    UI_TranscribeBook_AlreadyTranscribed = "Già transcritto",
+    UI_CheckingReadBook = "Controllo lettura libro sul server",
+    UI_CheckingWriteBook = "Controllo scrittura libro sul server",
+}
