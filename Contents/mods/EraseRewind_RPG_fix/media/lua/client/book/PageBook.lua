@@ -44,7 +44,7 @@ if getActivatedMods():contains("SkillLimiter_fix") then
     print("[ModData] SKILL_LIMITER aggiunto a ReadOnceBook e TimedBook")
 end
 
-if getActivatedMods():contains("SurvivalRewards") then
+if getActivatedMods():contains("SurvivalRewards2") then
     ModData.ReadOnceBook["kilMilReached"] = {}
     ModData.TimedBook["kilMilReached"] = {}
     ModData.ReadOnceBook["milReached"] = {}
