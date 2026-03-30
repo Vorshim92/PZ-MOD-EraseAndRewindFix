@@ -21,50 +21,36 @@ function WriteBookAction:stop()
     ISBaseTimedAction.stop(self)
 end
 
+local HALO_DURATION = 300
+
 function WriteBookAction:perform()
     self.character:playSound("CloseBook")
-    self.character:Say(getText("ContextMenu_WrittenBook"))
+    local ci = Core.getInstance():getGoodHighlitedColor()
+    self.character:setHaloNote(getText("ContextMenu_WrittenBook"),
+        math.floor(ci:getR() * 255), math.floor(ci:getG() * 255), math.floor(ci:getB() * 255), HALO_DURATION)
     ISBaseTimedAction.perform(self)
 end
 
 function WriteBookAction:complete()
     if not isServer() then return true end
 
-    local json = require("dkjson")
+    local backupIO = require("DiarynoBackupIO")
     local activityCalendar = require("lib/ActivityCalendar")
     local CharacterSerializer = require("CharacterSerializer")
 
     local character = self.character
     local username = character:getUsername()
-    local filepath = "Backup/Diaryno/PlayerBKP_" .. username .. ".json"
     local bookType = self.bookType
     local bookTableName = self.bookTableName
 
     -- 1. Read existing backup file
-    local backupData = {}
-    local filereader = getFileReader(filepath, false)
-    if filereader then
-        local lines = {}
-        local line = filereader:readLine()
-        while line ~= nil do
-            table.insert(lines, line)
-            line = filereader:readLine()
-        end
-        filereader:close()
-        local content = table.concat(lines, "\n")
-        if content ~= "" then
-            local decoded, _, err = json.decode(content, 1, nil)
-            if not err and decoded then
-                backupData = decoded
-            end
-        end
-    end
+    local backupData = backupIO.readBackup(username)
 
     -- 2. Validate write permission
     if bookType == "READ_ONCE_BOOK" and backupData[bookType] then
         local extra = ": " .. tostring(backupData[bookType])
         sendServerCommand(character, "Diaryno", "bookActionFailed", {
-            message = getText("ContextMenu_AlreadyTranscribed") .. extra
+            key = "ContextMenu_AlreadyTranscribed", extra = extra
         })
         return false
     end
@@ -75,7 +61,7 @@ function WriteBookAction:complete()
         if not activityCalendar.isExpectedDate() then
             local expectedDate = activityCalendar.fromSecondToDate(bookWriteDateInSeconds)
             sendServerCommand(character, "Diaryno", "bookActionFailed", {
-                message = getText("ContextMenu_ToEarly") .. ": " .. tostring(expectedDate)
+                key = "ContextMenu_ToEarly", extra = ": " .. tostring(expectedDate)
             })
             return false
         end
@@ -84,27 +70,7 @@ function WriteBookAction:complete()
     -- 3. Collect character data
     local characterData = CharacterSerializer.collect(character)
 
-    -- 4. Create incremental backup (.temp)
-    local existingReader = getFileReader(filepath, false)
-    if existingReader then
-        local existingLines = {}
-        local eline = existingReader:readLine()
-        while eline ~= nil do
-            table.insert(existingLines, eline)
-            eline = existingReader:readLine()
-        end
-        existingReader:close()
-        local existingContent = table.concat(existingLines, "\n")
-        if existingContent ~= "" then
-            local tempWriter = getFileWriter(filepath .. ".temp", false, false)
-            if tempWriter then
-                tempWriter:write(existingContent)
-                tempWriter:close()
-            end
-        end
-    end
-
-    -- 5. Update backup data
+    -- 4. Update backup data
     backupData[bookTableName] = characterData
 
     if bookType == "TIMED_BOOK" then
@@ -114,16 +80,8 @@ function WriteBookAction:complete()
         backupData[bookType] = os.date("%c")
     end
 
-    -- 6. Write JSON
-    local serialized = json.encode(backupData, { indent = true })
-    local filewriter = getFileWriter(filepath, false, false)
-    if filewriter then
-        filewriter:write(serialized)
-        filewriter:close()
-    else
-        print("[WriteBookAction:complete()] Unable to write backup file for " .. username)
-        return false
-    end
+    -- 5. Write JSON (with incremental .temp backup)
+    backupIO.writeBackup(username, backupData)
 
     -- 7. Rename book item (self.item auto-resolved by engine)
     local item = self.item

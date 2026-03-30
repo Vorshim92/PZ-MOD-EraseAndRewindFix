@@ -1,31 +1,24 @@
 module LR
 {
-    imports
-    {
-        Base
-    }
-
     item ReadOnceBook
     {
+        DisplayCategory = SkillBook,
+        ItemType = base:normal,
         Weight = 0.42,
-        Type = Normal,
-        DisplayName = Read Once Book,
         Icon = Book,
         StaticModel = Book,
+        WorldStaticModel = BookBrown_Ground,
         Tooltip = Tooltip_ReadOnceBook,
-        ItemType = base:normal,
-        Tags = drogatyno:drugs,
     }
 
     item TimedBook
     {
+        DisplayCategory = SkillBook,
+        ItemType = base:normal,
         Weight = 0.42,
-        Type = Normal,
-        DisplayName = Timed Book,
         Icon = Book,
         StaticModel = Book,
+        WorldStaticModel = BookBrown_Ground,
         Tooltip = Tooltip_TimedBook,
-        ItemType = base:normal,
-        Tags = drogatyno:drugs,
     }
 }

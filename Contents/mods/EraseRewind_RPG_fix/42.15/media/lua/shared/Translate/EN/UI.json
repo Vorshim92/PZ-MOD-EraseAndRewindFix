@@ -1,0 +1,9 @@
+{
+    "ContextMenu_TranscribeBook": "Transcribe Book",
+    "ContextMenu_ReadBook": "Read Magic Book",
+    "ContextMenu_WrittenBook": "Book transcribed successfully!",
+    "ContextMenu_AlreadyTranscribed": "Already transcribed",
+    "ContextMenu_ToEarly": "Too early to transcribe again",
+    "UI_TranscribeBook_NotTranscribed": "This book hasn't been transcribed yet.",
+    "UI_ReadBook_Eureka": "EUREKA!!!"
+}

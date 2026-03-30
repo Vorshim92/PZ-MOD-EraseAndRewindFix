@@ -21,55 +21,41 @@ function ReadBookAction:stop()
     ISBaseTimedAction.stop(self)
 end
 
+local HALO_DURATION = 300
+
 function ReadBookAction:perform()
     self.character:playSound("CloseBook")
-    self.character:Say("EUREKA!!!")
+    local ci = Core.getInstance():getGoodHighlitedColor()
+    self.character:setHaloNote(getText("UI_ReadBook_Eureka"),
+        math.floor(ci:getR() * 255), math.floor(ci:getG() * 255), math.floor(ci:getB() * 255), HALO_DURATION)
     ISBaseTimedAction.perform(self)
 end
 
 function ReadBookAction:complete()
     if not isServer() then return true end
 
-    local json = require("dkjson")
+    local backupIO = require("DiarynoBackupIO")
     local CharacterSerializer = require("CharacterSerializer")
 
     local character = self.character
     local username = character:getUsername()
-    local filepath = "Backup/Diaryno/PlayerBKP_" .. username .. ".json"
     local bookType = self.bookType
     local bookTableName = self.bookTableName
 
     -- 1. Read existing backup file
-    local backupData = {}
-    local filereader = getFileReader(filepath, false)
-    if filereader then
-        local lines = {}
-        local line = filereader:readLine()
-        while line ~= nil do
-            table.insert(lines, line)
-            line = filereader:readLine()
-        end
-        filereader:close()
-        local content = table.concat(lines, "\n")
-        if content ~= "" then
-            local decoded, _, err = json.decode(content, 1, nil)
-            if not err and decoded then
-                backupData = decoded
-            end
-        end
-    end
+    local backupData = backupIO.readBackup(username)
 
     -- 2. Validate: backup data must exist for this book type
     if not backupData[bookType] then
         sendServerCommand(character, "Diaryno", "bookActionFailed", {
-            message = getText("UI_TranscribeBook_NotTranscribed")
+            key = "UI_TranscribeBook_NotTranscribed"
         })
         return false
     end
 
     if not backupData[bookTableName] then
         sendServerCommand(character, "Diaryno", "bookActionFailed", {
-            message = getText("UI_TranscribeBook_NotTranscribed")
+            key = "UI_TranscribeBook_NotTranscribed"
         })
         return false
     end
@@ -83,12 +69,7 @@ function ReadBookAction:complete()
     backupData[bookType] = nil
 
     -- 5. Write updated backup file
-    local serialized = json.encode(backupData, { indent = true })
-    local filewriter = getFileWriter(filepath, false, false)
-    if filewriter then
-        filewriter:write(serialized)
-        filewriter:close()
-    end
+    backupIO.writeBackup(username, backupData)
 
     -- 6. Remove book item from inventory (self.item auto-resolved by engine)
     local item = self.item

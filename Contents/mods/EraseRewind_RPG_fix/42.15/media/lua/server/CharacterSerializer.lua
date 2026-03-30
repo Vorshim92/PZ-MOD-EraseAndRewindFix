@@ -57,6 +57,14 @@ function CharacterSerializer.collect(character)
     -- LIFE_TIME
     data["LIFE_TIME"] = character:getHoursSurvived()
 
+    -- WEIGHT
+    data["WEIGHT"] = character:getNutrition():getWeight()
+
+    -- CALORIES
+    data["CALORIES"] = character:getNutrition():getCalories()
+
+    -- TODO: RECIPES - character:getKnownRecipes() / learnRecipe() - verify B42 API
+
     return data
 end
 
@@ -157,6 +165,18 @@ function CharacterSerializer.apply(character, data)
     if data["LIFE_TIME"] then
         character:setHoursSurvived(data["LIFE_TIME"])
     end
+
+    -- 7. WEIGHT
+    if data["WEIGHT"] then
+        character:getNutrition():setWeight(data["WEIGHT"])
+    end
+
+    -- 8. CALORIES
+    if data["CALORIES"] then
+        character:getNutrition():setCalories(data["CALORIES"])
+    end
+
+    -- TODO: RECIPES - restore known recipes from backup
 end
 
 return CharacterSerializer
