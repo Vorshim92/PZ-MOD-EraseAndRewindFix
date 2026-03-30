@@ -39,20 +39,12 @@ function ReadBookAction:complete()
 
     local character = self.character
     local username = character:getUsername()
-    local bookType = self.bookType
     local bookTableName = self.bookTableName
 
     -- 1. Read existing backup file
     local backupData = backupIO.readBackup(username)
 
-    -- 2. Validate: backup data must exist for this book type
-    if not backupData[bookType] then
-        sendServerCommand(character, "Diaryno", "bookActionFailed", {
-            key = "UI_TranscribeBook_NotTranscribed"
-        })
-        return false
-    end
-
+    -- 2. Validate: backup data must exist
     if not backupData[bookTableName] then
         sendServerCommand(character, "Diaryno", "bookActionFailed", {
             key = "UI_TranscribeBook_NotTranscribed"
@@ -60,13 +52,11 @@ function ReadBookAction:complete()
         return false
     end
 
-    -- 3. Apply character data
-    local characterData = backupData[bookTableName]
-    CharacterSerializer.apply(character, characterData)
+    -- 3. Apply character data (timestamp is ignored by apply, only PG fields are used)
+    CharacterSerializer.apply(character, backupData[bookTableName])
 
-    -- 4. Remove consumed data from backup
+    -- 4. Remove consumed book data
     backupData[bookTableName] = nil
-    backupData[bookType] = nil
 
     -- 5. Write updated backup file
     backupIO.writeBackup(username, backupData)
@@ -79,7 +69,7 @@ function ReadBookAction:complete()
         sendRemoveItemFromContainer(container, item)
     end
 
-    print("[ReadBookAction:complete()] Restored backup for " .. username .. " / " .. bookType)
+    print("[ReadBookAction:complete()] Restored backup for " .. username .. " / " .. bookTableName)
     return true
 end
 

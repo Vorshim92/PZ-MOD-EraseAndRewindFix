@@ -31,72 +31,80 @@ function WriteBookAction:perform()
     ISBaseTimedAction.perform(self)
 end
 
+--- Convert game-hours to a readable "Day X, HH:MM" string
+local function hoursToDisplay(gameHours)
+    local totalMinutes = math.floor(gameHours * 60)
+    local days = math.floor(gameHours / 24)
+    local hours = math.floor(gameHours % 24)
+    local minutes = totalMinutes % 60
+    return string.format("Day %d, %02d:%02d", days, hours, minutes)
+end
+
 function WriteBookAction:complete()
     if not isServer() then return true end
 
     local backupIO = require("DiarynoBackupIO")
-    local activityCalendar = require("lib/ActivityCalendar")
     local CharacterSerializer = require("CharacterSerializer")
 
     local character = self.character
     local username = character:getUsername()
     local bookType = self.bookType
     local bookTableName = self.bookTableName
+    local nowHours = getGameTime():getWorldAgeHours()
 
     -- 1. Read existing backup file
     local backupData = backupIO.readBackup(username)
+    local existing = backupData[bookTableName]
 
     -- 2. Validate write permission
-    if bookType == "READ_ONCE_BOOK" and backupData[bookType] then
-        local extra = ": " .. tostring(backupData[bookType])
+    if bookType == "READ_ONCE_BOOK" and existing then
         sendServerCommand(character, "Diaryno", "bookActionFailed", {
-            key = "ContextMenu_AlreadyTranscribed", extra = extra
+            key = "ContextMenu_AlreadyTranscribed",
+            extra = ": " .. hoursToDisplay(existing.timestamp or 0)
         })
         return false
     end
 
-    if bookType == "TIMED_BOOK" and backupData[bookType] then
-        local bookWriteDateInSeconds = backupData[bookType]
-        activityCalendar.setExpectedDateInSecond(bookWriteDateInSeconds)
-        if not activityCalendar.isExpectedDate() then
-            local expectedDate = activityCalendar.fromSecondToDate(bookWriteDateInSeconds)
+    if bookType == "TIMED_BOOK" and existing and existing.timestamp then
+        if nowHours < existing.timestamp then
             sendServerCommand(character, "Diaryno", "bookActionFailed", {
-                key = "ContextMenu_ToEarly", extra = ": " .. tostring(expectedDate)
+                key = "ContextMenu_ToEarly",
+                extra = ": " .. hoursToDisplay(existing.timestamp)
             })
             return false
         end
     end
 
-    -- 3. Collect character data
+    -- 3. Collect character data + timestamp
     local characterData = CharacterSerializer.collect(character)
 
-    -- 4. Update backup data
-    backupData[bookTableName] = characterData
-
     if bookType == "TIMED_BOOK" then
-        activityCalendar.setWaitingOfDays(SandboxVars.Diaryno.SetDays)
-        backupData[bookType] = activityCalendar.getExpectedDateInSecond()
+        characterData.timestamp = nowHours + (SandboxVars.Diaryno.SetDays * 24)
     else
-        backupData[bookType] = os.date("%c")
+        characterData.timestamp = nowHours
     end
 
-    -- 5. Write JSON (with incremental .temp backup)
+    -- 4. Save under single key
+    backupData[bookTableName] = characterData
+
+    -- 5. Write JSON
     backupIO.writeBackup(username, backupData)
 
-    -- 7. Rename book item (self.item auto-resolved by engine)
+    -- 6. Rename book item + sync to client
     local item = self.item
     if item then
         local extra = ""
         if bookType == "TIMED_BOOK" then
-            local expectedDate = activityCalendar.fromSecondToDate(backupData[bookType])
-            extra = " - " .. tostring(expectedDate)
+            extra = " - " .. hoursToDisplay(characterData.timestamp)
         elseif bookType == "READ_ONCE_BOOK" then
-            extra = " - " .. tostring(backupData[bookType])
+            extra = " - " .. hoursToDisplay(characterData.timestamp)
         end
         item:setName(bookTableName .. " - " .. character:getFullName() .. extra)
+        item:setCustomName(true)
+        syncItemFields(character, item)
     end
 
-    print("[WriteBookAction:complete()] Saved backup for " .. username .. " / " .. bookType)
+    print("[WriteBookAction:complete()] Saved backup for " .. username .. " / " .. bookTableName)
     return true
 end
 

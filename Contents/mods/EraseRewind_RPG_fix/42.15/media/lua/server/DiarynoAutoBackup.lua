@@ -27,8 +27,9 @@ Events.OnClientCommand.Add(function(module, command, player, args)
     local bankNum = data.activeBank or 1
     local bankKey = "BKP_" .. bankNum
     data.activeBank = bankNum
-    data[bankKey] = CharacterSerializer.collect(player)
-    data[bankKey .. "_timestamp"] = os.date("%c")
+    local bankData = CharacterSerializer.collect(player)
+    bankData.timestamp = os.date("%c")
+    data[bankKey] = bankData
 
     backupIO.writeBackup(username, data)
     print("[DiarynoAutoBackup] Auto-backup for " .. username .. " saved to " .. bankKey)

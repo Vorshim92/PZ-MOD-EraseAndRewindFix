@@ -63,6 +63,22 @@ function CharacterSerializer.collect(character)
     -- CALORIES
     data["CALORIES"] = character:getNutrition():getCalories()
 
+    -- BOOST (XP boost per perk, from traits/profession)
+    local boostList = {}
+    for i = 0, Perks.getMaxIndex() - 1 do
+        local perk = PerkFactory.getPerk(Perks.fromIndex(i))
+        if perk and perk:getParent() and perk:getParent():getName() ~= "None" then
+            local boost = character:getXp():getPerkBoost(Perks.fromIndex(i))
+            if boost > 0 then
+                table.insert(boostList, {
+                    perk = perk:getId(),
+                    boost = boost,
+                })
+            end
+        end
+    end
+    data["BOOST"] = boostList
+
     -- TODO: RECIPES - character:getKnownRecipes() / learnRecipe() - verify B42 API
 
     return data
@@ -174,6 +190,24 @@ function CharacterSerializer.apply(character, data)
     -- 8. CALORIES
     if data["CALORIES"] then
         character:getNutrition():setCalories(data["CALORIES"])
+    end
+
+    -- 9. BOOST (XP boost per perk)
+    if data["BOOST"] then
+        -- Reset all boosts
+        for i = 0, Perks.getMaxIndex() - 1 do
+            local perk = PerkFactory.getPerk(Perks.fromIndex(i))
+            if perk and perk:getParent() and perk:getParent():getName() ~= "None" then
+                character:getXp():setPerkBoost(Perks.fromIndex(i), 0)
+            end
+        end
+        -- Set from backup
+        for _, v in pairs(data["BOOST"]) do
+            local perk = Perks[v.perk]
+            if perk then
+                character:getXp():setPerkBoost(perk, v.boost)
+            end
+        end
     end
 
     -- TODO: RECIPES - restore known recipes from backup
