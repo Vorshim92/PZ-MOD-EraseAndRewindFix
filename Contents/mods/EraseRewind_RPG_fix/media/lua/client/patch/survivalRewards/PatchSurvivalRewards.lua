@@ -135,7 +135,7 @@ end
 ---@return boolean
 function PatchSurvivalRewards.isModActive()
     ---@type string
-    local activeMod = "SurvivalRewards"
+    local activeMod = "SurvivalRewards2"
 
     ---@type List - string
     local activeMods = getActivatedMods();
