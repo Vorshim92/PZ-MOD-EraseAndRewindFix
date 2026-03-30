@@ -79,7 +79,13 @@ function CharacterSerializer.collect(character)
     end
     data["BOOST"] = boostList
 
-    -- TODO: RECIPES - character:getKnownRecipes() / learnRecipe() - verify B42 API
+    -- RECIPES
+    local recipesList = {}
+    local knownRecipes = character:getKnownRecipes()
+    for i = 0, knownRecipes:size() - 1 do
+        table.insert(recipesList, knownRecipes:get(i))
+    end
+    data["RECIPES"] = recipesList
 
     return data
 end
@@ -210,7 +216,16 @@ function CharacterSerializer.apply(character, data)
         end
     end
 
-    -- TODO: RECIPES - restore known recipes from backup
+    -- 10. RECIPES
+    if data["RECIPES"] then
+        character:forgetRecipes()
+        for _, recipeName in ipairs(data["RECIPES"]) do
+            character:learnRecipe(recipeName)
+        end
+        -- sendSyncPlayerFields is additive-only (never clears client list),
+        -- so we use sendServerCommand for atomic clear+replace on the client
+        sendServerCommand(character, "Diaryno", "syncRecipes", { recipes = data["RECIPES"] })
+    end
 end
 
 return CharacterSerializer
